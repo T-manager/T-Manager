@@ -1,4 +1,4 @@
-package com.example.demo;
+package cpt202.groupwork;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
