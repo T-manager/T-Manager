@@ -33,7 +33,7 @@ public class User implements Serializable {
     private Integer id;
 
     /** 用户名 */
-    @Column(length = 20, unique = true)
+    @Column(length = 20)
     private String username;
 
     /** 密码 */
