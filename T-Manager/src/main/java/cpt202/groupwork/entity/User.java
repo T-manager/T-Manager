@@ -1,4 +1,5 @@
 package cpt202.groupwork.entity;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,7 +15,7 @@ import java.io.Serializable;
 
 /**
  * 用户实体
- *
+ * <p>
  * [x] length, [x] index
  */
 @Entity
@@ -24,25 +25,47 @@ import java.io.Serializable;
 
 public class User implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
 
-    /** 主键 */
-    @Id
-    @JsonIgnore
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+  /**
+   * 主键
+   */
+  @Id
+  @JsonIgnore
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Integer id;
 
-    /** 用户名 */
-    @Column(length = 20, unique = true)
-    private String username;
+  /**
+   * 用户名
+   */
+  @Column(length = 20, unique = true)
+  private String username;
 
-    /** 密码 */
-    @JsonIgnore
-    @Column(length = 20)
-    private String password;
+  /**
+   * 用户邮箱
+   */
+  @Column(length = 100)
+  private String email;
 
-    // 用户头像
-    @Column(length = 20)
-    private String avatar;
+  /**
+   * 密码
+   */
+  @JsonIgnore//后台返回时 用来屏蔽此字段
+  @Column(length = 20)
+  private String password;
 
+  /**
+   * 用户角色
+   */
+  @Column(length = 20)
+  private String role;
+  /**
+   * 用户头像
+   */
+  @Column(length = 20)
+  private String avatar;
+
+  public User() {
+
+  }
 }
