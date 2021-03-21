@@ -20,21 +20,21 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    UserRepository userRepository;
+//    @Autowired
+//    UserRepository userRepository;
     @Resource
     private UserService userService;
 
     @GetMapping("/{userId}")
     public Response<?> getUserInfo(@PathVariable Integer userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            return Response.ok(user.get());
-        }
-        else {
-            return Response.ok("user not found");
-        }
-       // return userService.userIdExists(userId);
+//        Optional<User> user = userRepository.findById(userId);
+//        if (user.isPresent()) {
+//            return Response.ok(user.get());
+//        }
+//        else {
+//            return Response.ok("user not found");
+//        }
+        return userService.userIdExists(userId);
         // 没登录的人, 去访问别人的用户主页
     }
 
