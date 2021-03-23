@@ -21,7 +21,7 @@ public class ProjectMember {
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer todoId;
+  private Integer projectMemberId;
 
   /**
    * 项目id
