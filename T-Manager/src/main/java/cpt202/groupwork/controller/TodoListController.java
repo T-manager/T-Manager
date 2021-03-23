@@ -10,7 +10,7 @@ import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.TodoListRepository;
 import cpt202.groupwork.repository.TodoRepository;
 import cpt202.groupwork.repository.UserRepository;
-import cpt202.groupwork.security.SecurityUtils;
+//import cpt202.groupwork.security.SecurityUtils;
 import cpt202.groupwork.service.TodolistService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.ArrayList;
@@ -100,7 +100,7 @@ public class TodoListController {
   @Operation(summary = "修改todolist信息")
   public Response<?> putProject(@PathVariable Integer todolistId,
       @Valid @RequestBody TodolistDTO todolistDTO) {
-    Optional<String> username = SecurityUtils.getCurrentUsername();
+//    Optional<String> username = SecurityUtils.getCurrentUsername();
     // 没有登陆
 //    if (username.isEmpty()) {
 //      return Response.unAuth();

@@ -2,3 +2,6 @@
 *.class
 *.iml
 /T-Manager/target/
+
+tm-frontend/node_modules_old/
+tm-frontend/node_modules/

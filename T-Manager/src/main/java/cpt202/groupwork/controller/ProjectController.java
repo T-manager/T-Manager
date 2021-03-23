@@ -7,7 +7,7 @@ import cpt202.groupwork.entity.Todo;
 import cpt202.groupwork.entity.User;
 import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.UserRepository;
-import cpt202.groupwork.security.SecurityUtils;
+//import cpt202.groupwork.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/project")
-public class ProjecyController {
+public class ProjectController {
 
   @Autowired
   ProjectRepository projectRepository;
@@ -53,7 +53,7 @@ public class ProjecyController {
   @DeleteMapping("/{projectId}")
   @Operation(summary = "删除项目")
   public Response<?> deleteDiscussion(@PathVariable Integer projectId) {
-    Optional<String> username = SecurityUtils.getCurrentUsername();
+//    Optional<String> username = SecurityUtils.getCurrentUsername();
 //    if (username.isEmpty()) {
 //      return Response.unAuth();
 //    }
@@ -63,28 +63,28 @@ public class ProjecyController {
 //      return Response.notFound();
 //    }
 
-    if (!username.get().equals(project.get().getProjectOwner())) {
-      return Response.permissionDenied("只有项目拥有者才能删除哦！");
-    }
+//    if (!username.get().equals(project.get().getProjectOwner())) {
+//      return Response.permissionDenied("只有项目拥有者才能删除哦！");
+//    }
     projectRepository.deleteById(projectId);
     return Response.ok(project.get());
   }
 
   @PutMapping("/{projeectId}")
   @Operation(summary = "修改项目信息")
-  public Response<?> putProject(@PathVariable Integer projectId,
-      @Valid @RequestBody ProjectDTO projectDTO) {
-    Optional<String> username = SecurityUtils.getCurrentUsername();
+  public Response<?> putProject(@Valid @RequestBody Project projectInfo) {
+//    Optional<String> username = SecurityUtils.getCurrentUsername();
     // 没有登陆
 //    if (username.isEmpty()) {
 //      return Response.unAuth();
 //    }
+    Integer projectId=projectInfo.getProjectId();
     Optional<Project> project = projectRepository.findById(projectId);
     // 使用用户名找不到用户
 //    if (project.isEmpty()) {
 //      return Response.notFound("没有找到该用户哦！");
 //    }
-    BeanUtils.copyProperties(projectDTO, project.get());
+    BeanUtils.copyProperties(projectInfo, project.get());
     return Response.ok(projectRepository.save(project.get()));
   }
 

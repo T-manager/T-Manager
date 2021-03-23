@@ -11,7 +11,7 @@ import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.TodoListRepository;
 import cpt202.groupwork.repository.TodoRepository;
 import cpt202.groupwork.repository.UserRepository;
-import cpt202.groupwork.security.SecurityUtils;
+//import cpt202.groupwork.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.Optional;
 import javax.validation.Valid;
@@ -45,14 +45,14 @@ public class TodoController {
   @Autowired
   UserRepository userRepository;
 
-  @PostMapping("/{todolistId}")
+  @PostMapping("/add")
   @Operation(summary = "通过 todolistId 和 todoCreateDTO 添加 todo")
-  public Response<?> postTodo(@PathVariable Integer todolistId,
-      @Valid @RequestBody TodoDTO todoDTO) {
+  public Response<?> postTodo(@Valid @RequestBody TodoDTO todoDTO) {
 //    Optional<String> username = SecurityUtils.getCurrentUsername();
 //    if (username.isEmpty()) {
 //      return Response.unAuth();
 //    }
+    Integer todolistId = todoDTO.getTodolistId();
     TodoList todolist = todoListRepository.findById(todolistId).get();
     Todo todo = new Todo();
     BeanUtils.copyProperties(todoDTO, todo);
@@ -88,21 +88,21 @@ public class TodoController {
     return Response.ok();
   }
 
-  @PutMapping("/{todoId}")
+  @PutMapping("/")
   @Operation(summary = "修改todo信息")
-  public Response<?> putTodo(@PathVariable Integer todoId,
-      @Valid @RequestBody TodoDTO todoDTO) {
-    Optional<String> username = SecurityUtils.getCurrentUsername();
+  public Response<?> putTodo(@Valid @RequestBody Todo todoInfo) {
+//    Optional<String> username = SecurityUtils.getCurrentUsername();
     // 没有登陆
 //    if (username.isEmpty()) {
 //      return Response.unAuth();
 //    }
+    Integer todoId = todoInfo.getTodoId();
     Optional<Todo> todo = todoRepository.findById(todoId);
 
 //    if (todo.isEmpty()) {
 //      return Response.notFound("没有找到todo哦！");
 //    }
-    BeanUtils.copyProperties(todoDTO, todo.get());
+    BeanUtils.copyProperties(todoInfo, todo.get());
     return Response.ok(todoRepository.save(todo.get()));
   }
 
@@ -110,7 +110,7 @@ public class TodoController {
   @PutMapping("/check/{todoId}")
   @Operation(summary = "完成Todo")
   public Response<?> checkTodo(@PathVariable Integer todoId) {
-    Optional<String> username = SecurityUtils.getCurrentUsername();
+//    Optional<String> username = SecurityUtils.getCurrentUsername();
     // 没有登陆
 //    if (username.isEmpty()) {
 //      return Response.unAuth();
@@ -124,15 +124,14 @@ public class TodoController {
     return Response.ok(todoRepository.save(todo.get()));
   }
 
-  @GetMapping("/{todoId}")
+  @GetMapping("/get/{todoId}")
   @Operation(summary = "查看todo详情")
   public Response<?> getTodo(@PathVariable Integer todoId) {
+    System.out.println("------"+todoId);
     Optional<Todo> todo = todoRepository.findById(todoId);
-
 //  UserSelfVO userSelfVO = new UserSelfVO();
 //  BeanUtils.copyProperties(user.get(), userSelfVO);
     return Response.ok(todo);
-
   }
 
 }
