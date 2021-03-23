@@ -1,5 +1,6 @@
 package cpt202.groupwork.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -50,7 +51,8 @@ public class User implements Serializable {
   /**
    * 密码
    */
-  @JsonIgnore//后台返回时 用来屏蔽此字段
+//  @JsonIgnore//后台返回时 用来屏蔽此字段
+  @JsonProperty(access= JsonProperty.Access.WRITE_ONLY)
   @Column(length = 20)
   private String password;
 

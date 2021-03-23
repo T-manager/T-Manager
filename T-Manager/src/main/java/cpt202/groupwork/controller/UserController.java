@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,6 +38,13 @@ public class UserController {
 //        }
         return userService.userIdExists(userId);
         // 没登录的人, 去访问别人的用户主页
+    }
+
+    @PostMapping("/regist")
+    public Response<?> postUser(@RequestBody User user) {
+        // @RequestBody注解用来绑定通过http请求中application/json类型上传的数据
+
+        return userService.userCreate(user);
     }
 
 }

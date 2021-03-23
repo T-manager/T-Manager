@@ -28,4 +28,9 @@ public class UserService {
       return Response.ok("user not found");
     }
   }
+
+  public Response<?> userCreate(final User user){
+    userRepository.save(user);
+    return Response.ok();
+  }
 }
