@@ -4,6 +4,7 @@ import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.TodolistDTO;
 import cpt202.groupwork.dto.TodolistViewDTO;
 import cpt202.groupwork.entity.Todolist;
+import cpt202.groupwork.entity.Todolist;
 import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.TodoListRepository;
 import cpt202.groupwork.repository.TodoRepository;
@@ -51,19 +52,8 @@ public class TodolistController {
   @PostMapping("/add")
   @Operation(summary = "通过 projectId 和 todolistCreateDTO 添加 todoList")
   public Response<?> postTodolist(@Valid @RequestBody TodolistDTO todolistDTO) {
-//    如果用户没有登陆，不能添加新的todolist
-//
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
-//    if (username.isEmpty()) {
-//      return Response.unAuth();
-//    }
-//    如果项目不存在
-//    if (!projectRepository.existsById(projectId)) {
-//      return Response.bad("不存在此项目");
-//    }
 
     Todolist todolist = new Todolist();
-//    Discussion discussion = new Discussion();
     BeanUtils.copyProperties(todolistDTO, todolist);
     todoListRepository.save(todolist);
     return Response.ok(todolist);
@@ -86,24 +76,17 @@ public class TodolistController {
 //      return Response.permissionDenied("只有自己才能删除哦！");
 //    }
     todoListRepository.deleteById(todolistId);
-    return Response.ok(todolist.get());
+    return Response.ok();
   }
 
   @PutMapping("/modify")
   @Operation(summary = "修改todolist信息")
-  public Response<?> putProject(@Valid @RequestBody TodoList todolist) {
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
-    // 没有登陆
-//    if (username.isEmpty()) {
-//      return Response.unAuth();
-//    }
-    Optional<TodoList> todoList = todoListRepository.findById(todolist.getTodolistId());
+  public Response<?> putProject(@Valid @RequestBody Todolist todolist) {
+    Optional<Todolist> todolistOld = todoListRepository.findById(todolist.getTodolistId());
 
-//    if (todo.isEmpty()) {
-//      return Response.notFound("没有找到todo哦！");
-//    }
-    BeanUtils.copyProperties(todolist, todoList.get());
-    return Response.ok(todoListRepository.save(todoList.get()));
+    BeanUtils.copyProperties(todolist, todolistOld.get());
+    todoListRepository.save(todolistOld.get());
+    return Response.ok("modify success");
   }
 
 

@@ -1,6 +1,9 @@
 <template>
-  <div style="display:flex; padding:50px">
-    <todolistCard :todolist="todolist"></todolistCard>
+  <div style="display:flex; padding:35px">
+    <div v-for="(todolist, index) in todolists" :key="index">
+      <todolistCard :todolist="todolist"></todolistCard>
+    </div>
+    <!-- <todolistCard :todolist="todolist"></todolistCard> -->
     <v-card class="plusTodoList">
       <v-icon
         @click="showAddTodolist = true"
@@ -20,9 +23,9 @@
         style="width:75px; height:35px; border-radius:15px; color:#fff; margin-left:10px"
         depressed
         color="primary"
-        @click="replyDis"
-        :loading="loadReply"
-        :disabled="loadReply"
+        @click="addTodolist"
+        :loading="loadAddTodoList"
+        :disabled="loadAddTodoList"
         >New</v-btn
       >
       <v-btn
@@ -31,10 +34,11 @@
         icon
         @click="(showAddTodolist = false), (newTodolistName = '')"
         style="margin-left:8px"
+        :loading="loadAddTodoList"
+        :disabled="loadAddTodoList"
         ><v-icon>mdi-close</v-icon></v-btn
       >
     </v-card>
-    <addTodoListDialog></addTodoListDialog>
   </div>
 </template>
 
@@ -43,8 +47,10 @@ import todolistCard from "@/components/todolistCard";
 export default {
   data: function() {
     return {
-      showAddTodolist: true,
+      showAddTodolist: false,
+      loadAddTodoList: false,
       newTodolistName: "",
+      todolists: "",
       todolist: {
         todolistId: 0,
         projectId: 0,
@@ -90,9 +96,41 @@ export default {
     },
     hideAddNewTodolist() {
       this.showAddTodolist = false;
+    },
+    addTodolist() {
+      this.loadAddTodoList = true;
+      this.$axios({
+        method: "post",
+        url: this.$store.state.host + "todolist/add",
+        data: {
+          projectId: 0,
+          todolistName: this.newTodolistName
+        }
+      })
+        .then(res => {
+          this.loadAddTodoList = false;
+          this.showAddTodo = false;
+          this.$router.go(0);
+        })
+        .catch(error => {
+          this.$store.commit("response", error);
+          this.loadAddTodoList = false;
+        });
     }
   },
-
+  created() {
+    this.$axios({
+      method: "get",
+      url: this.$store.state.host + "todolist/get/0"
+    })
+      .then(res => {
+        console.log(res);
+        this.todolists = res.data.data;
+      })
+      .catch(error => {
+        this.$store.commit("response", error);
+      });
+  },
   components: {
     todolistCard
   }
@@ -101,7 +139,7 @@ export default {
 
 <style scoped>
 .plusTodoList {
-  margin-left: 30px;
+  margin: 15px;
   width: 400px;
   height: 70px;
   display: flex;

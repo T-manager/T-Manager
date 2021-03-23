@@ -6,9 +6,8 @@ export default new Vuex.Store({
   state: {
     token: null,
     host: "http://localhost:6767/api/",
-    show: {},
-    scrollHeight: {
-      teaforence: "" //滚动的距离
+    show: {
+      showModifyTodo: false
     }
   },
   getters: {
@@ -47,8 +46,6 @@ export default new Vuex.Store({
         alert(token.response.data.message);
         // console.log(typeof token.response.data.status);
         if (token.response.data.status == 401) {
-          // console.log();
-          // console.log(token.response.data);
           var path = "/login";
           router.push({ path: path });
         }
@@ -65,10 +62,6 @@ export default new Vuex.Store({
         //   router.push({ path: path });
         // }
       }
-    },
-    setScrollHeight(state, disdance) {
-      //管理赛事 滚动距离
-      state.scrollHeight.teaforence = disdance;
     }
   },
   actions: {},
