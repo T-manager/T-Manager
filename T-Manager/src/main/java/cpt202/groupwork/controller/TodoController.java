@@ -121,7 +121,7 @@ public class TodoController {
 //    if (todo.isEmpty()) {
 //      return Response.notFound("没有找到todo哦！");
 //    }
-    todo.get().setTodoCheck(true);
+    todo.get().setTodoCheck(!todo.get().getTodoCheck());
     return Response.ok(todoRepository.save(todo.get()));
   }
 
