@@ -13,7 +13,7 @@ public interface TodoRepository extends JpaRepository<Todo, Integer> {
   /**
    * 通过 projectId 找到 List<TodoList>
    *
-   * @param projectId
+   * @param todolistId
    * @return List<TodoList>
    */
   List<Todo> findByTodolistId(Integer todolistId);

@@ -78,7 +78,8 @@ export default {
         .then(res => {
           console.log(res);
           this.loading = false;
-          this.$router.go(0);
+          this.showModifyTodolist = false;
+          //   this.$router.go(0);
         })
         .catch(error => {
           console.log(error);

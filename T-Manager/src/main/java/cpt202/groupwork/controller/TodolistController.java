@@ -4,9 +4,8 @@ import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.TodolistDTO;
 import cpt202.groupwork.dto.TodolistViewDTO;
 import cpt202.groupwork.entity.Todolist;
-import cpt202.groupwork.entity.Todolist;
 import cpt202.groupwork.repository.ProjectRepository;
-import cpt202.groupwork.repository.TodoListRepository;
+import cpt202.groupwork.repository.TodolistRepository;
 import cpt202.groupwork.repository.TodoRepository;
 import cpt202.groupwork.repository.UserRepository;
 //import cpt202.groupwork.security.SecurityUtils;
@@ -16,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -38,7 +37,7 @@ public class TodolistController {
   ProjectRepository projectRepository;
 
   @Autowired
-  TodoListRepository todoListRepository;
+  TodolistRepository todoListRepository;
 
   @Autowired
   TodoRepository todoRepository;

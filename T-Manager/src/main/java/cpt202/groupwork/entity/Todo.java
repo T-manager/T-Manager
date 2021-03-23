@@ -37,13 +37,13 @@ public class Todo implements Serializable {
   /**
    * to-do的名字
    */
-  @Column(length = 20,name="todo_name")
+  @Column(length = 20, name="todo_name")
   private String todoName;
 
   /**
    * to-do的描述
    */
-  @Column(length = 100,name="todo_detail")
+  @Column(length = 100, name="todo_detail")
   private String todoDetail;
 
   /**

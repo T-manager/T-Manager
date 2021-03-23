@@ -4,7 +4,7 @@ import cpt202.groupwork.dto.TodoViewDTO;
 import cpt202.groupwork.dto.TodolistViewDTO;
 import cpt202.groupwork.entity.Todo;
 import cpt202.groupwork.entity.Todolist;
-import cpt202.groupwork.repository.TodoListRepository;
+import cpt202.groupwork.repository.TodolistRepository;
 import cpt202.groupwork.repository.TodoRepository;
 import cpt202.groupwork.repository.UserRepository;
 import cpt202.groupwork.service.TodolistService;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class TodolistServiceImpl  implements TodolistService {
   @Autowired
-  TodoListRepository todoListRepository;
+  TodolistRepository todoListRepository;
 
   @Autowired
   TodoRepository todoRepository;

@@ -1,21 +1,92 @@
 <template>
   <div>
-    <v-list-item style="margin-top:10px" @click="showAddTodo = true">
-      <v-list-item-content style="display:flex; justify-content:center;"
-        ><v-icon>mdi-plus</v-icon>
-      </v-list-item-content>
+    <!-- 每一行TODO概述 -->
+    <v-list-item @click="showTodoDetail = true">
+      <template>
+        <v-list-item-content
+          style="display:flex; justify-content:flex-start; margin-left:10px;"
+        >
+          <div
+            class="todo_name"
+            :style="
+              todo.todoCheck
+                ? 'color:#a3a3a3; text-decoration:line-through'
+                : 'color:#434843'
+            "
+          >
+            {{ todo.todoName }}
+          </div>
+          <div
+            style="display:flex; margin-top:5px"
+            :style="
+              todo.todoCheck
+                ? 'color:#c3c3c3; text-decoration:line-through'
+                : 'color:#838383'
+            "
+          >
+            <div class="todo_detail">
+              {{ todo.todoDetail }}
+            </div>
+            <div class="todo_ddl">
+              {{ todo.todoDdl }}
+            </div>
+          </div>
+        </v-list-item-content>
+        <!-- TODO check 按键 -->
+        <v-list-item-action style="margin-right:8px">
+          <v-checkbox
+            v-model="todo.todoCheck"
+            color="primary"
+            @click="checkTodo()"
+          ></v-checkbox>
+        </v-list-item-action>
+      </template>
     </v-list-item>
-    <v-dialog v-model="showAddTodo" persistent max-width="600px">
+
+    <!-- TODO 详情弹窗 -->
+    <v-dialog v-model="showTodoDetail" max-width="600px">
+      <v-card v-if="showModifyTodo == false" class="card">
+        <v-card-title>
+          <span class="headline">Modify todo</span>
+          <v-icon
+            color="primary"
+            @click="showModifyTodo = true"
+            style="margin-left:10px"
+            >mdi-pencil-outline</v-icon
+          >
+          <v-icon @click="deleteTodo" style="margin-left:10px"
+            >mdi-close</v-icon
+          >
+        </v-card-title>
+        <v-card-text
+          style="display:flex; flex-direction:column; align-items:flex-start;"
+        >
+          <span class="todo_detail_info">
+            Todolist Name: {{ todolistName }}
+          </span>
+          <span class="todo_detail_info"> Todo Name: {{ todo.todoName }} </span>
+          <span class="todo_detail_info">
+            Todo Detail: {{ todo.todoDetail }}
+          </span>
+          <span class="todo_detail_info">Todo DDL: {{ todo.todoDdl }}</span>
+
+          <!-- 选择负责人 -->
+        </v-card-text>
+      </v-card>
+    </v-dialog>
+
+    <!-- 编辑 TODO -->
+    <v-dialog v-model="showModifyTodo" persistent max-width="600px">
       <v-card class="card">
         <v-card-title>
-          <span class="headline">Create a new todo</span>
+          <span class="headline">Modify a new todo</span>
         </v-card-title>
         <v-card-text>
           <v-text-field
             label="todo list name"
             color="primary"
             prepend-icon="mdi-leaf"
-            v-model="todolist.todolistName"
+            v-model="todolistName"
             readonly
           ></v-text-field>
           <v-text-field
@@ -24,7 +95,7 @@
             :rules="rules.nameRules"
             counter="20"
             prepend-icon="mdi-alphabetical"
-            v-model="todoForm.todoName"
+            v-model="todo.todoName"
           ></v-text-field>
           <v-textarea
             label="todo detail"
@@ -35,7 +106,7 @@
             auto-grow
             rows="1"
             prepend-icon="mdi-menu"
-            v-model="todoForm.todoDetail"
+            v-model="todo.todoDetail"
           ></v-textarea>
           <!-- 选择时间日期 -->
           <div style="display:flex">
@@ -44,14 +115,14 @@
               ref="datePicker"
               v-model="datePicker"
               :close-on-content-click="false"
-              :return-value.sync="todo.date"
+              :return-value.sync="todoChange.date"
               transition="scale-transition"
               offset-y
               min-width="290px"
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="todo.date"
+                  v-model="todoChange.date"
                   label="todo ddl date"
                   color="primary"
                   :rules="rules.notNull"
@@ -62,7 +133,7 @@
                 ></v-text-field>
               </template>
               <v-date-picker
-                v-model="todo.date"
+                v-model="todoChange.date"
                 no-title
                 scrollable
                 locale="zh-cn"
@@ -71,7 +142,7 @@
               >
                 <v-spacer></v-spacer>
                 <v-btn
-                  color="indigo lighten-4"
+                  color="indigo lighten-5"
                   @click="datePicker = false"
                   class="indigo--text"
                   >Cancel</v-btn
@@ -79,7 +150,7 @@
                 <v-btn
                   color="primary"
                   class="white--text"
-                  @click="$refs.datePicker.save(todo.date)"
+                  @click="$refs.datePicker.save(todoChange.date)"
                   >Submit</v-btn
                 >
               </v-date-picker>
@@ -90,7 +161,7 @@
               v-model="timePicker"
               :close-on-content-click="false"
               :nudge-right="40"
-              :return-value.sync="todo.time"
+              :return-value.sync="todoChange.time"
               transition="scale-transition"
               offset-y
               max-width="290px"
@@ -98,7 +169,7 @@
             >
               <template v-slot:activator="{ on, attrs }">
                 <v-text-field
-                  v-model="todo.time"
+                  v-model="todoChange.time"
                   label="todo ddl time"
                   color="primary"
                   :rules="rules.notNull"
@@ -109,11 +180,11 @@
               </template>
               <v-time-picker
                 v-if="timePicker"
-                v-model="todo.time"
+                v-model="todoChange.time"
                 full-width
                 format="24hr"
                 color="primary"
-                @click:minute="$refs.timePicker.save(todo.time)"
+                @click:minute="$refs.timePicker.save(todoChange.time)"
               ></v-time-picker>
             </v-menu>
           </div>
@@ -124,14 +195,14 @@
           <v-btn
             color="indigo lighten-5"
             class="indigo--text"
-            @click="showAddTodo = false"
+            @click="showModifyTodo = false"
           >
             <v-icon class="pr-2">mdi-cancel</v-icon>Cancel
           </v-btn>
           <v-btn
             color="primary"
             style="color:#fff; margin-left:20px"
-            @click="createTodo()"
+            @click="ModifyTodo()"
             :loading="loading"
             :disabled="loading"
           >
@@ -148,11 +219,9 @@ export default {
   data() {
     return {
       loading: false,
-      showAddTodo: false,
-      todoForm: {
-        todoCheck: true
-      },
-      todo: {},
+      showTodoDetail: false,
+      showModifyTodo: false,
+      todoChange: {},
 
       dateFormat: new Date().toISOString().substr(0, 10),
       datePicker: false,
@@ -172,8 +241,23 @@ export default {
       }
     };
   },
-  props: ["todolist"],
+  props: ["todolistName", "todo"],
   methods: {
+    checkTodo() {
+      var todoId = this.todo.todoId;
+      this.todo.loading = true;
+      this.$axios({
+        method: "put",
+        url: this.$store.state.host + "todo/check/" + todoId
+      })
+        .then(res => {
+          console.log(res);
+          this.todo.loading = false;
+        })
+        .catch(error => {
+          this.$store.commit("response", error);
+        });
+    },
     checkNameRules(v) {
       if (typeof v == "undefined") return false;
       return v.length <= 20 && v.length >= 3;
@@ -186,52 +270,98 @@ export default {
       return typeof v != "undefined";
     },
     checkRules() {
-      if (!this.checkNameRules(this.todoForm.todoName)) {
+      if (!this.checkNameRules(this.todo.todoName)) {
         alert("check the name");
         return false;
       }
-      if (!this.checkDetailRules(this.todoForm.todoDetail)) {
+      if (!this.checkDetailRules(this.todo.todoDetail)) {
         alert("check the detail");
         return false;
       }
-      if (!this.checkDateTimeRules(this.todo.date)) {
+      if (!this.checkDateTimeRules(this.todoChange.date)) {
         alert("check the date");
         return false;
       }
-      if (!this.checkDateTimeRules(this.todo.time)) {
+      if (!this.checkDateTimeRules(this.todoChange.time)) {
         alert("check the time");
         return false;
       }
       return true;
     },
-    async createTodo() {
+    async ModifyTodo() {
       this.loading = true;
-      this.todoForm.todoDdl = this.todo.date + " " + this.todo.time + ":00";
+      this.todo.todoDdl =
+        this.todoChange.date + "T" + this.todoChange.time + ":00";
       if (!this.checkRules()) {
         this.loading = false;
         return;
       }
-      this.todoForm.todolistId = this.todolist.todolistId;
+      this.todo.todoMember = 0;
+      console.log(this.todo);
       await this.$axios({
-        method: "post",
-        url: this.$store.state.host + "todo/add",
-        data: this.todoForm
+        method: "put",
+        url: this.$store.state.host + "todo/edit",
+        data: this.todo
       })
         .then(res => {
           this.loading = false;
-          this.showAddTodo = false;
+          this.showTodoDetail = false;
           this.$router.go(0);
         })
         .catch(error => {
           this.$store.commit("response", error);
           this.loading = false;
         });
+    },
+    deleteTodo() {
+      this.$axios({
+        method: "delete",
+        url: this.$store.state.host + "todo/delete/" + this.todo.todoId
+      })
+        .then(res => {
+          this.$router.go(0);
+        })
+        .catch(error => {
+          this.$store.commit("response", error);
+        });
     }
+  },
+  created() {
+    var dateTime = this.todo.todoDdl;
+    this.todoChange.date = dateTime.split("T")[0];
+    this.todoChange.time = dateTime.split("T")[1].split(":00.")[0];
   }
 };
 </script>
 
 <style scoped>
+.todo_name {
+  text-align: left;
+  font-size: 16px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.todo_ddl {
+  margin-left: 5px;
+  font-size: 12px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.todo_detail {
+  width: 195px;
+  text-align: left;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.omit {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .card {
   padding: 20px;
 }
@@ -239,5 +369,9 @@ export default {
   display: flex;
   justify-content: flex-end;
   align-items: center;
+}
+.todo_detail_info {
+  margin-top: 10px;
+  font-size: 16px;
 }
 </style>

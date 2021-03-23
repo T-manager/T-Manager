@@ -17,6 +17,9 @@ public class TodoViewDTO {
   //todo的名字
   private String todoName;
 
+  //todo的详情
+  private String todoDetail;
+
   //todo的截止日期
   private Date todoDdl;
 

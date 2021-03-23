@@ -9,11 +9,11 @@ import org.springframework.stereotype.Repository;
 public interface UserRepository extends JpaRepository<User, Integer> {
 
     /**
-     * 是否存在 user.username
+     * 是否存在 user.userName
      *
-     * @param username
+     * @param userName
      * @return
      */
-    boolean existsByUsername(String username);
+    boolean existsByUserName(String userName);
 
 }
