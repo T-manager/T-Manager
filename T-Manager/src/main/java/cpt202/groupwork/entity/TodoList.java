@@ -44,12 +44,12 @@ public class TodoList implements Serializable {
    */
 
   @Column(name = "todolist_total_num")
-  private Integer todolistTotalNum;
+  private Integer todolistTotalNum = 0;
 
 
   /**
    * 完成的todo的数量
    */
   @Column(name = "todolist_complete_num")
-  private Integer todolistCompleteNum;
+  private Integer todolistCompleteNum = 0;
 }
