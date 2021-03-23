@@ -88,7 +88,7 @@ public class TodoController {
     return Response.ok();
   }
 
-  @PutMapping("/")
+  @PutMapping("/edit")
   @Operation(summary = "修改todo信息")
   public Response<?> putTodo(@Valid @RequestBody Todo todoInfo) {
 //    Optional<String> username = SecurityUtils.getCurrentUsername();
@@ -103,7 +103,8 @@ public class TodoController {
 //      return Response.notFound("没有找到todo哦！");
 //    }
     BeanUtils.copyProperties(todoInfo, todo.get());
-    return Response.ok(todoRepository.save(todo.get()));
+    todoRepository.save(todo.get());
+    return Response.ok();
   }
 
 
