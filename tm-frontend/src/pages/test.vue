@@ -3,9 +3,12 @@
     <v-btn @click="addTodolost">添加todolist</v-btn>
     <v-btn @click="addProject">添加project</v-btn>
     <v-btn @click="getTodo" class="success">获取todo</v-btn>
-    <v-btn @click="addTodo" class="error">添加todo</v-btn>
-    <v-btn @click="deleteTodo" class="error">删除todo</v-btn>
+    <v-btn @click="addTodo" class="success">添加todo</v-btn>
+    <v-btn @click="deleteTodo" class="success">删除todo</v-btn>
     <v-btn @click="getTodolist" class="success">获取todolist</v-btn>
+    <v-btn @click="modifyTodo" class="success">修改todo</v-btn>
+    <v-btn @click="checkTodo" class="success">check todo</v-btn>
+
 
 
   </v-container>
@@ -101,10 +104,42 @@ export default {
           console.log(error);
         });
     },
+ 
+    modifyTodo: function() {
+      this.$axios({
+        method: "put",
+        url: "http://localhost:6767/api/todo/edit",
+        data:{
+          todoId:1,
+          todoDetail:"very new detail!"
+        }
+      })
+        .then(res => {
+          console.log(res);
+          // this.$router.go(0);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
+
+    checkTodo: function() {
+      this.$axios({
+        method: "put",
+        url: "http://localhost:6767/api/todo/check/1",
+      })
+        .then(res => {
+          console.log(res);
+          // this.$router.go(0);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     deleteTodo: function() {
       this.$axios({
         method: "delete",
-        url: "http://localhost:6767/api/todo/delete/1"
+        url: "http://localhost:6767/api/todo/delete/2"
       })
         .then(res => {
           console.log(res);
