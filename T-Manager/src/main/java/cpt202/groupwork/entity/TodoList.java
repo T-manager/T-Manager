@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class TodoList implements Serializable {
+public class Todolist implements Serializable {
 
   private static final long serialVersionUID = 1L;
 

@@ -1,11 +1,9 @@
 package cpt202.groupwork.controller;
 
 import cpt202.groupwork.Response;
-import cpt202.groupwork.dto.TodoDTO;
 import cpt202.groupwork.dto.TodolistDTO;
 import cpt202.groupwork.dto.TodolistViewDTO;
-import cpt202.groupwork.entity.Todo;
-import cpt202.groupwork.entity.TodoList;
+import cpt202.groupwork.entity.Todolist;
 import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.TodoListRepository;
 import cpt202.groupwork.repository.TodoRepository;
@@ -33,7 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/todolist")
-public class TodoListController {
+public class TodolistController {
 
   @Autowired
   ProjectRepository projectRepository;
@@ -66,7 +64,7 @@ public class TodoListController {
 //      return Response.bad("不存在此项目");
 //    }
 
-    TodoList todolist = new TodoList();
+    Todolist todolist = new Todolist();
 //    Discussion discussion = new Discussion();
     BeanUtils.copyProperties(todolistDTO, todolist);
     todolist.setProjectId(projectId);
@@ -84,7 +82,7 @@ public class TodoListController {
 //      return Response.unAuth();
 //    }
 
-    Optional<TodoList> todolist = todoListRepository.findById(todolistId);
+    Optional<Todolist> todolist = todoListRepository.findById(todolistId);
 //    if (todoList.isEmpty()) {
 //      return Response.notFound();
 //    }
@@ -105,7 +103,7 @@ public class TodoListController {
 //    if (username.isEmpty()) {
 //      return Response.unAuth();
 //    }
-    Optional<TodoList> todoList = todoListRepository.findById(todolistId);
+    Optional<Todolist> todoList = todoListRepository.findById(todolistId);
 
 //    if (todo.isEmpty()) {
 //      return Response.notFound("没有找到todo哦！");

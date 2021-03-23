@@ -4,9 +4,8 @@ package cpt202.groupwork.controller;
 import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.TodoDTO;
 
-import cpt202.groupwork.entity.Project;
 import cpt202.groupwork.entity.Todo;
-import cpt202.groupwork.entity.TodoList;
+import cpt202.groupwork.entity.Todolist;
 import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.TodoListRepository;
 import cpt202.groupwork.repository.TodoRepository;
@@ -53,7 +52,7 @@ public class TodoController {
 //      return Response.unAuth();
 //    }
     Integer todolistId = todoDTO.getTodolistId();
-    TodoList todolist = todoListRepository.findById(todolistId).get();
+    Todolist todolist = todoListRepository.findById(todolistId).get();
     Todo todo = new Todo();
     BeanUtils.copyProperties(todoDTO, todo);
     todo.setTodoCheck(false);
@@ -63,7 +62,7 @@ public class TodoController {
     return Response.ok(todoRepository.save(todo));
   }
 
-  @DeleteMapping("/{todoId}")
+  @DeleteMapping("/delete/{todoId}")
   @Operation(summary = "删除todo")
   public Response<?> deleteTodo(@PathVariable Integer todoId) {
 //    Optional<String> username = SecurityUtils.getCurrentUsername();
@@ -71,7 +70,7 @@ public class TodoController {
 //      return Response.unAuth();
 //    }
     Optional<Todo> todo = todoRepository.findById(todoId);
-    TodoList todolist = todoListRepository.findById(todo.get().getTodolistId()).get();
+    Todolist todolist = todoListRepository.findById(todo.get().getTodolistId()).get();
 //    if (todo.isEmpty()) {
 //      return Response.ok();
 //    }
@@ -127,7 +126,6 @@ public class TodoController {
   @GetMapping("/get/{todoId}")
   @Operation(summary = "查看todo详情")
   public Response<?> getTodo(@PathVariable Integer todoId) {
-    System.out.println("------"+todoId);
     Optional<Todo> todo = todoRepository.findById(todoId);
 //  UserSelfVO userSelfVO = new UserSelfVO();
 //  BeanUtils.copyProperties(user.get(), userSelfVO);
