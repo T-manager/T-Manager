@@ -7,7 +7,7 @@ import cpt202.groupwork.dto.TodoDTO;
 import cpt202.groupwork.entity.Todo;
 import cpt202.groupwork.entity.Todolist;
 import cpt202.groupwork.repository.ProjectRepository;
-import cpt202.groupwork.repository.TodoListRepository;
+import cpt202.groupwork.repository.TodolistRepository;
 import cpt202.groupwork.repository.TodoRepository;
 import cpt202.groupwork.repository.UserRepository;
 //import cpt202.groupwork.security.SecurityUtils;
@@ -36,7 +36,7 @@ public class TodoController {
   ProjectRepository projectRepository;
 
   @Autowired
-  TodoListRepository todoListRepository;
+  TodolistRepository todolistRepository;
 
   @Autowired
   TodoRepository todoRepository;
@@ -52,14 +52,15 @@ public class TodoController {
 //      return Response.unAuth();
 //    }
     Integer todolistId = todoDTO.getTodolistId();
-    Todolist todolist = todoListRepository.findById(todolistId).get();
+    Optional<Todolist> todolist = todolistRepository.findById(todolistId);
     Todo todo = new Todo();
     BeanUtils.copyProperties(todoDTO, todo);
     todo.setTodoCheck(false);
     todo.setTodolistId(todolistId);
-    todolist.setTodolistTotalNum(todolist.getTodolistTotalNum() + 1);
-    todoListRepository.save(todolist);
-    return Response.ok(todoRepository.save(todo));
+    todolist.get().setTodolistTotalNum(todolist.get().getTodolistTotalNum() + 1);
+    todolistRepository.save(todolist.get());
+    todoRepository.save(todo);
+    return Response.ok();
   }
 
   @DeleteMapping("/delete/{todoId}")
@@ -70,7 +71,7 @@ public class TodoController {
 //      return Response.unAuth();
 //    }
     Optional<Todo> todo = todoRepository.findById(todoId);
-    Todolist todolist = todoListRepository.findById(todo.get().getTodolistId()).get();
+    Todolist todolist = todolistRepository.findById(todo.get().getTodolistId()).get();
 //    if (todo.isEmpty()) {
 //      return Response.ok();
 //    }
@@ -82,7 +83,7 @@ public class TodoController {
     if (todo.get().getTodoCheck() == true) {
       todolist.setTodolistCompleteNum(todolist.getTodolistCompleteNum() - 1);
     }
-    todoListRepository.save(todolist);
+    todolistRepository.save(todolist);
     todoRepository.deleteById(todoId);
     return Response.ok();
   }
