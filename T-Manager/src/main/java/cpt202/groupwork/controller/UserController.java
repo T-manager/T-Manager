@@ -10,9 +10,11 @@ import cpt202.groupwork.Response;
 import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -47,4 +49,21 @@ public class UserController {
         return userService.userCreate(user);
     }
 
+    @PutMapping("/{id}")
+    public Response<?> putUser(@PathVariable Integer id, @RequestBody User user) {
+
+       return userService.userModify(id,user);
+    }
+
+    /**
+     *
+     *
+     * @param id
+     * @return
+     */
+    @DeleteMapping("/{id}")
+    public Response<?> deleteUser(@PathVariable Integer id) {
+
+        return userService.userDelete(id);
+    }
 }
