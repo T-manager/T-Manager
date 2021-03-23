@@ -1,12 +1,12 @@
 package cpt202.groupwork.repository;
 
-import cpt202.groupwork.entity.TodoList;
+import cpt202.groupwork.entity.Todolist;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface TodoListRepository extends JpaRepository<TodoList, Integer> {
+public interface TodoListRepository extends JpaRepository<Todolist, Integer> {
 
 //  List<TodoList> findByUsername(String username);
 
@@ -16,6 +16,6 @@ public interface TodoListRepository extends JpaRepository<TodoList, Integer> {
    * @param projectId
    * @return List<TodoList>
    */
-  List<TodoList> findByProjectId(Integer projectId);
+  List<Todolist> findByProjectId(Integer projectId);
 
 }

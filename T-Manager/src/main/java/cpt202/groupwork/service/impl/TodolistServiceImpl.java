@@ -1,10 +1,9 @@
 package cpt202.groupwork.service.impl;
 
 import cpt202.groupwork.dto.TodoViewDTO;
-import cpt202.groupwork.dto.TodolistDTO;
 import cpt202.groupwork.dto.TodolistViewDTO;
 import cpt202.groupwork.entity.Todo;
-import cpt202.groupwork.entity.TodoList;
+import cpt202.groupwork.entity.Todolist;
 import cpt202.groupwork.repository.TodoListRepository;
 import cpt202.groupwork.repository.TodoRepository;
 import cpt202.groupwork.repository.UserRepository;
@@ -29,9 +28,9 @@ public class TodolistServiceImpl  implements TodolistService {
   @Override
   public List<TodolistViewDTO> getTodolist(Integer projectId) {
     List<TodolistViewDTO> todolistViewDTOs= new ArrayList<>();
-    List<TodoList> todoLists = todoListRepository.findByProjectId(projectId);
+    List<Todolist> todolists = todoListRepository.findByProjectId(projectId);
 
-    for (TodoList todoList : todoLists) {
+    for (Todolist todoList : todolists) {
       TodolistViewDTO todolistViewDTO = new TodolistViewDTO();
       BeanUtils.copyProperties(todoList, todolistViewDTO);
 //      todolistViewDTO.setAvatar(userRepository.findAvatarByUsername(todolistViewDTO.getUsername()));
