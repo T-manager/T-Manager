@@ -113,7 +113,7 @@ public class TodolistController {
   }
 
 
-  @GetMapping("/{project}")
+  @GetMapping("/get/{projectId}")
   @Operation(summary = "通过 projectid 查看所有的 todolist, 包括所属的todo")
   public Response<?> getDiscussion(@PathVariable Integer projectId) {
     List<TodolistViewDTO> todolistViewDTOs = new ArrayList<>();

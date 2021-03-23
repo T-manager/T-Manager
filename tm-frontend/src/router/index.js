@@ -1,6 +1,8 @@
 import Vue from "vue";
 import Router from "vue-router";
 import todolist from "@/pages/todolist";
+import test from "@/pages/test";
+
 
 Vue.use(Router);
 
@@ -16,6 +18,12 @@ export default new Router({
       path: "/todolist",
       name: "todolist",
       component: todolist
+    },
+    {
+      path: "/test",
+      name: "test",
+      component: test
+      
     }
   ]
 });
