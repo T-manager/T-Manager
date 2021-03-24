@@ -121,6 +121,13 @@ public class TodoController {
 //    if (todo.isEmpty()) {
 //      return Response.notFound("没有找到todo哦！");
 //    }
+    Optional<Todolist> todolist = todolistRepository.findById(todo.get().getTodolistId());
+    //如果是没有完成的todo
+    if (todo.get().getTodoCheck() == false) {
+      todolist.get().setTodolistCompleteNum(todolist.get().getTodolistCompleteNum() + 1);
+    } else {
+      todolist.get().setTodolistCompleteNum(todolist.get().getTodolistCompleteNum() - 1);
+    }
     todo.get().setTodoCheck(!todo.get().getTodoCheck());
     return Response.ok(todoRepository.save(todo.get()));
   }
