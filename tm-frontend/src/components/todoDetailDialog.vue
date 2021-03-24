@@ -253,6 +253,8 @@ export default {
         .then(res => {
           console.log(res);
           this.todo.loading = false;
+          // 调用父组件方法改变完成任务数量
+          this.$emit("changeCompleteNum");
         })
         .catch(error => {
           this.$store.commit("response", error);

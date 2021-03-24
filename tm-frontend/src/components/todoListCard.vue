@@ -31,6 +31,7 @@
           <!-- 每个TODO -->
           <div v-for="(todo, index) in todolist.todoViewDTO" :key="index">
             <todoDetailDialog
+              @changeCompleteNum="changeCompleteNum(index)"
               :todolistName="todolist.todolistName"
               :todo="todo"
             ></todoDetailDialog>
@@ -57,6 +58,11 @@ export default {
     };
   },
   methods: {
+    changeCompleteNum(index) {
+      if (this.todolist.todoViewDTO[index].todoCheck == false)
+        this.todolist.todolistCompleteNum--;
+      else this.todolist.todolistCompleteNum++;
+    },
     deleteTodolist() {
       this.loadAddTodoList = true;
       this.$axios({
