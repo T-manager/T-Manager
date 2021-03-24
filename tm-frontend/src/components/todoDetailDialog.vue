@@ -37,7 +37,7 @@
           <v-checkbox
             v-model="todo.todoCheck"
             color="primary"
-            @click="checkTodo()"
+            @click.stop="checkTodo()"
           ></v-checkbox>
         </v-list-item-action>
       </template>
@@ -202,7 +202,7 @@
           <v-btn
             color="primary"
             style="color:#fff; margin-left:20px"
-            @click="ModifyTodo()"
+            @click="modifyTodo()"
             :loading="loading"
             :disabled="loading"
           >
@@ -288,17 +288,17 @@ export default {
       }
       return true;
     },
-    async ModifyTodo() {
+    async modifyTodo() {
       this.loading = true;
       this.todo.todoDdl =
-        this.todoChange.date + "T" + this.todoChange.time + ":00";
+        this.todoChange.date + " " + this.todoChange.time + ":00 ";
       if (!this.checkRules()) {
         this.loading = false;
         return;
       }
       this.todo.todoMember = 0;
       console.log(this.todo);
-      await this.$axios({
+      this.$axios({
         method: "put",
         url: this.$store.state.host + "todo/edit",
         data: this.todo
@@ -328,8 +328,8 @@ export default {
   },
   created() {
     var dateTime = this.todo.todoDdl;
-    this.todoChange.date = dateTime.split("T")[0];
-    this.todoChange.time = dateTime.split("T")[1].split(":00.")[0];
+    this.todoChange.date = dateTime.split(" ")[0];
+    this.todoChange.time = dateTime.split(" ")[1].split(":00 ")[0];
   }
 };
 </script>
@@ -343,7 +343,7 @@ export default {
   text-overflow: ellipsis;
 }
 .todo_ddl {
-  margin-left: 5px;
+  margin-left: 3px;
   font-size: 12px;
   white-space: nowrap;
   overflow: hidden;
