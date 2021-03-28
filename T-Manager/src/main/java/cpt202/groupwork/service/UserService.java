@@ -4,7 +4,9 @@ import cpt202.groupwork.controller.UserController;
 import cpt202.groupwork.Response;
 import cpt202.groupwork.repository.UserRepository;
 import cpt202.groupwork.entity.User;
+import cpt202.groupwork.security.TokenUtils;
 import java.util.Optional;
+import javax.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ public class UserService {
   @Autowired
   UserRepository userRepository;
 
+  @Resource
+  TokenUtils tokenUtils;
   /**
    *
    * @param userId
@@ -37,9 +41,9 @@ public class UserService {
     user.setPassword(encoder.encode(user.getPassword()));
     try {
       userRepository.save(user);
-      return Response.ok();
+      return Response.ok(1000); //User created successfully
     } catch (Exception e){
-      return Response.fail();
+      return Response.fail(1001); // User already exists
     }
   }
 
@@ -74,13 +78,14 @@ public class UserService {
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
       // matches参数: 第一个参数为未加密密码，第二个为数据库中存储的加密后的密码，返回值为其是否匹配
       if(encoder.matches(postUser.getPassword(), user.get().getPassword())){
+        tokenUtils.createToken(user.get());
         return Response.ok();
       }
       else{
-        return Response.fail(); // not match
+        return Response.fail("Wrong password"); // not match
       }
     }
     else
-      return Response.fail(); // not found
+      return Response.fail("User not exist"); // not found
   }
 }
