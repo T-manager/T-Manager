@@ -9,10 +9,12 @@ import javax.persistence.Id;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import java.io.Serializable;
+import lombok.Getter;
 
 /**
  * 用户实体
@@ -23,7 +25,6 @@ import java.io.Serializable;
 @Data
 @Builder
 @AllArgsConstructor
-
 public class User implements Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -53,8 +54,14 @@ public class User implements Serializable {
    */
 //  @JsonIgnore//后台返回时 用来屏蔽此字段
   @JsonProperty(access= JsonProperty.Access.WRITE_ONLY)
-  @Column(length = 20)
+  @Column(length = 75)
   private String password;
+
+  /**
+   * 盐
+   */
+  @Column(length = 20)
+  private String salt;
 
   /**
    * 用户角色

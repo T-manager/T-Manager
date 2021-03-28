@@ -6,6 +6,7 @@ import cpt202.groupwork.repository.UserRepository;
 import cpt202.groupwork.entity.User;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
@@ -30,8 +31,16 @@ public class UserService {
   }
 
   public Response<?> userCreate(final User user){
-    userRepository.save(user);
-    return Response.ok();
+    // Springboot Security 提供的密码加密方法，使用SHA-256 + 随机盐 + 密钥对密码进行加密
+    // 密文格式见 https://stackoverflow.com/questions/6832445/how-can-bcrypt-have-built-in-salts
+    BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    user.setPassword(encoder.encode(user.getPassword()));
+    try {
+      userRepository.save(user);
+      return Response.ok();
+    } catch (Exception e){
+      return Response.fail();
+    }
   }
 
   public Response<?> userDelete(final Integer userId){
@@ -44,6 +53,7 @@ public class UserService {
       return Response.ok("user not found");
     }
   }
+
   public Response<?> userModify(final Integer userId,  final User userMod){
     Optional<User> user = userRepository.findById(userId);
 //    if(userMod.getId()!=userId){
@@ -58,4 +68,19 @@ public class UserService {
     }
   }
 
+  public Response<?> userLogin(final User postUser){
+    Optional<User> user = userRepository.findByUsername(postUser.getUsername());
+    if(user.isPresent()) {
+      BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+      // matches参数: 第一个参数为未加密密码，第二个为数据库中存储的加密后的密码，返回值为其是否匹配
+      if(encoder.matches(postUser.getPassword(), user.get().getPassword())){
+        return Response.ok();
+      }
+      else{
+        return Response.fail(); // not match
+      }
+    }
+    else
+      return Response.fail(); // not found
+  }
 }

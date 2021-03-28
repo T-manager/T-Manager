@@ -2,7 +2,7 @@ import Vue from "vue";
 import Router from "vue-router";
 import todolist from "@/pages/todolist";
 import test from "@/pages/test";
-import regist from "@/pages/regist";
+import register from "@/pages/register";
 
 Vue.use(Router);
 
@@ -20,9 +20,9 @@ export default new Router({
       component: todolist
     },
     {
-      path: "/regist",
-      name: "regist",
-      component: regist
+      path: "/register",
+      name: "register",
+      component: register
     },
     {
       path: "/test",

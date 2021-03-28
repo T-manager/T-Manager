@@ -1,19 +1,14 @@
 package cpt202.groupwork.controller;
 
 import cpt202.groupwork.service.UserService;
-import java.util.Optional;
 
 import cpt202.groupwork.entity.User;
-import cpt202.groupwork.service.UserService;
-import cpt202.groupwork.repository.UserRepository;
 import cpt202.groupwork.Response;
 import javax.annotation.Resource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,13 +35,6 @@ public class UserController {
 //        }
         return userService.userIdExists(userId);
         // 没登录的人, 去访问别人的用户主页
-    }
-
-    @PostMapping("/regist")
-    public Response<?> postUser(@RequestBody User user) {
-        // @RequestBody注解用来绑定通过http请求中application/json类型上传的数据
-
-        return userService.userCreate(user);
     }
 
     @PutMapping("/{id}")
