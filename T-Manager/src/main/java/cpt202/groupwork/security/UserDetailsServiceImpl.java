@@ -11,7 +11,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import cpt202.groupwork.entity.*;
+
 import cpt202.groupwork.repository.UserRepository;
 
 /**
@@ -36,9 +36,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             // 可以通过增加用户角色表、用户--角色映射表，存储多个用户角色信息
             authorities.add(new SimpleGrantedAuthority("ROLE_" + user.get().getRole()));
             // 给 Spring Security 传入用户名、用户密码、用户角色。
+            //org.springframework.security.core.userdetails.User不是entity里的User
             return new User(username, user.get().getPassword(), authorities);
         }
         else
-            return null;
+            throw new UsernameNotFoundException(username);
     }
 }

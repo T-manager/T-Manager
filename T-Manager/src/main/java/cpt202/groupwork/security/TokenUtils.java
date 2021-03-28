@@ -12,7 +12,7 @@ import cpt202.groupwork.entity.User;
 /**
  * 生成 验证用户Token
  *
- * @author xian
+ * @author
  */
 @Component
 public class TokenUtils implements Serializable {
@@ -20,7 +20,7 @@ public class TokenUtils implements Serializable {
     /**
      * Token 有效时长
      */
-    private static final Long EXPIRATION = 604800L;
+    private static final Long EXPIRATION = 604800L;//seconds=7days
 
     /**
      * 生成 Token 字符串  setAudience 接收者 setExpiration 过期时间 role 用户角色
@@ -31,7 +31,7 @@ public class TokenUtils implements Serializable {
     public String createToken(User user) {
         try {
             // Token 的过期时间
-            Date expirationDate = new Date(System.currentTimeMillis() + EXPIRATION * 1000);
+            Date expirationDate = new Date(System.currentTimeMillis() + EXPIRATION * 1000);//过期时间:生成后七天
             // 生成 Token
             String token = Jwts.builder()
                     // 设置 Token 签发者 可选
@@ -44,12 +44,12 @@ public class TokenUtils implements Serializable {
                     .setIssuedAt(new Date())
                     // 通过 claim 方法设置一个 key = role，value = userRole 的值
                     .claim("role", user.getRole())
-                    // 设置加密密钥和加密算法，注意要用私钥加密且保证私钥不泄露
+                    // 设置加密密钥和加密算法
                     .signWith(cpt202.groupwork.security.RsaUtils.getPrivateKey(), SignatureAlgorithm.RS256)
                     .compact();
             return String.format("Bearer %s", token);
         } catch (Exception e) {
-            return null;
+            return "tokenCreate Mistake";
         }
     }
 
@@ -63,7 +63,7 @@ public class TokenUtils implements Serializable {
         try {
             // 解密 Token，获取 Claims 主体
             Claims claims = Jwts.parserBuilder()
-                    // 设置公钥解密，以为私钥是保密的，因此 Token 只能是自己生成的，如此来验证 Token
+                    // 设置私钥解密
                     .setSigningKey(cpt202.groupwork.security.RsaUtils.getPublicKey())
                     .build().parseClaimsJws(token).getBody();
             assert claims != null;

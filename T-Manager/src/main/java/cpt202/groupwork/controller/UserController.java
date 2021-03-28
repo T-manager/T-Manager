@@ -5,6 +5,7 @@ import cpt202.groupwork.service.UserService;
 import cpt202.groupwork.entity.User;
 import cpt202.groupwork.Response;
 import javax.annotation.Resource;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,6 +51,7 @@ public class UserController {
      * @return
      */
     @DeleteMapping("/{id}")
+//    @PreAuthorize("hasRole('ADMIN')")
     public Response<?> deleteUser(@PathVariable Integer id) {
 
         return userService.userDelete(id);

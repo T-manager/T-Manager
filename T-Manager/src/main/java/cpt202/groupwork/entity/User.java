@@ -57,11 +57,7 @@ public class User implements Serializable {
   @Column(length = 75)
   private String password;
 
-  /**
-   * 盐
-   */
-  @Column(length = 20)
-  private String salt;
+
 
   /**
    * 用户角色

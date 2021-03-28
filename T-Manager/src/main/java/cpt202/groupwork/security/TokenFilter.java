@@ -20,7 +20,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 /**
  * Jwt 拦截器，通过Token鉴权
  *
- * @author xian
+ * @author
  */
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @Service
@@ -37,6 +37,7 @@ public class TokenFilter extends OncePerRequestFilter {
         // 存储Token的Headers Key与Value
         final String authorizationKey = "Authorization";
         String authorizationValue;
+        //判断request的header中是否有token
         try {
             authorizationValue = request.getHeader(authorizationKey);
         } catch (Exception e) {
@@ -57,6 +58,7 @@ public class TokenFilter extends OncePerRequestFilter {
                 authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
                 // 传入用户名、用户密码、用户角色。 这里的密码随便写的，用不上
                 UserDetails userDetails = new User(user.getUsername(), "password", authorities);
+                //用户名与密码验证
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(userDetails.getUsername());

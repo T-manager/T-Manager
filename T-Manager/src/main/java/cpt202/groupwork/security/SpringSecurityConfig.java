@@ -8,6 +8,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -54,6 +55,21 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     return super.authenticationManagerBean();
   }
 
+  /**
+   * 静态资源设置
+   */
+  @Override
+  public void configure(WebSecurity webSecurity) {
+    //不拦截静态资源,所有用户均可访问的资源
+    webSecurity.ignoring().antMatchers(
+        "/",
+        "/css/**",
+        "/js/**",
+        "/images/**",
+        "/layui/**"
+    );
+  }
+
   @Override
   public void configure(HttpSecurity httpSecurity) throws Exception {
     // 配置 CSRF 关闭,允许跨域访问
@@ -67,7 +83,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         .antMatchers("/auth/**", "/user/**")
         .permitAll().anyRequest().authenticated();
     // 添加拦截器
-    //httpSecurity.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
+    httpSecurity.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
     // 禁用缓存
     httpSecurity.headers().cacheControl();
   }
