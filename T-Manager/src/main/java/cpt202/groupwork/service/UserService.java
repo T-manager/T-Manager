@@ -110,10 +110,10 @@ public class UserService {
         return Response.ok(tokenUtils.createToken(user.get()));
       }
       else{
-        return Response.fail("Wrong password"); // not match
+        return Response.fail(2001); // Wrong password
       }
     }
     else
-      return Response.fail("User not exist"); // not found
+      return Response.fail(2002); // User not found
   }
 }

@@ -3,8 +3,8 @@
     <v-row justify="center">
       <v-col cols="6">
         <v-form v-model="valid">
-          <v-card class="userRegistCard" ref="form">
-            <v-card-title>Create an new account</v-card-title>
+          <v-card class="userLoginCard" ref="form">
+            <v-card-title>Sign in with your account</v-card-title>
             <v-card-text>
               <v-text-field
                 outlined
@@ -24,20 +24,12 @@
                 color="primary"
                 type="password"
               ></v-text-field>
-              <v-text-field
-                outlined
-                v-model="email"
-                ref="email"
-                :rules="[rules.required, rules.email]"
-                label="Enter E-mail"
-                color="primary"
-              ></v-text-field>
             </v-card-text>
             <v-card-actions>
               <v-btn text @click="cancel"> Cancel </v-btn>
               <v-spacer></v-spacer>
               <v-slide-x-reverse-transition>
-                <v-tooltip v-if="this.valid" left>
+                <v-tooltip v-if="valid" left>
                   <template v-slot:activator="{ on, attrs }">
                     <v-btn
                       icon
@@ -52,7 +44,7 @@
                   <span>Refresh form</span>
                 </v-tooltip>
               </v-slide-x-reverse-transition>
-              <v-btn :disabled="!this.valid" color="primary" text @click="submit">  Submit </v-btn>
+              <v-btn :disabled="!this.valid" color="primary" text @click="submit"> Submit </v-btn>
             </v-card-actions>
           </v-card>
         </v-form>
@@ -71,10 +63,6 @@ export default {
       email: null,
       rules: {
         required: (value) => !!value || "This field is required.",
-        email: (value) => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || "Invalid e-mail.";
-        },
       }
     };
   },
@@ -83,25 +71,24 @@ export default {
       return {
         username: this.username,
         password: this.password,
-        email: this.email,
       };
     },
   },
   methods: {
-    addNewUser: function () {
+    login: function () {
       this.$axios({
         method: "post",
-        url: "http://localhost:6767/api/auth/register",
+        url: "http://localhost:6767/api/auth/login",
         data: {
           username: this.username,
           password: this.password,
-          email: this.email,
         },
       })
         .then((res) => {
-          if (res.data.data == 1000) alert("Registered successfully");
+          if (res.data.data == 2000) alert("Login successfully");
           // 跳转首页 (未实现)
-          if (res.data.data == 1001) alert("User already exists");
+          if (res.data.data == 2001) alert("Wrong password");
+          if (res.data.data == 2002){ alert("User not exist");}
           //this.$router.go(0);
         })
         .catch((error) => {
@@ -110,13 +97,12 @@ export default {
     },
     resetForm() {
       this.errorMessages = [];
-      // bug: 当邮箱格式错误时无法reset
       Object.keys(this.form).forEach((f) => {
         this.$refs[f].reset();
       });
     },
     submit() {
-      this.addNewUser();
+      this.login();
     },
     cancel(){
       console.log("cancel")
@@ -125,7 +111,7 @@ export default {
 };
 </script>
 <style scoped>
-.userRegistCard {
+.userLoginCard {
   min-width: 450px;
   margin: 15px;
   justify-content: center;
