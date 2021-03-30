@@ -39,6 +39,20 @@ public class UserService {
       return Response.ok("user not found");
     }
   }
+  /**
+   *
+   * @param username
+   * @return
+   */
+  public Response<?> userNameExists(final String username){
+    Optional<User> user = userRepository.findByUsername(username);
+    if (user.isPresent()) {
+      return Response.ok(user.get());
+    }
+    else {
+      return Response.ok("username not found");
+    }
+  }
 
   /**
    * 普通的用户注册，自动给它role=USER,并将密码加密保存
@@ -71,11 +85,19 @@ public class UserService {
     }
   }
 
+  public Response<?> userDelete(final String username){
+    Optional<User> user = userRepository.findByUsername(username);
+    if (user.isPresent()) {
+      userRepository.delete(user.get());
+      return Response.ok(user.get());
+    }
+    else {
+      return Response.ok("user not found");
+    }
+  }
+
   public Response<?> userModify(final Integer userId,  final User userMod){
     Optional<User> user = userRepository.findById(userId);
-//    if(userMod.getId()!=userId){
-//      return Response.ok("userID not found");
-//    }
     if (user.isPresent()) {
       //找出值为空的属性
       final BeanWrapper src = new BeanWrapperImpl(userMod);
@@ -88,10 +110,32 @@ public class UserService {
           emptyNames.add(pd.getName());
       }
       String[] result = new String[emptyNames.size()];
-//      emptyNames.toArray(result);
       //找出为空的属性传入copyProperties
       BeanUtils.copyProperties(userMod,user.get(),emptyNames.toArray(result));
-//      user.get().setId(userId);
+      userRepository.save(user.get());
+      return Response.ok(user.get());
+    }
+    else {
+      return Response.ok("user not found");
+    }
+  }
+
+  public Response<?> userModify(final String username,  final User userMod){
+    Optional<User> user = userRepository.findByUsername(username);
+    if (user.isPresent()) {
+      //找出值为空的属性
+      final BeanWrapper src = new BeanWrapperImpl(userMod);
+      java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
+
+      Set<String> emptyNames = new HashSet<String>();
+      for (java.beans.PropertyDescriptor pd : pds) {
+        Object srcValue = src.getPropertyValue(pd.getName());
+        if (srcValue == null)
+          emptyNames.add(pd.getName());
+      }
+      String[] result = new String[emptyNames.size()];
+      //找出为空的属性传入copyProperties
+      BeanUtils.copyProperties(userMod,user.get(),emptyNames.toArray(result));
       userRepository.save(user.get());
       return Response.ok(user.get());
     }

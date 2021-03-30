@@ -25,35 +25,25 @@ public class UserController {
     @Resource
     private UserService userService;
 
-    @GetMapping("/{userId}")
-    public Response<?> getUserInfo(@PathVariable Integer userId) {
-//        Optional<User> user = userRepository.findById(userId);
-//        if (user.isPresent()) {
-//            return Response.ok(user.get());
-//        }
-//        else {
-//            return Response.ok("user not found");
-//        }
-        return userService.userIdExists(userId);
-        // 没登录的人, 去访问别人的用户主页
+    @GetMapping("/{username}")
+    public Response<?> getUserInfo(@PathVariable String username) {
+        return userService.userNameExists(username);
     }
 
-    @PutMapping("/{id}")
-    public Response<?> putUser(@PathVariable Integer id, @RequestBody User user) {
-
-       return userService.userModify(id,user);
+    @PutMapping("/{username}")
+    public Response<?> putUser(@PathVariable String username, @RequestBody User user) {
+       return userService.userModify(username,user);
     }
 
     /**
      *
-     *
-     * @param id
+     * @param username
      * @return
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{username}")
 //    @PreAuthorize("hasRole('ADMIN')")
-    public Response<?> deleteUser(@PathVariable Integer id) {
+    public Response<?> deleteUser(@PathVariable String username) {
 
-        return userService.userDelete(id);
+        return userService.userDelete(username);
     }
 }
