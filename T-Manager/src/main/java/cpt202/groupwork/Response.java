@@ -57,6 +57,19 @@ public class Response<T> {
     public static Response<?> permissionDenied(String message) {
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, message);
     }
+    // 未通过
+    public static Response<?> fail() {
+        return Response.builder().status(HttpStatus.OK.value()).message("Fail").data(new ArrayList<>()).build();
+    }
 
+    // 未通过 + 携带相关 data 数据
+    public static Response<?> fail(Object data) {
+        return Response.builder().status(HttpStatus.OK.value()).message("Fail").data(data).build();
+    }
+
+    // 未通过 + 携带相关 data 数据
+    public static Response<?> fail(String message, Object data) {
+        return Response.builder().status(HttpStatus.OK.value()).message(message).data(data).build();
+    }
 
 }
