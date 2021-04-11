@@ -8,17 +8,17 @@
             <v-card-text>
               <v-text-field
                 outlined
-                ref="username"
-                v-model="username"
+                ref="userName"
+                v-model="userName"
                 :rules="[rules.required]"
-                label="Enter username"
+                label="Enter userName"
                 color="primary"
                 style="margin-top: 8px"
               ></v-text-field>
               <v-text-field
                 outlined
-                ref="password"
-                v-model="password"
+                ref="userPassword"
+                v-model="userPassword"
                 :rules="[rules.required]"
                 label="Enter password"
                 color="primary"
@@ -65,9 +65,8 @@ export default {
   data() {
     return {
       valid: false,
-      username: null,
-      password: null,
-      email: null,
+      userName: null,
+      userPassword: null,
       rules: {
         required: (value) => !!value || "This field is required.",
       }
@@ -76,8 +75,8 @@ export default {
   computed: {
     form() {
       return {
-        username: this.username,
-        password: this.password,
+        userName: this.userName,
+        userPassword: this.userPassword,
       };
     },
   },
@@ -87,8 +86,8 @@ export default {
         method: "post",
         url: "http://localhost:6767/api/auth/login",
         data: {
-          username: this.username,
-          password: this.password,
+          userName: this.userName,
+          userPassword: this.userPassword,
         },
       })
         .then((res) => {
@@ -97,7 +96,7 @@ export default {
           if (res.data.data == 2001) alert("Wrong password");
           if (res.data.data == 2002){ alert("User not exist");}
           else {this.$store.commit('set_token',res.data.data);}
-          console.log(this.$store.getters.getToken)
+          console.log(this.$store.getters.getToken) // 临时看一下token
           //this.$router.go(0);
         })
         .catch((error) => {

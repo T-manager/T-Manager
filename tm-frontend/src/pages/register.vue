@@ -8,8 +8,8 @@
             <v-card-text>
               <v-text-field
                 outlined
-                ref="username"
-                v-model="username"
+                ref="userName"
+                v-model="userName"
                 :rules="[rules.required]"
                 label="Enter username"
                 color="primary"
@@ -17,8 +17,8 @@
               ></v-text-field>
               <v-text-field
                 outlined
-                ref="password"
-                v-model="password"
+                ref="userPassword"
+                v-model="userPassword"
                 :rules="[rules.required]"
                 label="Enter password"
                 color="primary"
@@ -26,8 +26,8 @@
               ></v-text-field>
               <v-text-field
                 outlined
-                v-model="email"
-                ref="email"
+                v-model="userEmail"
+                ref="userEmail"
                 :rules="[rules.required, rules.email]"
                 label="Enter E-mail"
                 color="primary"
@@ -66,9 +66,9 @@ export default {
   data() {
     return {
       valid: false,
-      username: null,
-      password: null,
-      email: null,
+      userName: null,
+      userPassword: null,
+      userEmail: null,
       rules: {
         required: (value) => !!value || "This field is required.",
         email: (value) => {
@@ -81,9 +81,9 @@ export default {
   computed: {
     form() {
       return {
-        username: this.username,
-        password: this.password,
-        email: this.email,
+        userName: this.userName,
+        userPassword: this.userPassword,
+        userEmail: this.userEmail,
       };
     },
   },
@@ -93,9 +93,9 @@ export default {
         method: "post",
         url: "http://localhost:6767/api/auth/register",
         data: {
-          username: this.username,
-          password: this.password,
-          email: this.email,
+          userName: this.userName,
+          userPassword: this.userPassword,
+          userEmail: this.userEmail,
         },
       })
         .then((res) => {
