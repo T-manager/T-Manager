@@ -36,9 +36,6 @@ export default {
       loading: false,
       showCard: false,
       showContent: false,
-      showFollow: true,
-      position: true,
-      showPost: false,
       user: {}
     };
   },
@@ -55,8 +52,6 @@ export default {
       })
         .then(res => {
           this.user = res.data.data;
-          //console.log("用户信息");
-          //console.log(this.user);
           this.showContent = true;
         })
         .catch(error => {
@@ -84,9 +79,6 @@ export default {
       this.$store.commit("del_userphoto");
       this.$router.go(0);
       return;
-    },
-    showTeaPost() {
-      this.showPost = true;
     }
   }
 };
