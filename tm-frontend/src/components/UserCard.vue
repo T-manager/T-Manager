@@ -33,8 +33,8 @@ export default {
   components: {},
   data() {
     return {
-      loading: true,
-      showCard: true,
+      loading: false,
+      showCard: false,
       showContent: false,
       user: {}
     };
@@ -84,5 +84,4 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

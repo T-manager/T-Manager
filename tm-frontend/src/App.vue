@@ -21,8 +21,8 @@ export default Vue.extend({
     return {};
   },
   components: {
-    NavBar,
-  },
+    NavBar
+  }
 });
 </script>
 
