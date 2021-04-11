@@ -39,19 +39,7 @@ export default {
       showFollow: true,
       position: true,
       showPost: false,
-      user: {},
-      tea_module: [
-        { module_name: "我的茶迹", module_router: 0 },
-        { module_name: "我的茶馆", module_router: 1 },
-        { module_name: "我的茶会", module_router: 2 }
-      ],
-      tea_new: [
-        { new_name: "新建采茶", new_router: "" },
-        { new_name: "新建茶帖", new_router: "" }
-      ],
-      str: {
-        str_follow: ["取消关注", "关注"]
-      }
+      user: {}
     };
   },
   props: ["size"],
@@ -75,60 +63,10 @@ export default {
           this.$store.commit("response", error);
         });
     },
-    gotoMyTea(mod) {
-      this.$router.replace({
-        path:
-          "/userpage/username=" + this.user.username + "&&" + mod.module_router
-      });
-    },
-    gotoFollow(type) {
-      this.$router.replace({
-        path:
-          "/follow/username=" +
-          this.$route.path.split("username=")[1] +
-          "&&" +
-          type
-      });
-    },
     gotoUserInfo() {
       this.$router.replace({
         path: "/user"
       });
-    },
-    followUser() {
-      this.loading = true;
-      if (this.user.isFollowed) {
-        // 取消关注
-        this.axios({
-          method: "delete",
-          url: this.$store.state.host + "follows/" + this.user.username
-        })
-          .then(res => {
-            //console.log("取消关注" + this.user.username);
-            //console.log(res);
-            this.user.isFollowed = false;
-            this.loading = false;
-          })
-          .catch(error => {
-            this.$store.commit("response", error);
-            this.loading = false;
-          });
-      } else {
-        this.axios({
-          method: "post",
-          url: this.$store.state.host + "follows/" + this.user.username
-        })
-          .then(res => {
-            //console.log("关注" + this.user.username);
-            //console.log(res);
-            this.user.isFollowed = true;
-            this.loading = false;
-          })
-          .catch(error => {
-            this.$store.commit("response", error);
-            this.loading = false;
-          });
-      }
     },
     toUserPage() {
       console.log("user");
@@ -154,23 +92,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.rowC {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-}
-.tea_module {
-  height: 95px;
-  width: 95px;
-  border-radius: 100px;
-  border: 1px solid #96efd9;
-  color: #428675;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 14px;
-  margin-left: 33px;
-  cursor: pointer;
-}
-</style>
+<style scoped></style>
