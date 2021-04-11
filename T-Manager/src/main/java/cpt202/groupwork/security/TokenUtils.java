@@ -37,13 +37,13 @@ public class TokenUtils implements Serializable {
                     // 设置 Token 签发者 可选
                     .setIssuer("SpringBoot")
                     // 根据用户名设置 Token 的接受者
-                    .setAudience(user.getUsername())
+                    .setAudience(user.getUserName())
                     // 设置过期时间
                     .setExpiration(expirationDate)
                     // 设置 Token 生成时间 可选
                     .setIssuedAt(new Date())
                     // 通过 claim 方法设置一个 key = role，value = userRole 的值
-                    .claim("role", user.getRole())
+                    .claim("role", user.getUserRole())
                     // 设置加密密钥和加密算法
                     .signWith(cpt202.groupwork.security.RsaUtils.getPrivateKey(), SignatureAlgorithm.RS256)
                     .compact();
@@ -74,8 +74,8 @@ public class TokenUtils implements Serializable {
                 return null;
             }
             User user = new User();
-            user.setUsername(claims.getAudience());
-            user.setRole(claims.get("role").toString());
+            user.setUserName(claims.getAudience());
+            user.setUserRole(claims.get("role").toString());
             return user;
         } catch (Exception e) {
             e.printStackTrace();
