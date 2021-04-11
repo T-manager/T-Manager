@@ -2,7 +2,10 @@
 *.class
 *.iml
 /T-Manager/target/
-
+/T-Manager/bin/
 tm-frontend/node_modules_old/
 tm-frontend/node_modules/
 *.xml
+T-Manager/.classpath
+T-Manager/.settings/
+T-Manager/.factorypath
