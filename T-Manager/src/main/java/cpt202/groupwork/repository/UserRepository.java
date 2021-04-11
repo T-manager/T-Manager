@@ -16,11 +16,11 @@ public interface UserRepository extends JpaRepository<User, Integer> {
      * @param username
      * @return
      */
-    boolean existsByUsername(String username);
+    boolean existsByUserName(String username);
 
 
-    Optional<User> findByUsername(String username);
-    User findByEmail(String email);
-    Optional<User> findById(Integer id);
+    Optional<User> findByUserName(String username);
+    User findByUserEmail(String email);
+    Optional<User> findByUserId(Integer id);
 
 }

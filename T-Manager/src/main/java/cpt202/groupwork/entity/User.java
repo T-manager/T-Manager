@@ -35,19 +35,19 @@ public class User implements Serializable {
   @Id
   @JsonIgnore
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer id;
+  private Integer userId;
 
   /**
    * 用户名
    */
   @Column(length = 20, unique = true)
-  private String username;
+  private String userName;
 
   /**
    * 用户邮箱
    */
   @Column(length = 100)
-  private String email;
+  private String userEmail;
 
   /**
    * 密码
@@ -55,7 +55,7 @@ public class User implements Serializable {
 //  @JsonIgnore//后台返回时 用来屏蔽此字段
   @JsonProperty(access= JsonProperty.Access.WRITE_ONLY)
   @Column(length = 75)
-  private String password;
+  private String userPassword;
 
 
 
@@ -63,12 +63,12 @@ public class User implements Serializable {
    * 用户角色
    */
   @Column(length = 20)
-  private String role;
+  private String userRole;
   /**
    * 用户头像
    */
-  @Column(length = 20)
-  private String avatar;
+  @Column(length = 100)
+  private String userAvatar;
 
   public User() {
 

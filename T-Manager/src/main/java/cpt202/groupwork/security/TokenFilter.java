@@ -55,9 +55,9 @@ public class TokenFilter extends OncePerRequestFilter {
                 // authorities.add 可以增加多个用户角色，对于一个用户有多种角色的系统来说，
                 // 可以通过增加用户角色表、用户--角色映射表，存储多个用户角色信息
                 List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getRole()));
+                authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getUserRole()));
                 // 传入用户名、用户密码、用户角色。 这里的密码随便写的，用不上
-                UserDetails userDetails = new User(user.getUsername(), "password", authorities);
+                UserDetails userDetails = new User(user.getUserName(), "password", authorities);
                 //用户名与密码验证
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());

@@ -44,7 +44,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Response<?> userNameExists(String username) {
-    Optional<User> user = userRepository.findByUsername(username);
+    Optional<User> user = userRepository.findByUserName(username);
     if (user.isPresent()) {
       return Response.ok(user.get());
     }
@@ -65,8 +65,8 @@ public class UserServiceImpl implements UserService {
 
     try {
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-      user.setPassword(encoder.encode(user.getPassword()));
-      user.setRole("USER");
+      user.setUserPassword(encoder.encode(user.getUserPassword()));
+      user.setUserRole("USER");
       userRepository.save(user);
       return Response.ok(1000); //User created successfully
     } catch (Exception e){
@@ -88,7 +88,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Response<?> userDelete(String username) {
-    Optional<User> user = userRepository.findByUsername(username);
+    Optional<User> user = userRepository.findByUserName(username);
     if (user.isPresent()) {
       userRepository.delete(user.get());
       return Response.ok(user.get());
@@ -125,7 +125,7 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Response<?> userModify(String username, User userMod) {
-    Optional<User> user = userRepository.findByUsername(username);
+    Optional<User> user = userRepository.findByUserName(username);
     if (user.isPresent()) {
       //找出值为空的属性
       final BeanWrapper src = new BeanWrapperImpl(userMod);
@@ -150,11 +150,11 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Response<?> userLogin(User postUser) {
-    Optional<User> user = userRepository.findByUsername(postUser.getUsername());
+    Optional<User> user = userRepository.findByUserName(postUser.getUserName());
     if(user.isPresent()) {
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
       // matches参数: 第一个参数为未加密密码，第二个为数据库中存储的加密后的密码，返回值为其是否匹配
-      if(encoder.matches(postUser.getPassword(), user.get().getPassword())){
+      if(encoder.matches(postUser.getUserPassword(), user.get().getUserPassword())){
         System.out.println(tokenUtils.createToken(user.get()));
         return Response.ok(tokenUtils.createToken(user.get()));
       }
