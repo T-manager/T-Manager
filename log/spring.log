@@ -1,0 +1,198 @@
+2021-04-12 00:00:40.079  INFO 17560 --- [main] cpt202.groupwork.TManagerApplication     : Starting TManagerApplication using Java 1.8.0_271 on DESKTOP-340CEB3 with PID 17560 (C:\Users\Kaiyu\Documents\T-manager\T-Manager\target\classes started by Kaiyu in C:\Users\Kaiyu\Documents\T-manager)
+2021-04-12 00:00:40.107  INFO 17560 --- [main] cpt202.groupwork.TManagerApplication     : No active profile set, falling back to default profiles: default
+2021-04-12 00:00:42.030  INFO 17560 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-04-12 00:00:42.203  INFO 17560 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 156 ms. Found 6 JPA repository interfaces.
+2021-04-12 00:00:42.704  INFO 17560 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@489543a6' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-12 00:00:42.714  INFO 17560 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-12 00:00:43.107  INFO 17560 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 6767 (http)
+2021-04-12 00:00:43.122  INFO 17560 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-04-12 00:00:43.122  INFO 17560 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-04-12 00:00:43.372  INFO 17560 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2021-04-12 00:00:43.373  INFO 17560 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3133 ms
+2021-04-12 00:00:43.667  INFO 17560 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-04-12 00:00:43.735  INFO 17560 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-04-12 00:00:43.921  INFO 17560 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-04-12 00:00:44.201  INFO 17560 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-04-12 00:00:45.244  INFO 17560 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-04-12 00:00:45.268  INFO 17560 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2021-04-12 00:00:46.189  INFO 17560 --- [main] org.hibernate.tuple.PojoInstantiator     : HHH000182: No default (no-argument) constructor for class: cpt202.groupwork.entity.relation.ProjectMember (class must be instantiated by Interceptor)
+2021-04-12 00:00:46.391  INFO 17560 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-04-12 00:00:46.413  INFO 17560 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-04-12 00:00:47.187  WARN 17560 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-04-12 00:00:47.680  INFO 17560 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/'] with []
+2021-04-12 00:00:47.680  INFO 17560 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/css/**'] with []
+2021-04-12 00:00:47.681  INFO 17560 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/js/**'] with []
+2021-04-12 00:00:47.681  INFO 17560 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/images/**'] with []
+2021-04-12 00:00:47.750  INFO 17560 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@425b5fe2, org.springframework.security.web.context.SecurityContextPersistenceFilter@5403431a, org.springframework.security.web.header.HeaderWriterFilter@504b8705, org.springframework.security.web.authentication.logout.LogoutFilter@4a4b288a, cpt202.groupwork.security.TokenFilter@14dc3f89, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@3d798e76, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@8af1c49, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@3eec8583, org.springframework.security.web.session.SessionManagementFilter@347123dc, org.springframework.security.web.access.ExceptionTranslationFilter@4813d0, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@534762ed]
+2021-04-12 00:00:47.928  INFO 17560 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-04-12 00:00:49.007  WARN 17560 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2021-04-12 00:00:49.630  INFO 17560 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 6767 (http) with context path '/api'
+2021-04-12 00:00:49.650  INFO 17560 --- [main] cpt202.groupwork.TManagerApplication     : Started TManagerApplication in 10.457 seconds (JVM running for 12.416)
+2021-04-12 00:01:16.740  INFO 17560 --- [http-nio-6767-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-04-12 00:01:16.741  INFO 17560 --- [http-nio-6767-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-04-12 00:01:16.743  INFO 17560 --- [http-nio-6767-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2021-04-12 00:02:30.368  INFO 17560 --- [http-nio-6767-exec-7] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 496 ms
+2021-04-12 00:16:05.292  INFO 13448 --- [main] cpt202.groupwork.TManagerApplication     : Starting TManagerApplication using Java 1.8.0_271 on DESKTOP-340CEB3 with PID 13448 (C:\Users\Kaiyu\Documents\T-manager\T-Manager\target\classes started by Kaiyu in C:\Users\Kaiyu\Documents\T-manager)
+2021-04-12 00:16:05.297  INFO 13448 --- [main] cpt202.groupwork.TManagerApplication     : No active profile set, falling back to default profiles: default
+2021-04-12 00:16:06.882  INFO 13448 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-04-12 00:16:07.091  INFO 13448 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 186 ms. Found 6 JPA repository interfaces.
+2021-04-12 00:16:07.648  INFO 13448 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@982bb90' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-12 00:16:07.656  INFO 13448 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-12 00:16:08.042  INFO 13448 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 6767 (http)
+2021-04-12 00:16:08.059  INFO 13448 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-04-12 00:16:08.060  INFO 13448 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-04-12 00:16:08.342  INFO 13448 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2021-04-12 00:16:08.344  INFO 13448 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2951 ms
+2021-04-12 00:16:08.729  INFO 13448 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-04-12 00:16:08.809  INFO 13448 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-04-12 00:16:09.008  INFO 13448 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-04-12 00:16:09.259  INFO 13448 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-04-12 00:16:10.338  INFO 13448 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-04-12 00:16:10.358  INFO 13448 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2021-04-12 00:16:11.346  INFO 13448 --- [main] org.hibernate.tuple.PojoInstantiator     : HHH000182: No default (no-argument) constructor for class: cpt202.groupwork.entity.relation.ProjectMember (class must be instantiated by Interceptor)
+2021-04-12 00:16:11.626  INFO 13448 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-04-12 00:16:11.645  INFO 13448 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-04-12 00:16:12.462  WARN 13448 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-04-12 00:16:12.922  INFO 13448 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/'] with []
+2021-04-12 00:16:12.923  INFO 13448 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/css/**'] with []
+2021-04-12 00:16:12.923  INFO 13448 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/js/**'] with []
+2021-04-12 00:16:12.924  INFO 13448 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/images/**'] with []
+2021-04-12 00:16:12.980  INFO 13448 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2c815fdc, org.springframework.security.web.context.SecurityContextPersistenceFilter@386e9fd8, org.springframework.security.web.header.HeaderWriterFilter@6501b105, org.springframework.security.web.authentication.logout.LogoutFilter@405d8a80, cpt202.groupwork.security.TokenFilter@7c6189d5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@10745a02, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@5611bba, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@769b0752, org.springframework.security.web.session.SessionManagementFilter@3d798e76, org.springframework.security.web.access.ExceptionTranslationFilter@504b8705, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@425b5fe2]
+2021-04-12 00:16:13.110  INFO 13448 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-04-12 00:16:13.937  WARN 13448 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2021-04-12 00:16:14.447  INFO 13448 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 6767 (http) with context path '/api'
+2021-04-12 00:16:14.463  INFO 13448 --- [main] cpt202.groupwork.TManagerApplication     : Started TManagerApplication in 10.04 seconds (JVM running for 11.911)
+2021-04-12 00:16:30.211  INFO 13448 --- [http-nio-6767-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-04-12 00:16:30.212  INFO 13448 --- [http-nio-6767-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-04-12 00:16:30.214  INFO 13448 --- [http-nio-6767-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2021-04-12 00:22:02.600  INFO 20740 --- [main] cpt202.groupwork.TManagerApplication     : Starting TManagerApplication using Java 1.8.0_271 on DESKTOP-340CEB3 with PID 20740 (C:\Users\Kaiyu\Documents\T-manager\T-Manager\target\classes started by Kaiyu in C:\Users\Kaiyu\Documents\T-manager)
+2021-04-12 00:22:02.605  INFO 20740 --- [main] cpt202.groupwork.TManagerApplication     : No active profile set, falling back to default profiles: default
+2021-04-12 00:22:04.255  INFO 20740 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-04-12 00:22:04.434  INFO 20740 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 162 ms. Found 6 JPA repository interfaces.
+2021-04-12 00:22:04.965  INFO 20740 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@57fae983' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-12 00:22:04.970  INFO 20740 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-12 00:22:05.334  INFO 20740 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 6767 (http)
+2021-04-12 00:22:05.349  INFO 20740 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-04-12 00:22:05.350  INFO 20740 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-04-12 00:22:05.600  INFO 20740 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2021-04-12 00:22:05.601  INFO 20740 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 2899 ms
+2021-04-12 00:22:05.912  INFO 20740 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-04-12 00:22:06.000  INFO 20740 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-04-12 00:22:06.211  INFO 20740 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-04-12 00:22:06.481  INFO 20740 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-04-12 00:22:07.576  INFO 20740 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-04-12 00:22:07.596  INFO 20740 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2021-04-12 00:22:08.658  INFO 20740 --- [main] org.hibernate.tuple.PojoInstantiator     : HHH000182: No default (no-argument) constructor for class: cpt202.groupwork.entity.relation.ProjectMember (class must be instantiated by Interceptor)
+2021-04-12 00:22:08.904  INFO 20740 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-04-12 00:22:08.924  INFO 20740 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-04-12 00:22:09.780  WARN 20740 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-04-12 00:22:10.238  INFO 20740 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/'] with []
+2021-04-12 00:22:10.238  INFO 20740 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/css/**'] with []
+2021-04-12 00:22:10.239  INFO 20740 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/js/**'] with []
+2021-04-12 00:22:10.239  INFO 20740 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/images/**'] with []
+2021-04-12 00:22:10.318  INFO 20740 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@5db9f51f, org.springframework.security.web.context.SecurityContextPersistenceFilter@779228dc, org.springframework.security.web.header.HeaderWriterFilter@64757d56, org.springframework.security.web.authentication.logout.LogoutFilter@13c90c06, cpt202.groupwork.security.TokenFilter@167279d1, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@4c030fe1, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@10745a02, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@534762ed, org.springframework.security.web.session.SessionManagementFilter@66ab924, org.springframework.security.web.access.ExceptionTranslationFilter@b70fa38, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@cae2a97]
+2021-04-12 00:22:10.499  INFO 20740 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-04-12 00:22:11.373  WARN 20740 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2021-04-12 00:22:11.905  INFO 20740 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 6767 (http) with context path '/api'
+2021-04-12 00:22:11.919  INFO 20740 --- [main] cpt202.groupwork.TManagerApplication     : Started TManagerApplication in 10.342 seconds (JVM running for 12.34)
+2021-04-12 00:22:37.794  INFO 20740 --- [http-nio-6767-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-04-12 00:22:37.794  INFO 20740 --- [http-nio-6767-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-04-12 00:22:37.797  INFO 20740 --- [http-nio-6767-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 2 ms
+2021-04-12 15:47:38.012  WARN 20740 --- [HikariPool-1 housekeeper] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=30m10s569ms725µs300ns).
+2021-04-12 15:49:18.576  INFO 10632 --- [main] cpt202.groupwork.TManagerApplication     : Starting TManagerApplication using Java 1.8.0_271 on DESKTOP-340CEB3 with PID 10632 (C:\Users\Kaiyu\Documents\T-manager\T-Manager\target\classes started by Kaiyu in C:\Users\Kaiyu\Documents\T-manager)
+2021-04-12 15:49:18.582  INFO 10632 --- [main] cpt202.groupwork.TManagerApplication     : No active profile set, falling back to default profiles: default
+2021-04-12 15:49:22.627  INFO 10632 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-04-12 15:49:22.922  INFO 10632 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 274 ms. Found 6 JPA repository interfaces.
+2021-04-12 15:49:23.738  INFO 10632 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@5aae8eb5' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-12 15:49:23.757  INFO 10632 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-12 15:49:24.395  INFO 10632 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 6767 (http)
+2021-04-12 15:49:24.418  INFO 10632 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-04-12 15:49:24.419  INFO 10632 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-04-12 15:49:25.004  INFO 10632 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2021-04-12 15:49:25.005  INFO 10632 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 6228 ms
+2021-04-12 15:49:25.705  INFO 10632 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-04-12 15:49:25.849  INFO 10632 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-04-12 15:49:26.413  INFO 10632 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-04-12 15:49:26.796  INFO 10632 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-04-12 15:49:28.562  INFO 10632 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-04-12 15:49:28.583  INFO 10632 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2021-04-12 15:49:30.737  INFO 10632 --- [main] org.hibernate.tuple.PojoInstantiator     : HHH000182: No default (no-argument) constructor for class: cpt202.groupwork.entity.relation.ProjectMember (class must be instantiated by Interceptor)
+2021-04-12 15:49:30.982  INFO 10632 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-04-12 15:49:31.022  INFO 10632 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-04-12 15:49:34.651  WARN 10632 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-04-12 15:49:39.438  INFO 10632 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/'] with []
+2021-04-12 15:49:39.442  INFO 10632 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/css/**'] with []
+2021-04-12 15:49:39.445  INFO 10632 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/js/**'] with []
+2021-04-12 15:49:39.447  INFO 10632 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/images/**'] with []
+2021-04-12 15:49:39.596  INFO 10632 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@2a667f44, org.springframework.security.web.context.SecurityContextPersistenceFilter@64757d56, org.springframework.security.web.header.HeaderWriterFilter@7e2c6fd6, org.springframework.security.web.authentication.logout.LogoutFilter@23469199, cpt202.groupwork.security.TokenFilter@506dcf55, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@702096ef, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6df2af02, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@53ba7997, org.springframework.security.web.session.SessionManagementFilter@7e31d53b, org.springframework.security.web.access.ExceptionTranslationFilter@4de91056, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@312a738d]
+2021-04-12 15:49:39.918  INFO 10632 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-04-12 15:49:41.256  WARN 10632 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2021-04-12 15:49:42.195  INFO 10632 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 6767 (http) with context path '/api'
+2021-04-12 15:49:42.238  INFO 10632 --- [main] cpt202.groupwork.TManagerApplication     : Started TManagerApplication in 24.594 seconds (JVM running for 39.029)
+2021-04-12 15:50:54.383  INFO 22516 --- [main] cpt202.groupwork.TManagerApplication     : Starting TManagerApplication using Java 1.8.0_271 on DESKTOP-340CEB3 with PID 22516 (C:\Users\Kaiyu\Documents\T-manager\T-Manager\target\classes started by Kaiyu in C:\Users\Kaiyu\Documents\T-manager)
+2021-04-12 15:50:54.388  INFO 22516 --- [main] cpt202.groupwork.TManagerApplication     : No active profile set, falling back to default profiles: default
+2021-04-12 15:50:55.762  INFO 22516 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-04-12 15:50:56.101  INFO 22516 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 309 ms. Found 6 JPA repository interfaces.
+2021-04-12 15:50:56.730  INFO 22516 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@982bb90' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-12 15:50:56.737  INFO 22516 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-12 15:50:57.380  INFO 22516 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 6767 (http)
+2021-04-12 15:50:57.394  INFO 22516 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-04-12 15:50:57.394  INFO 22516 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-04-12 15:50:57.749  INFO 22516 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2021-04-12 15:50:57.751  INFO 22516 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3294 ms
+2021-04-12 15:50:58.166  INFO 22516 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-04-12 15:50:58.272  INFO 22516 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-04-12 15:50:58.714  INFO 22516 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-04-12 15:50:59.420  INFO 22516 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-04-12 15:51:01.219  INFO 22516 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-04-12 15:51:01.247  INFO 22516 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2021-04-12 15:51:02.446  INFO 22516 --- [main] org.hibernate.tuple.PojoInstantiator     : HHH000182: No default (no-argument) constructor for class: cpt202.groupwork.entity.relation.ProjectMember (class must be instantiated by Interceptor)
+2021-04-12 15:51:06.153  INFO 22516 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-04-12 15:51:06.210  INFO 22516 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-04-12 15:51:07.370  WARN 22516 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-04-12 15:51:07.848  INFO 22516 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/'] with []
+2021-04-12 15:51:07.849  INFO 22516 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/css/**'] with []
+2021-04-12 15:51:07.849  INFO 22516 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/js/**'] with []
+2021-04-12 15:51:07.849  INFO 22516 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/images/**'] with []
+2021-04-12 15:51:07.904  INFO 22516 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@70139a81, org.springframework.security.web.context.SecurityContextPersistenceFilter@782e6b40, org.springframework.security.web.header.HeaderWriterFilter@4d8056bf, org.springframework.security.web.authentication.logout.LogoutFilter@11bdab37, cpt202.groupwork.security.TokenFilter@7c6189d5, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@32d0d7eb, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@2a631049, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@60f9dc7e, org.springframework.security.web.session.SessionManagementFilter@61dd1c3d, org.springframework.security.web.access.ExceptionTranslationFilter@2f471037, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@66b6873f]
+2021-04-12 15:51:08.036  INFO 22516 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-04-12 15:51:08.933  WARN 22516 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2021-04-12 15:51:09.452  INFO 22516 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 6767 (http) with context path '/api'
+2021-04-12 15:51:09.469  INFO 22516 --- [main] cpt202.groupwork.TManagerApplication     : Started TManagerApplication in 15.685 seconds (JVM running for 17.793)
+2021-04-12 15:52:48.687  INFO 22516 --- [http-nio-6767-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-04-12 15:52:48.689  INFO 22516 --- [http-nio-6767-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-04-12 15:52:48.692  INFO 22516 --- [http-nio-6767-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2021-04-12 15:58:30.797  INFO 12512 --- [main] cpt202.groupwork.TManagerApplication     : Starting TManagerApplication using Java 1.8.0_271 on DESKTOP-340CEB3 with PID 12512 (C:\Users\Kaiyu\Documents\T-manager\T-Manager\target\classes started by Kaiyu in C:\Users\Kaiyu\Documents\T-manager)
+2021-04-12 15:58:30.800  INFO 12512 --- [main] cpt202.groupwork.TManagerApplication     : No active profile set, falling back to default profiles: default
+2021-04-12 15:58:32.274  INFO 12512 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-04-12 15:58:32.442  INFO 12512 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 151 ms. Found 6 JPA repository interfaces.
+2021-04-12 15:58:33.037  INFO 12512 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@7a639ec5' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-12 15:58:33.043  INFO 12512 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-12 15:58:33.702  INFO 12512 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 6767 (http)
+2021-04-12 15:58:33.730  INFO 12512 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-04-12 15:58:33.731  INFO 12512 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-04-12 15:58:34.043  INFO 12512 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2021-04-12 15:58:34.044  INFO 12512 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 3171 ms
+2021-04-12 15:58:34.518  INFO 12512 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-04-12 15:58:34.689  INFO 12512 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-04-12 15:58:34.996  INFO 12512 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-04-12 15:58:35.506  INFO 12512 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-04-12 15:58:36.884  INFO 12512 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-04-12 15:58:36.914  INFO 12512 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2021-04-12 15:58:37.933  INFO 12512 --- [main] org.hibernate.tuple.PojoInstantiator     : HHH000182: No default (no-argument) constructor for class: cpt202.groupwork.entity.relation.ProjectMember (class must be instantiated by Interceptor)
+2021-04-12 15:58:38.168  INFO 12512 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-04-12 15:58:38.188  INFO 12512 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-04-12 15:58:39.261  WARN 12512 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-04-12 15:58:39.717  INFO 12512 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/'] with []
+2021-04-12 15:58:39.718  INFO 12512 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/css/**'] with []
+2021-04-12 15:58:39.718  INFO 12512 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/js/**'] with []
+2021-04-12 15:58:39.719  INFO 12512 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/images/**'] with []
+2021-04-12 15:58:39.787  INFO 12512 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@34cb0e49, org.springframework.security.web.context.SecurityContextPersistenceFilter@7e31d53b, org.springframework.security.web.header.HeaderWriterFilter@16cf7fd0, org.springframework.security.web.authentication.logout.LogoutFilter@8af1c49, cpt202.groupwork.security.TokenFilter@14ac77b9, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@64757d56, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@6501b105, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@48b2dbc4, org.springframework.security.web.session.SessionManagementFilter@b70fa38, org.springframework.security.web.access.ExceptionTranslationFilter@3d71e10b, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@42211e04]
+2021-04-12 15:58:39.927  INFO 12512 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-04-12 15:58:40.660  WARN 12512 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2021-04-12 15:58:41.222  INFO 12512 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 6767 (http) with context path '/api'
+2021-04-12 15:58:41.250  INFO 12512 --- [main] cpt202.groupwork.TManagerApplication     : Started TManagerApplication in 11.064 seconds (JVM running for 13.024)
+2021-04-12 15:58:57.877  INFO 12512 --- [http-nio-6767-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-04-12 15:58:57.879  INFO 12512 --- [http-nio-6767-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-04-12 15:58:57.882  INFO 12512 --- [http-nio-6767-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2021-04-12 15:59:00.184  INFO 12512 --- [http-nio-6767-exec-8] o.springdoc.api.AbstractOpenApiResource  : Init duration for springdoc-openapi is: 1373 ms
