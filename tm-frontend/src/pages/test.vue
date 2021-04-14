@@ -1,6 +1,6 @@
 <template>
   <v-container class="d-flex" style="flex-direction:column">
-    <v-btn @click="addTodolost">添加todolist</v-btn>
+    <v-btn @click="addTodolist">添加todolist</v-btn>
     <v-btn @click="addProject">添加project</v-btn>
     <v-btn @click="getTodo" class="success">获取todo</v-btn>
     <v-btn @click="addTodo" class="success">添加todo</v-btn>
@@ -8,9 +8,6 @@
     <v-btn @click="getTodolist" class="success">获取todolist</v-btn>
     <v-btn @click="modifyTodo" class="success">修改todo</v-btn>
     <v-btn @click="checkTodo" class="success">check todo</v-btn>
-
-
-
   </v-container>
 </template>
 
@@ -28,7 +25,7 @@ export default {
     };
   },
   methods: {
-    addTodolost: function() {
+    addTodolist: function() {
       this.$axios({
         method: "post",
         url: "http://localhost:6767/api/todolist/1",
@@ -104,14 +101,14 @@ export default {
           console.log(error);
         });
     },
- 
+
     modifyTodo: function() {
       this.$axios({
         method: "put",
         url: "http://localhost:6767/api/todo/edit",
-        data:{
-          todoId:1,
-          todoDetail:"very new detail!"
+        data: {
+          todoId: 1,
+          todoDetail: "very new detail!"
         }
       })
         .then(res => {
@@ -126,7 +123,7 @@ export default {
     checkTodo: function() {
       this.$axios({
         method: "put",
-        url: "http://localhost:6767/api/todo/check/1",
+        url: "http://localhost:6767/api/todo/check/1"
       })
         .then(res => {
           console.log(res);
@@ -154,10 +151,10 @@ export default {
 </script>
 
 <style scoped>
-.success{
-  background-color:green;
+.success {
+  background-color: green;
 }
-.error{
-  background-color:red;
+.error {
+  background-color: red;
 }
 </style>

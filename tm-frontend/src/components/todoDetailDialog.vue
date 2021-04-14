@@ -46,6 +46,9 @@
     <!-- TODO 详情弹窗 -->
     <v-dialog v-model="showTodoDetail" max-width="600px">
       <v-card v-if="showModifyTodo == false" class="card">
+        <div style="width:100%; display:flex; justify-content:flex-end">
+          <v-icon>mdi-close</v-icon>
+        </div>
         <v-card-title>
           <span class="headline">Modify todo</span>
           <v-icon
@@ -55,7 +58,7 @@
             >mdi-pencil-outline</v-icon
           >
           <v-icon @click="deleteTodo" style="margin-left:10px"
-            >mdi-close</v-icon
+            >mdi-delete-outline</v-icon
           >
         </v-card-title>
         <v-card-text
