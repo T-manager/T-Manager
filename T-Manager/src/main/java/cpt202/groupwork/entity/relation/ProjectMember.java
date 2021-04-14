@@ -1,5 +1,6 @@
 package cpt202.groupwork.entity.relation;
 
+import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,31 +9,35 @@ import javax.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
-public class ProjectMember {
+@NoArgsConstructor
+
+public class ProjectMember implements Serializable {
 
   private static final long serialVersionUID = 1L;
+
   /**
-   * 主键，唯一标识一个
+   * Primary Key, unique identification of the relation
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer projectMemberId;
 
   /**
-   * 项目id
+   * ID of the project
    */
   @Column(name = "project_id")
   private Integer projectId;
 
   /**
-   * 用户id user_id
+   * name of the project member
    */
-  @Column(name = "member_id")
-  private Integer memberId;
+  @Column(name = "member_name")
+  private String memberName;
 
 }

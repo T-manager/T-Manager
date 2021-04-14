@@ -22,35 +22,27 @@ public class Project implements Serializable {
   private static final long serialVersionUID = 1L;
 
   /**
-   * 主键，唯一标识project
+   * Primary Key, unique identification of the project
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Integer projectId;
 
   /**
-   * project的名字
+   * name of the project
    */
   @Column(length = 20, name = "project_name")
   private String projectName;
 
   /**
-   * project的描述
+   * description of the project
    */
   @Column(length = 100, name = "project_detail")
   private String projectDetail;
 
   /**
-   * project的拥有者user_id
+   * name of the project owner
    */
   @Column(name = "project_owner")
-  private Integer projectOwner;
-
-  /**
-   * project的种类 个人/团体
-   */
-  @Column(name = "project_type")
-  private Boolean projectType;
-
-
+  private String projectOwner;
 }

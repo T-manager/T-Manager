@@ -2,26 +2,25 @@ package cpt202.groupwork.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
 
 @Data
 public class ProjectDTO {
-  // 新建project需要的属性
+  // all attributes needed when create a new project
 
-  // project的名字
-  @Size(min = 1, max = 20, message = "todo名称必须在1到20个字之间哦")
+  // name of the project
+  @Size(min = 1, max = 20, message = "the length of the project cannot exceed 20")
+  @NotNull(message = "The name of the project cannot be null")
   private String projectName;
 
-  // project的详细介绍
-  @Size(min = 0, max = 100, message = "详细介绍必须小于100个字哦")
+  // detailed specification of the project
+  @Size(min = 0, max = 100, message = "the detail of the project cannot exceed 100")
   private String projectDetail;
 
 
-  // project的所属人
-  private Integer projectOwner;
-
-  //project的种类
-  private Boolean projectType;
+  // owner of the project
+  private String projectOwner;
 
 }
