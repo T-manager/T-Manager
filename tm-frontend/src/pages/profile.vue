@@ -1,78 +1,66 @@
 <template>
-  <div style=" padding: 35px">
-    <v-row justify="center">
-      <v-col cols="6">
-        <v-form v-model="valid">
-          <v-card flat class="userProfileCard" ref="form">
-            <v-card-title>Edit Profile</v-card-title>
-            <v-list-item>
-              <v-list-item-avatar>
-                <v-img src="https://picsum.photos/200"></v-img>
-              </v-list-item-avatar>
-            </v-list-item>
-            <v-card-text v-if="submit">
-              <v-text-field
-                outlined
-                ref="username"
-                v-model="userEdit.userName"
-                :rules="[rules.required]"
-                label="Enter username"
-                color="primary"
-                style="margin-top: 8px"
-              ></v-text-field>
-              <v-text-field
-                outlined
-                v-model="userEdit.userEmail"
-                ref="email"
-                :rules="[rules.required, rules.email]"
-                label="Enter E-mail"
-                color="primary"
-              ></v-text-field>
-            </v-card-text>
-            <v-card-text v-if="!submit">
-              <v-text-field
-                outlined
-                disabled
-                ref="username"
-                v-model="userEdit.userName"
-                :rules="[rules.required]"
-                label="Enter username"
-                color="primary"
-                style="margin-top: 8px"
-              ></v-text-field>
-              <v-text-field
-                outlined
-                disabled
-                v-model="userEdit.userEmail"
-                ref="email"
-                :rules="[rules.required, rules.email]"
-                label="Enter E-mail"
-                color="primary"
-              ></v-text-field>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn v-if="submit" text @click="submit=false"> Cancel </v-btn>
-              <v-spacer></v-spacer>
+  <div style="display:flex;justify-content:center;padding-top:20px">
+    <v-avatar size="150">
+      <v-img src="https://picsum.photos/200"></v-img>
+    </v-avatar>
 
-              <v-btn
-                :disabled="!this.valid"
-                color="primary"
-                text
-                @click="submit == true ? editProfile() : (submit = true)"
-              >
-                {{ submit == true ? "Submit" : "Edit" }}
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-form>
-      </v-col>
-    </v-row>
     <div
-      v-if="submit"
-      style="margin-left:560px;margin-top:-340px;display:flex; background-color:red;width:300px"
+      v-model="valid"
+      style=" margin-left:50px;display:flex;flex-direction:column;padding:25px;height:400px;width:900px;background-color:#ffffff;border-radius:20px"
     >
-      <UploadImg :userName="this.$store.getters.getUsername"></UploadImg>
-      <ModifyPassword :userEdit="userEdit"></ModifyPassword>
+      <div style="font-size:26px;color:#101010;width:900px;text-align:start">
+        {{ !submit ? "Personal Profile" : "Edit Profile" }}
+      </div>
+      <div v-if="submit" style="margin-left:100px;display:flex; ">
+        <UploadImg :userName="this.$store.getters.getUsername"></UploadImg>
+        <ModifyPassword :userEdit="userEdit"></ModifyPassword>
+      </div>
+      <!-- 编辑信息 -->
+      <div v-if="submit" style="width:700px;margin-left:75px">
+        <v-text-field
+          outlined
+          ref="username"
+          v-model="userEdit.userName"
+          :rules="[rules.required]"
+          label="Enter username"
+          color="primary"
+          style="margin-top: 8px"
+        ></v-text-field>
+        <v-text-field
+          outlined
+          v-model="userEdit.userEmail"
+          ref="email"
+          :rules="[rules.required, rules.email]"
+          label="Enter E-mail"
+          color="primary"
+        ></v-text-field>
+      </div>
+      <!-- 查看信息 -->
+      <div
+        v-if="!submit"
+        style="width:500px;display:flex;flex-direction:column;justify-self:center;font-size:20px;"
+      >
+        <div class="line">
+          <div style="width:200px">User Name:</div>
+          <div style="margin-left:30px">{{ userInfo.userName }}</div>
+        </div>
+        <div class="line">
+          <div style="width:200px">Email:</div>
+          <div style="margin-left:30px">{{ userInfo.userEmail }}</div>
+        </div>
+      </div>
+      <div style="margin-top:0px;display:flex;width:700px;margin-left:75px">
+        <v-btn v-if="submit" text @click="submit = false"> Cancel </v-btn>
+        <v-spacer></v-spacer>
+
+        <v-btn
+          color="primary"
+          text
+          @click="submit == true ? editProfile() : (submit = true)"
+        >
+          {{ submit == true ? "Submit" : "Edit" }}
+        </v-btn>
+      </div>
     </div>
   </div>
 </template>
@@ -145,9 +133,7 @@ export default {
       Object.keys(this.form).forEach(f => {
         this.$refs[f].reset();
       });
-    },
-
-    
+    }
   },
   created() {
     this.$axios({
@@ -171,11 +157,10 @@ export default {
 };
 </script>
 <style scoped>
-.userProfileCard {
-  min-width: 450px;
-  margin: 15px;
-  justify-content: center;
-  align-items: center;
-  padding: 10px 10px 0px 10px;
+.line {
+  display: flex;
+  text-align: start;
+  margin-top: 50px;
+  margin-left: 30px;
 }
 </style>

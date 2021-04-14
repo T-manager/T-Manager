@@ -15,6 +15,7 @@
         @click="toUserPage"
         style="background-color:#aaaaaa"
       >
+        <v-img src="https://picsum.photos/200"></v-img>
       </v-avatar>
     </template>
 
@@ -24,6 +25,7 @@
       <router-link to="/register">注册</router-link>
       <router-link to="/login">登录</router-link>
       <router-link to="/my">个人主页</router-link>
+      <router-link @click="logout">退出登录</router-link>
     </v-card>
   </v-menu>
 </template>
@@ -77,6 +79,7 @@ export default {
       this.$store.commit("del_token");
       this.$store.commit("del_username");
       this.$store.commit("del_userphoto");
+      alert("Log out successfully！")
       this.$router.go(0);
       return;
     }
