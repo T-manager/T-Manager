@@ -2,6 +2,7 @@
   <div>
     <v-btn color="primary" text @click="showUserInviteDialog = true">
       Invite members
+      <v-icon>mdi-account-plus-outline</v-icon>
     </v-btn>
     <!-- 点击邀请进入成员dialog -->
     <v-dialog v-model="showUserInviteDialog" persistent max-width="600px">
@@ -88,6 +89,7 @@ export default {
             this.loadAddMember = false;
           });
     }
-  }
+  },
+  props: ["project"]
 };
 </script>

@@ -13,31 +13,38 @@
         ></v-img
       >
     </v-card>
-    <div style="display:flex; align-items:center">
-      <v-card-title> {{ project.projectName }} </v-card-title>
+    <div
+      style="display:flex; align-items:center; padding-left:20px; padding-right:20px; padding-top:10px"
+    >
+      <div style="font-size:25px">{{ project.projectName }}</div>
       <v-spacer></v-spacer>
       <!-- 点击铅笔修改项目 -->
       <modifyProjectDialog :project="project"></modifyProjectDialog>
-      <memberDialog :project="project"></memberDialog>
       <v-btn icon color="primary" @click="deleteProject()">
-        <v-icon>mdi-close</v-icon></v-btn
+        <v-icon>mdi-delete-outline</v-icon></v-btn
       >
     </div>
-    <v-card-actions>
-      <inviteMemberDialog
+    <div
+      style="display:flex; justify-content:flex-end; padding-left:20px; padding-right:20px; padding-bottom:10px; padding-top:10px"
+    >
+      <memberDialog
         v-if="project.projectType == 'team'"
-      ></inviteMemberDialog>
+        :project="project"
+      ></memberDialog>
       <v-spacer></v-spacer>
       <v-btn color="primary" icon @click="showDetail = !showDetail">
         <v-icon>{{
           showDetail ? "mdi-chevron-up" : "mdi-chevron-down"
         }}</v-icon>
       </v-btn>
-    </v-card-actions>
+    </div>
     <v-expand-transition>
       <div v-show="showDetail">
         <v-divider></v-divider>
-        <v-card-text>{{ project.projectDetail }} </v-card-text>
+        <v-card-text
+          style="width:100%; display:flex; justify-content:flex-start"
+          >{{ project.projectDetail }}
+        </v-card-text>
       </div>
     </v-expand-transition>
   </v-card>
@@ -46,7 +53,6 @@
 <script>
 import modifyProjectDialog from "@/components/modifyProjectDialog";
 import memberDialog from "@/components/memberDialog";
-import inviteMemberDialog from "@/components/inviteMemberDialog";
 export default {
   data: function() {
     return {
@@ -112,8 +118,7 @@ export default {
   },
   components: {
     modifyProjectDialog,
-    memberDialog,
-    inviteMemberDialog
+    memberDialog
   },
   props: ["project"]
 };
