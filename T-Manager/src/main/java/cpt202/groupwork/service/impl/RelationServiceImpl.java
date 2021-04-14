@@ -46,6 +46,7 @@ public class RelationServiceImpl implements RelationService{
             Optional<Project> project = projectRepository.findByProjectId(projectMember.getProjectId());
             ProjectDetailDTO pdDTO = new ProjectDetailDTO();
             BeanUtils.copyProperties(project.get(), pdDTO);
+            pdDTO.setProjectMemberId(projectMember.getProjectMemberId());
             Optional<User> po = userRepository.findById(project.get().getProjectOwnerId());
             pdDTO.setProjectOwner(po.get().getUserName());
             userProject.add(pdDTO);
