@@ -121,10 +121,10 @@ export default {
   created() {
     this.$axios({
       method: "get",
-      url: this.$store.state.host + "todolist/get/0"
-      // headers: {
-      //   Authorization: "Bearer " + this.$store.getters.getToken
-      // }
+      url: this.$store.state.host + "todolist/get/0",
+      headers: {
+        Authorization: "Bearer " + this.$store.getters.getToken
+      }
     })
       .then(res => {
         console.log(res);

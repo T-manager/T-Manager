@@ -3,7 +3,9 @@ package cpt202.groupwork.controller;
 import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.ProjectDTO;
 import cpt202.groupwork.entity.Project;
+import cpt202.groupwork.entity.relation.ProjectMember;
 import cpt202.groupwork.repository.ProjectRepository;
+import cpt202.groupwork.repository.RelationRepository;
 import cpt202.groupwork.repository.UserRepository;
 //import cpt202.groupwork.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,6 +32,9 @@ public class ProjectController {
   ProjectRepository projectRepository;
 
   @Autowired
+  RelationRepository relationRepository;
+
+  @Autowired
   UserRepository userRepository;
 
   @PostMapping("/add")
@@ -38,7 +43,11 @@ public class ProjectController {
     Project project = new Project();
     BeanUtils.copyProperties(projectDTO, project);
     projectRepository.save(project);
-    return Response.ok(project);
+    ProjectMember pm = new ProjectMember();
+    pm.setProjectId(project.getProjectId());
+    pm.setMemberName(project.getProjectOwner());
+    relationRepository.save(pm);
+    return Response.ok();
   }
 
   @DeleteMapping("/delete/{projectId}")

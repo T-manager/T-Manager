@@ -4,6 +4,7 @@ import todolist from "@/pages/todolist";
 import test from "@/pages/test";
 import register from "@/pages/register";
 import login from "@/pages/login";
+import project from "@/pages/project";
 // import profile from "@/pages/profile";
 
 Vue.use(Router);
@@ -40,6 +41,11 @@ export default new Router({
       path: "/test",
       name: "test",
       component: test
+    },
+    {
+      path: "/project",
+      name: "project",
+      component: project
     }
   ]
 });

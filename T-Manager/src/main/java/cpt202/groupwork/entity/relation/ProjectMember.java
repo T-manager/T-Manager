@@ -37,7 +37,7 @@ public class ProjectMember implements Serializable {
   /**
    * name of the project member
    */
-  @Column(name = "member_name")
+  @Column(length = 20, name = "member_name")
   private String memberName;
 
 }

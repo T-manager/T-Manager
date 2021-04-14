@@ -43,6 +43,12 @@ public class Project implements Serializable {
   /**
    * name of the project owner
    */
-  @Column(name = "project_owner")
+  @Column(length = 20, name = "project_owner")
   private String projectOwner;
+
+  /**
+   * name of the project owner
+   */
+  @Column(length = 100, name = "project_type")
+  private String projectType;
 }

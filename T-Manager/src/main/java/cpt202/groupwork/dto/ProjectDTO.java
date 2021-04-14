@@ -19,8 +19,10 @@ public class ProjectDTO {
   @Size(min = 0, max = 100, message = "the detail of the project cannot exceed 100")
   private String projectDetail;
 
-
   // owner of the project
   private String projectOwner;
+
+  // owner of the project
+  private String projectType;
 
 }
