@@ -7,12 +7,20 @@
       <v-card>
         <v-card-title>
           <span class="headline">ProjectMembers</span>
+          <v-spacer></v-spacer>
+          <inviteMemberDialog :project="project"></inviteMemberDialog>
         </v-card-title>
-        <v-card-text>
+        <div
+          style="display:flex; justify-content:center; flex-direction:column; align-items:flex-start; padding:30px"
+        >
           <div v-for="(member, index) in members" :key="index">
+            <v-icon
+              :color="member.memberRole == 'owner' ? '#f8e71c' : '#7ed321'"
+              >mdi-account</v-icon
+            >
             {{ member.memberName }} {{ member.memberRole }}
           </div>
-        </v-card-text>
+        </div>
 
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -45,6 +53,7 @@
 </template>
 
 <script>
+import inviteMemberDialog from "@/components/inviteMemberDialog";
 export default {
   data: function() {
     return { showMember: false, loading: false, members: [] };
@@ -92,6 +101,7 @@ export default {
         this.$store.commit("response", error);
       });
   },
-  props: ["project"]
+  props: ["project"],
+  components: { inviteMemberDialog }
 };
 </script>
