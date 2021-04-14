@@ -22,30 +22,30 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-//    @Autowired
+
+  //    @Autowired
 //    UserRepository userRepository;
-    @Resource
-    private UserService userService;
+  @Resource
+  private UserService userService;
 
-    @GetMapping("/{username}")
-    public Response<?> getUserInfo(@PathVariable String username) {
-        return userService.userNameExists(username);
-    }
+  @GetMapping("/get/{username}")
+  public Response<?> getUserInfo(@PathVariable String username) {
+    return userService.userNameExists(username);
+  }
 
-    @PutMapping("/{username}")
-    public Response<?> putUser(@PathVariable String username, @RequestBody User user) {
-        return userService.userModify(username,user);
-    }
+  @PutMapping("/edit/{username}")
+  public Response<?> putUser(@PathVariable String username, @RequestBody User user) {
+    return userService.userModify(username, user);
+  }
 
-    /**
-     *
-     * @param username
-     * @return
-     */
-    @DeleteMapping("/{username}")
+  /**
+   * @param username
+   * @return
+   */
+  @DeleteMapping("/delete/{username}")
 //    @PreAuthorize("hasRole('ADMIN')")
-    public Response<?> deleteUser(@PathVariable String username) {
+  public Response<?> deleteUser(@PathVariable String username) {
 
-        return userService.userDelete(username);
-    }
+    return userService.userDelete(username);
+  }
 }

@@ -5,7 +5,7 @@ import test from "@/pages/test";
 import register from "@/pages/register";
 import login from "@/pages/login";
 import project from "@/pages/project";
-// import profile from "@/pages/profile";
+import profile from "@/pages/profile";
 
 Vue.use(Router);
 
@@ -32,11 +32,11 @@ export default new Router({
       name: "login",
       component: login
     },
-    // {
-    //   path: "/profile",
-    //   name: "profile",
-    //   component: profile
-    // },
+    {
+      path: "/profile",
+      name: "profile",
+      component: profile
+    },
     {
       path: "/test",
       name: "test",
