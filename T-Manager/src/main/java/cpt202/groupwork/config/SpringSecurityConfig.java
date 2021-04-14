@@ -37,6 +37,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
   @Resource
   private ErrorAuthenticationEntryPoint errorAuthenticationEntryPoint;
 
+  @Autowired
+  private AuthEntryPointJwt unauthorizedHandler;
+
   @Resource
   private TokenFilter tokenFilter;
 
@@ -74,15 +77,24 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
   @Override
   public void configure(HttpSecurity httpSecurity) throws Exception {
+    httpSecurity.headers().disable();
+    httpSecurity.cors()
+            .and()
+            .csrf().disable().exceptionHandling().authenticationEntryPoint(unauthorizedHandler)
+            .and()
+            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            .and()
+            .authorizeRequests()
+            .antMatchers("/").permitAll();
     // 配置 CSRF 关闭,允许跨域访问
-    httpSecurity.csrf().disable();
+//    httpSecurity.csrf().disable();
     // 指定错误未授权访问的处理类
     httpSecurity.exceptionHandling().authenticationEntryPoint(errorAuthenticationEntryPoint);
     // 关闭 Session
     httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     // 允许 登录 注册的 api 的无授权访问，其他需要授权访问
     httpSecurity.authorizeRequests()
-        .antMatchers("auth/**")
+        .antMatchers("/auth/**")
         .permitAll().anyRequest().authenticated();
     // 添加拦截器
     httpSecurity.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
