@@ -1,11 +1,10 @@
 <template>
   <div>
-    <v-btn color="primary" text>
+    <v-btn color="primary" text @click="showUserInviteDialog = true">
       Invite members
     </v-btn>
     <!-- 点击邀请进入成员dialog -->
     <v-dialog v-model="showUserInviteDialog" persistent max-width="600px">
-      <template v-slot:activator="{ on, attrs }"> </template>
       <v-card>
         <v-card-title>
           <span class="headline">Invite User</span>
@@ -60,7 +59,35 @@
 <script>
 export default {
   data() {
-    return { showUserInviteDialog: false };
+    return { showUserInviteDialog: false, loadAddMember: false };
+  },
+  methods: {
+    addRelation() {
+      if (this.project.projectType == "team")
+        this.$axios({
+          method: "post",
+          url: this.$store.state.host + "relation/add",
+          data: {
+            projectId: this.project.projectId,
+            memberName: this.newMemberName
+          },
+          headers: {
+            Authorization: "Bearer " + this.$store.getters.getToken
+          }
+        })
+          .then(res => {
+            this.showMenber = true;
+            console.log(res);
+            this.loadAddMember = false;
+            //   this.$router.go(0);
+          })
+          .catch(error => {
+            console.log("error");
+            console.log(error);
+            this.$store.commit("response", error);
+            this.loadAddMember = false;
+          });
+    }
   }
 };
 </script>

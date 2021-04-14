@@ -51,11 +51,9 @@ export default {
   data: function() {
     return {
       dialog: false,
-      showUserInviteDialog: false,
 
       showDetail: true,
       show: true,
-      loadAddMember: false,
       loading: {
         delete: false,
         modify: false
@@ -110,32 +108,6 @@ export default {
         .catch(error => {
           this.$store.commit("response", error);
         });
-    },
-    addRelation() {
-      if (this.project.projectType == "team")
-        this.$axios({
-          method: "post",
-          url: this.$store.state.host + "relation/add",
-          data: {
-            projectId: this.project.projectId,
-            memberName: this.newMemberName
-          },
-          headers: {
-            Authorization: "Bearer " + this.$store.getters.getToken
-          }
-        })
-          .then(res => {
-            this.showMenber = true;
-            console.log(res);
-            this.loadAddMember = false;
-            //   this.$router.go(0);
-          })
-          .catch(error => {
-            console.log("error");
-            console.log(error);
-            this.$store.commit("response", error);
-            this.loadAddMember = false;
-          });
     }
   },
   components: {
