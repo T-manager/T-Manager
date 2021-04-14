@@ -68,7 +68,7 @@ export default {
       userName: null,
       userPassword: null,
       rules: {
-        required: (value) => !!value || "This field is required.",
+        required: value => !!value || "This field is required."
       }
     };
   },
@@ -76,46 +76,50 @@ export default {
     form() {
       return {
         userName: this.userName,
-        userPassword: this.userPassword,
+        userPassword: this.userPassword
       };
-    },
+    }
   },
   methods: {
-    login: function () {
+    login: function() {
       this.$axios({
         method: "post",
         url: "http://localhost:6767/api/auth/login",
         data: {
           userName: this.userName,
-          userPassword: this.userPassword,
-        },
+          userPassword: this.userPassword
+        }
       })
-        .then((res) => {
+        .then(res => {
           if (res.data.data == 2000) alert("Login successfully");
           // 跳转首页 (未实现)
           if (res.data.data == 2001) alert("Wrong password");
-          if (res.data.data == 2002){ alert("User not exist");}
-          else {this.$store.commit('set_token',res.data.data);}
-          console.log(this.$store.getters.getToken) // 临时看一下token
+          if (res.data.data == 2002) {
+            alert("User not exist");
+          } else {
+            this.$store.commit("set_token", res.data.data);
+            this.$store.commit("set_username", this.userName);
+          }
+          console.log(this.$store.getters.getToken); // 临时看一下token
           //this.$router.go(0);
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
     resetForm() {
       this.errorMessages = [];
-      Object.keys(this.form).forEach((f) => {
+      Object.keys(this.form).forEach(f => {
         this.$refs[f].reset();
       });
     },
     submit() {
       this.login();
     },
-    cancel(){
-      console.log("cancel")
+    cancel() {
+      console.log("cancel");
     }
-  },
+  }
 };
 </script>
 <style scoped>
