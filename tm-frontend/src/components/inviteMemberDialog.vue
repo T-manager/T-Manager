@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-btn color="primary" text @click="showUserInviteDialog = true">
-      Invite members
+      Invite
       <v-icon>mdi-account-plus-outline</v-icon>
     </v-btn>
     <!-- 点击邀请进入成员dialog -->

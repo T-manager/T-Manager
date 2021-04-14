@@ -22,7 +22,7 @@
           "
           @click="gotoTodoList()"
         >
-          TodoList
+          Dashboard
         </div>
 
         <div style="height:23px;">

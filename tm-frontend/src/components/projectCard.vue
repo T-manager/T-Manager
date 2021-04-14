@@ -16,11 +16,18 @@
     <div
       style="display:flex; align-items:center; padding-left:20px; padding-right:20px; padding-top:10px"
     >
-      <div style="font-size:25px">{{ project.projectName }}</div>
+      <div style="font-size:25px">
+        {{ project.projectName }}
+      </div>
       <v-spacer></v-spacer>
       <!-- 点击铅笔修改项目 -->
       <modifyProjectDialog :project="project"></modifyProjectDialog>
-      <v-btn icon color="primary" @click="deleteProject()">
+      <v-btn
+        icon
+        color="primary"
+        @click="deleteProject()"
+        v-if="project.projectOwner == $store.getters.getUsername"
+      >
         <v-icon>mdi-delete-outline</v-icon></v-btn
       >
     </div>

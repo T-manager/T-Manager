@@ -1,6 +1,7 @@
 package cpt202.groupwork.service.impl;
 
 import cpt202.groupwork.dto.MemberDTO;
+import cpt202.groupwork.dto.ProjectDetailDTO;
 import cpt202.groupwork.dto.TodoViewDTO;
 import cpt202.groupwork.dto.TodolistViewDTO;
 import cpt202.groupwork.entity.Project;
@@ -37,12 +38,17 @@ public class RelationServiceImpl implements RelationService{
      * @param username
      * @return List<Project>
      */
-    public List<Project> getUserProject(String username){
-        List<Project> userProject = new ArrayList<>();
+    public List<ProjectDetailDTO> getUserProject(String username){
+        List<ProjectDetailDTO> userProject = new ArrayList<>();
         Optional<User> user = userRepository.findByUserName(username);
         List<ProjectMember> projectMembers = relationRepository.findByMemberId(user.get().getUserId());
         for (ProjectMember projectMember : projectMembers){
-            userProject.add(projectRepository.findByProjectId(projectMember.getProjectId()).get());
+            Optional<Project> project = projectRepository.findByProjectId(projectMember.getProjectId());
+            ProjectDetailDTO pdDTO = new ProjectDetailDTO();
+            BeanUtils.copyProperties(project.get(), pdDTO);
+            Optional<User> po = userRepository.findById(project.get().getProjectOwnerId());
+            pdDTO.setProjectOwner(po.get().getUserName());
+            userProject.add(pdDTO);
         }
         return userProject;
     }
