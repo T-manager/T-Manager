@@ -126,6 +126,10 @@ public class UserServiceImpl implements UserService {
   public Response<?> userModify(String username, User userMod) {
     Optional<User> user = userRepository.findByUserName(username);
     if (user.isPresent()) {
+      if (userMod.getUserPassword() != null) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        userMod.setUserPassword(encoder.encode(userMod.getUserPassword()));
+      }
       //找出值为空的属性
       final BeanWrapper src = new BeanWrapperImpl(userMod);
       java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
