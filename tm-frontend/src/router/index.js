@@ -18,7 +18,7 @@ export default new Router({
       component: todolist
     },
     {
-      path: "/todolist",
+      path: "/projectdetail/todolist/*",
       name: "todolist",
       component: todolist
     },

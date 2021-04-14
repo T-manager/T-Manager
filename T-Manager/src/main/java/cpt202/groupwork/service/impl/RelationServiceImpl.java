@@ -1,5 +1,6 @@
 package cpt202.groupwork.service.impl;
 
+import cpt202.groupwork.dto.MemberDTO;
 import cpt202.groupwork.dto.TodoViewDTO;
 import cpt202.groupwork.dto.TodolistViewDTO;
 import cpt202.groupwork.entity.Project;
@@ -11,9 +12,13 @@ import cpt202.groupwork.repository.*;
 import cpt202.groupwork.service.RelationService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.swing.text.html.Option;
 
 @Service
 public class RelationServiceImpl implements RelationService{
@@ -34,7 +39,8 @@ public class RelationServiceImpl implements RelationService{
      */
     public List<Project> getUserProject(String username){
         List<Project> userProject = new ArrayList<>();
-        List<ProjectMember> projectMembers = relationRepository.findByMemberName(username);
+        Optional<User> user = userRepository.findByUserName(username);
+        List<ProjectMember> projectMembers = relationRepository.findByMemberId(user.get().getUserId());
         for (ProjectMember projectMember : projectMembers){
             userProject.add(projectRepository.findByProjectId(projectMember.getProjectId()).get());
         }
@@ -47,12 +53,17 @@ public class RelationServiceImpl implements RelationService{
      * @param projectId
      * @return List<User>
      */
-    public List<User> getProjectUser(Integer projectId){
-        List<User> projectUser = new ArrayList<>();
+    public List<MemberDTO> getProjectUser(Integer projectId){
         List<ProjectMember> projectMembers = relationRepository.findByProjectId(projectId);
+        List<MemberDTO> memberDTOs = new ArrayList<>();
         for (ProjectMember projectMember : projectMembers){
-            projectUser.add(userRepository.findByUserName(projectMember.getMemberName()).get());
+            MemberDTO memberDTO = new MemberDTO();
+            BeanUtils.copyProperties(projectMember, memberDTO);
+            Optional<User> user = userRepository.findById(projectMember.getMemberId());
+            memberDTO.setMemberName(user.get().getUserName());
+            memberDTO.setMemberAvatar(user.get().getUserAvatar());
+            memberDTOs.add(memberDTO);
         }
-        return projectUser;
+        return memberDTOs;
     }
 }

@@ -7,19 +7,22 @@
       <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
       <div
         style="margin-left:29px; cursor:pointer; font-size:20px; color:#535353"
-        @click="gotoHome"
+        @click="gotoProjectPage"
       >
         T-Manager
       </div>
-      <div style="display:flex; margin-left:37px; align-items:center">
+      <div
+        style="display:flex; margin-left:37px; align-items:center"
+        v-if="$route.path.split('/')[1] == 'projectdetail'"
+      >
         <div
           style="margin-right:17px;"
           :class="
             $route.path == '/home/teaforence' ? 'choose_home' : 'unchoose_home'
           "
-          @click="gotoTeaforenceHome()"
+          @click="gotoTodoList()"
         >
-          Project
+          TodoList
         </div>
 
         <div style="height:23px;">
@@ -30,9 +33,9 @@
           :class="
             $route.path == '/home/community' ? 'choose_home' : 'unchoose_home'
           "
-          @click="gotoCommunityHome()"
+          @click="gotoGantt()"
         >
-          My Schedule
+          Gantt
         </div>
       </div>
       <v-spacer></v-spacer>
@@ -61,8 +64,8 @@ export default {
     };
   },
   methods: {
-    gotoHome() {
-      this.$router.replace({ path: "/todolist" });
+    gotoProjectPage() {
+      this.$router.replace({ path: "/project" });
     },
     showUser() {
       if (this.user.avatar == null) this.$store.state.show.showLogin = true;

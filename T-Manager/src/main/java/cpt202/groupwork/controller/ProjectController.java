@@ -9,6 +9,9 @@ import cpt202.groupwork.repository.RelationRepository;
 import cpt202.groupwork.repository.UserRepository;
 //import cpt202.groupwork.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -42,10 +45,12 @@ public class ProjectController {
   public Response<?> addProject(@Valid @RequestBody ProjectDTO projectDTO) {
     Project project = new Project();
     BeanUtils.copyProperties(projectDTO, project);
+    project.setProjectOwnerId(userRepository.findByUserName(projectDTO.getProjectOwner()).get().getUserId());
     projectRepository.save(project);
     ProjectMember pm = new ProjectMember();
     pm.setProjectId(project.getProjectId());
-    pm.setMemberName(project.getProjectOwner());
+    pm.setMemberId(project.getProjectOwnerId());
+    pm.setMemberRole("owner");
     relationRepository.save(pm);
     return Response.ok();
   }
@@ -55,8 +60,12 @@ public class ProjectController {
   public Response<?> deleteProject(@PathVariable Integer projectId) {
 
     Optional<Project> project = projectRepository.findById(projectId);
-
+    List<ProjectMember> pms = relationRepository.findByProjectId(projectId);
+    for (ProjectMember pm : pms) {
+      relationRepository.delete(pm);
+    }
     projectRepository.deleteById(projectId);
+
     return Response.ok();
   }
 

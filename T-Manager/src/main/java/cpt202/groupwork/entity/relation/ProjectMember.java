@@ -37,7 +37,12 @@ public class ProjectMember implements Serializable {
   /**
    * name of the project member
    */
-  @Column(length = 20, name = "member_name")
-  private String memberName;
+  @Column(name = "member_id")
+  private Integer memberId;
 
+  /**
+   * role of the member
+   */
+  @Column(length = 20, name = "member_role")
+  private String memberRole;
 }

@@ -43,8 +43,8 @@ public class Project implements Serializable {
   /**
    * name of the project owner
    */
-  @Column(length = 20, name = "project_owner")
-  private String projectOwner;
+  @Column(name = "project_owner_id")
+  private Integer projectOwnerId;
 
   /**
    * name of the project owner

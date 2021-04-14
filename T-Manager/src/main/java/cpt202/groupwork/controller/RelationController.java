@@ -2,6 +2,7 @@ package cpt202.groupwork.controller;
 
 import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.RelationDTO;
+import cpt202.groupwork.entity.User;
 import cpt202.groupwork.entity.relation.ProjectMember;
 import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.RelationRepository;
@@ -9,6 +10,8 @@ import cpt202.groupwork.repository.UserRepository;
 //import cpt202.groupwork.security.SecurityUtils;
 import cpt202.groupwork.service.RelationService;
 import io.swagger.v3.oas.annotations.Operation;
+
+import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 import org.springframework.beans.BeanUtils;
@@ -40,9 +43,18 @@ public class RelationController {
 
     @PostMapping("/add")
     @Operation(summary = "add a relation")
-    public Response<?> addRelation(@Valid @RequestBody RelationDTO RelationDTO) {
+    public Response<?> addRelation(@Valid @RequestBody RelationDTO relationDTO) {
+        Optional<User> user = userRepository.findByUserName(relationDTO.getMemberName());
+        List<ProjectMember> pms = relationRepository.findByProjectId(relationDTO.getProjectId());
+        for (ProjectMember pm : pms) {
+            if (pm.getMemberId() == user.get().getUserId())
+                return Response.conflict("aaaaa");
+        }
         ProjectMember projectmember = new ProjectMember();
-        BeanUtils.copyProperties(RelationDTO, projectmember);
+        BeanUtils.copyProperties(relationDTO, projectmember);
+        projectmember.setMemberRole("member");
+
+        projectmember.setMemberId(user.get().getUserId());
         relationRepository.save(projectmember);
         return Response.ok(projectmember);
     }

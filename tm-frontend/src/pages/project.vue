@@ -2,16 +2,13 @@
   <div style="display: flex; padding: 35px">
     <v-row>
       <!-- 已经创建的的所有项目CARD -->
-      222
-      <div
+      <projectCard
+        style="margin:15px;"
         v-for="(project, index) in projects"
         :key="index"
         v-if="showProjects"
-      >
-        111
-        <projectCard :project="project"></projectCard>
-      </div>
-      333
+        :project="project"
+      ></projectCard>
       <!--新建项目dialog-->
       <v-dialog v-model="dialog" persistent max-width="600px">
         <!-- 点击加号新建项目 -->
@@ -107,34 +104,16 @@ export default {
   data: function() {
     return {
       dialog: false,
-      showUserInviteDialog: false,
-      showModifyDialog: false,
-      showDetail: true,
+
       showProjects: false,
-      show: true,
       loadAddProject: false,
       loadAddMember: false,
-      loading: {
-        delete: false,
-        modify: false
-      },
       projects: [],
       newProject: {
         projectName: "",
         projectDetail: "",
         projectOwner: this.$store.getters.getUsername,
         projectType: ""
-      },
-      project: {
-        projectId: 1,
-        projectName: 1,
-        projectDetail: 114514,
-        projectOwner: 1
-      },
-      relation: {
-        relationId: 1,
-        projectId: 1111,
-        memberName: "田所浩二"
       },
       memberItem: 1,
       items: [
@@ -145,9 +124,6 @@ export default {
     };
   },
   methods: {
-    // showProjectType(){
-    //   if(this.project.)
-    // },
     addProject() {
       this.loadAddProject = true;
       this.$axios({
@@ -166,68 +142,6 @@ export default {
         .catch(error => {
           this.$store.commit("response", error);
           this.loadAddProject = false;
-        });
-    },
-    async modifyProject() {
-      this.loading = true;
-      console.log(this.project.projectId);
-      await this.$axios({
-        method: "put",
-        url: this.$store.state.host + "project/modify",
-        data: {
-          projectId: this.project.projectId,
-          projectName: this.project.projectName,
-          projectDetail: this.project.projectDetail,
-          projectOwner: this.project.projectOwner
-          //projectType: this.newProjectType
-        }
-      })
-        .then(res => {
-          console.log(res);
-          this.loading = false;
-          this.showModifyDialog = false;
-          //   this.$router.go(0);
-        })
-        .catch(error => {
-          console.log(error);
-          this.$store.commit("response", error);
-          this.loading = false;
-        });
-    },
-    deleteProject() {
-      // this.loadAddProject = true;
-      this.$axios({
-        method: "delete",
-        url: this.$store.state.host + "project/delete/" + this.project.projectId
-      })
-        .then(res => {
-          this.show = false;
-        })
-        .catch(error => {
-          this.$store.commit("response", error);
-        });
-    },
-    addRelation() {
-      this.$axios({
-        method: "post",
-        url: this.$store.state.host + "relation/add",
-        data: {
-          projectId: this.projectId,
-          memberName: this.newMemberName
-        },
-        headers: {
-          Authorization: "Bearer " + this.$store.getters.getToken
-        }
-      })
-        .then(res => {
-          this.showMenber = true;
-          console.log(res);
-          this.loadAddMember = false;
-          //this.$router.go(0);
-        })
-        .catch(error => {
-          this.$store.commit("response", error);
-          this.loadAddMember = false;
         });
     },
     deleteRelation() {
@@ -263,8 +177,8 @@ export default {
       .then(res => {
         console.log(res);
         // projects
-        this.project = res.data.data;
-        console.log(this.project);
+        this.projects = res.data.data;
+        console.log(this.projects);
         this.showProjects = true;
       })
       .catch(error => {

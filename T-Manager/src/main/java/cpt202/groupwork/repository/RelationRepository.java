@@ -10,10 +10,10 @@ public interface RelationRepository extends JpaRepository<ProjectMember, Integer
     /**
      * get the list of relation which contain certain member by memberName
      *
-     * @param memberName
+     * @param memberId
      * @return List<ProjectMember>
      */
-    List<ProjectMember> findByMemberName(String memberName);
+    List<ProjectMember> findByMemberId(Integer memberId);
 
     /**
      * get the list of relation which contain certain project by projectId

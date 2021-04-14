@@ -215,7 +215,10 @@ export default {
       await this.$axios({
         method: "post",
         url: this.$store.state.host + "todo/add",
-        data: this.todoForm
+        data: this.todoForm,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
       })
         .then(res => {
           this.loading = false;
