@@ -1,5 +1,5 @@
 <template>
-  <v-card min-width="300px">
+  <v-card width="400px" :style="showDetail ? '' : 'height:256px'">
     <v-card
       @click="gotoProjectDetail"
       style="border-bottom-left-radius:0px; border-bottom-right-radius:0px"
@@ -79,9 +79,15 @@
       </v-img>
     </v-card>
     <div
-      style="display:flex; justify-content:flex-end; padding-left:20px; padding-right:20px; padding-bottom:10px; padding-top:10px;"
+      style="display:flex; align-items:center; justify-content:flex-end; padding-left:20px; padding-right:20px; padding-bottom:10px; padding-top:10px;"
     >
-      <div style="font-size:20px">
+      <div
+        :style="
+          project.projectName.length > 13
+            ? ';font-size:16px'
+            : ';font-size:20px'
+        "
+      >
         {{ project.projectName }}
       </div>
       <v-spacer></v-spacer>
@@ -94,8 +100,7 @@
     <v-expand-transition>
       <div v-if="showDetail">
         <v-divider></v-divider>
-        <v-card-text
-          style="width:100%; display:flex; justify-content:flex-start"
+        <v-card-text class="Omit" style="max-width:400px;text-align:start"
           >{{ project.projectDetail }}
         </v-card-text>
       </div>
@@ -186,4 +191,11 @@ export default {
 };
 </script>
 
-<style></style>
+<style>
+.Omit {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+</style>
