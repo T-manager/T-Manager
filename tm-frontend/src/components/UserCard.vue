@@ -69,7 +69,7 @@ export default {
       console.log("user");
       console.log(this.user);
       if (this.user.username != null) {
-        var path = "/userpage/username=" + this.user.username;
+        var path = "/profile";
         this.$router.push({ path: path });
       } else {
         this.$store.state.show.showLogin = true;
