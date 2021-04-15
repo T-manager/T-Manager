@@ -1,11 +1,24 @@
 <template>
-  <v-dialog v-model="showAlert" persistent max-width="600px">
-    <v-card>
-      <div><v-icon>mdi-close</v-icon></div>
-      <div>{{ message }}</div>
-      <div>
-        <v-btn @click="showAlert = false">Cancel</v-btn>
-        <v-btn @click="confirm">Confirm</v-btn>
+  <v-dialog v-model="showPopup" persistent max-width="400px">
+    <v-card
+      class="background"
+      style="padding:20px; display:flex; align-items:center; flex-direction:column"
+    >
+      <div style="margin-bottom:40px; margin-top:10px; font-size:18px">
+        {{ message }}
+      </div>
+      <div style="display:flex; width:250px">
+        <v-btn
+          style="border:1px solid #aab2de; background-color:#fff"
+          class="indigo--text"
+          @click="cancel"
+          depressed
+          >Cancel</v-btn
+        >
+        <v-spacer></v-spacer>
+        <v-btn color="primary" class="white--text" @click="confirm" depressed
+          >Confirm</v-btn
+        >
       </div>
     </v-card>
   </v-dialog>
@@ -14,13 +27,25 @@
 <script>
 export default {
   data: function() {
-    return { showAlert: false, loading: false };
+    return { loading: false };
   },
   methods: {
     confirm() {
       this.$emit("confirmOperation");
+    },
+    cancel() {
+      this.$emit("showPopupMethod");
     }
   },
-  props: ["message"]
+  props: ["message", "showPopup"]
 };
 </script>
+
+<style scope>
+.background {
+  background-image: url("../assets/logo.png");
+  background-size: 200px;
+  background-repeat: no-repeat;
+  background-position: 200px -20px;
+}
+</style>

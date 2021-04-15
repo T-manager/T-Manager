@@ -1,5 +1,5 @@
 <template>
-  <v-card min-width="300px">
+  <v-card width="400px">
     <v-card
       @click="gotoProjectDetail"
       style="border-bottom-left-radius:0px; border-bottom-right-radius:0px"
