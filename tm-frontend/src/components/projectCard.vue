@@ -51,7 +51,7 @@
                 <v-btn
                   text
                   color="primary"
-                  @click="deleteProject()"
+                  @click="showPopupMethod"
                   v-if="project.projectOwner == $store.getters.getUsername"
                   style="width:120px; display:flex; justify-content:flex-start; padding:0px 10px 0px 10px"
                 >
@@ -102,6 +102,8 @@
         <v-divider></v-divider>
         <v-card-text class="Omit" style="max-width:400px;text-align:start"
           >{{ project.projectDetail }}
+          {{ project.projectOwner }}
+          {{ $store.getters.getUsername }}
         </v-card-text>
       </div>
     </v-expand-transition>
@@ -113,10 +115,12 @@
             : 'quit') +
           ' this project team?'
       "
+      :showPopup="showPopup"
+      @showPopupMethod="showPopupMethod"
       @confirmOperation="
         project.projectOwner == $store.getters.getUsername
-          ? deleteProject
-          : quitProject
+          ? deleteProject()
+          : quitProject()
       "
     ></popup>
   </v-card>
@@ -130,7 +134,7 @@ export default {
   data: function() {
     return {
       dialog: false,
-
+      showPopup: false,
       showDetail: false,
       show: true,
       loading: {
@@ -141,6 +145,9 @@ export default {
     };
   },
   methods: {
+    showPopupMethod() {
+      this.showPopup = !this.showPopup;
+    },
     quitProject() {
       console.log("quit");
       this.$axios({
@@ -166,6 +173,7 @@ export default {
       });
     },
     deleteProject() {
+      alert("delete!");
       this.$axios({
         method: "delete",
         url:

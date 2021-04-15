@@ -4,7 +4,7 @@
       class="background"
       style="padding:20px; display:flex; align-items:center; flex-direction:column"
     >
-      <div style="margin-bottom:40px; margin-top:10px; font-size:18px">
+      <div style="margin-bottom:40px; margin-top:30px; font-size:18px">
         {{ message }}
       </div>
       <div style="display:flex; width:250px">
@@ -43,9 +43,10 @@ export default {
 
 <style scope>
 .background {
-  background-image: url("../assets/logo.png");
-  background-size: 200px;
+  background-image: url("../assets/TManager.png");
+  /* background-image: url("../assets/TManagerLogo.png"); */
+  background-size: 100px;
   background-repeat: no-repeat;
-  background-position: 200px -20px;
+  background-position: 0px -25px;
 }
 </style>
