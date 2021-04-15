@@ -118,9 +118,7 @@ export default {
             (typeof v != "undefined" && v.length <= 100) ||
             "the length of detail should less than 100"
         ],
-        selectRules: [
-          v => !!v ||  "please choose a type"
-        ]
+        selectRules: [v => !!v || "please choose a type"]
       },
       showProjects: false,
       loadAddProject: false,
@@ -149,8 +147,8 @@ export default {
       if (typeof v == "undefined") return false;
       return v.length <= 100;
     },
-    checkSelectRule(v){
-      if (typeof v == "undefined"||v=="") return false;
+    checkSelectRule(v) {
+      if (typeof v == "undefined" || v == "") return false;
       return true;
     },
     checkRules() {
@@ -166,7 +164,7 @@ export default {
         alert("check the type");
         return false;
       }
-      
+
       return true;
     },
     addProject() {

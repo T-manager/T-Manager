@@ -1,5 +1,5 @@
 <template>
-  <v-card max-width="344">
+  <v-card min-width="300px">
     <v-card
       @click="gotoProjectDetail"
       style="border-bottom-left-radius:0px; border-bottom-right-radius:0px"
@@ -81,7 +81,7 @@
     <div
       style="display:flex; justify-content:flex-end; padding-left:20px; padding-right:20px; padding-bottom:10px; padding-top:10px;"
     >
-      <div style="font-size:25px">
+      <div style="font-size:20px">
         {{ project.projectName }}
       </div>
       <v-spacer></v-spacer>
@@ -100,12 +100,27 @@
         </v-card-text>
       </div>
     </v-expand-transition>
+    <popup
+      :message="
+        'Are you sure you want to ' +
+          (project.projectOwner == $store.getters.getUsername
+            ? 'disband'
+            : 'quit') +
+          ' this project team?'
+      "
+      @confirmOperation="
+        project.projectOwner == $store.getters.getUsername
+          ? deleteProject
+          : quitProject
+      "
+    ></popup>
   </v-card>
 </template>
 
 <script>
 import modifyProjectDialog from "@/components/modifyProjectDialog";
 import memberDialog from "@/components/memberDialog";
+import popup from "@/components/popup";
 export default {
   data: function() {
     return {
@@ -164,7 +179,8 @@ export default {
   },
   components: {
     modifyProjectDialog,
-    memberDialog
+    memberDialog,
+    popup
   },
   props: ["project"]
 };

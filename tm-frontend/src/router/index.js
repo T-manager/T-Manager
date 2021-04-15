@@ -29,7 +29,7 @@ export default new Router({
       component: login
     },
     {
-      path: "/gantt",
+      path: "/projectdetail/gantt/*",
       name: "gantt",
       component: gantt
     },
