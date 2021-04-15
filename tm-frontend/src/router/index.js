@@ -2,7 +2,6 @@ import Vue from "vue";
 import Router from "vue-router";
 import todolist from "@/pages/todolist";
 import test from "@/pages/test";
-import register from "@/pages/register";
 import login from "@/pages/login";
 import project from "@/pages/project";
 import profile from "@/pages/profile";
@@ -22,11 +21,7 @@ export default new Router({
       name: "todolist",
       component: todolist
     },
-    {
-      path: "/register",
-      name: "register",
-      component: register
-    },
+
     {
       path: "/login",
       name: "login",
