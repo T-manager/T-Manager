@@ -1,6 +1,13 @@
 <template>
   <div>
-    <v-btn icon @click="showMember = true" color="primary">
+    <v-btn
+      text
+      style="width:120px; display:flex; justify-content:flex-start; padding:0px 10px 0px 10px"
+      @click="showMember = true"
+      color="primary"
+    >
+      Member
+      <v-spacer></v-spacer>
       <v-icon>mdi-account-group</v-icon></v-btn
     >
     <v-dialog v-model="showMember" persistent max-width="600px">
@@ -8,7 +15,10 @@
         <v-card-title>
           <span class="headline">ProjectMembers</span>
           <v-spacer></v-spacer>
-          <inviteMemberDialog :project="project"></inviteMemberDialog>
+          <inviteMemberDialog
+            v-if="project.projectOwner == $store.getters.getUsername"
+            :project="project"
+          ></inviteMemberDialog>
         </v-card-title>
         <v-list>
           <v-list-item-group multiple>
@@ -28,26 +38,31 @@
                   </v-avatar>
                   {{ member.memberName }}
                   <v-spacer></v-spacer>
-                  <v-menu offset-x style="min-width:50px">
+                  <v-btn
+                    v-if="member.memberRole == 'owner'"
+                    text
+                    style="color:#f8e71c; width:140px"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    {{ member.memberRole }}<v-spacer></v-spacer
+                    ><v-icon color="#f8e71c" style="font-size:35px"
+                      >mdi-account-star-outline</v-icon
+                    >
+                  </v-btn>
+                  <v-menu v-else offset-x style="min-width:50px">
                     <template v-slot:activator="{ on, attrs }">
                       <v-btn
-                        icons-and-text
-                        depressed
-                        @click="deleteRelation"
-                        :style="
-                          member.memberRole == 'owner'
-                            ? 'color:#f8e71c'
-                            : 'color:#7ed321'
-                        "
+                        text
+                        style="color:#7ed321; width:140px"
                         v-bind="attrs"
                         v-on="on"
+                        :disabled="
+                          project.projectOwner != $store.getters.getUsername
+                        "
                       >
-                        {{ member.memberRole
-                        }}<v-icon
-                          :color="
-                            member.memberRole == 'owner' ? '#f8e71c' : '#7ed321'
-                          "
-                          style="font-size:35px"
+                        {{ member.memberRole }}<v-spacer></v-spacer
+                        ><v-icon color="#7ed321" style="font-size:35px"
                           >mdi-account</v-icon
                         >
                       </v-btn>
@@ -65,28 +80,6 @@
             </v-list-item>
           </v-list-item-group>
         </v-list>
-        <!-- <div
-          style="display:flex; justify-content:center; flex-direction:column; align-items:flex-start; padding:30px"
-        >
-          <div
-            v-for="(member, index) in members"
-            :key="index"
-            style="line-height:60px; font-size:18px; display:flex; width:100%; align-items:center"
-          >
-            <v-avatar size="40" style="margin-right:10px">
-              <v-img
-                src="https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/u=1526651059,4112790729&fm=15&gp=0.jpg"
-              ></v-img>
-            </v-avatar>
-            {{ member.memberName }}
-            <v-spacer></v-spacer>
-            <v-icon
-              :color="member.memberRole == 'owner' ? '#f8e71c' : '#7ed321'"
-              style="font-size:35px"
-              >mdi-account</v-icon
-            >
-          </div>
-        </div> -->
 
         <v-card-actions>
           <v-spacer></v-spacer>

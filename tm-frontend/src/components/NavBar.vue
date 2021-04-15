@@ -39,11 +39,9 @@
         </div>
       </div>
       <v-spacer></v-spacer>
+      <div style="font-size:20px">{{ $store.getters.getUsername }}</div>
       <!-- <SearchingBarthird></SearchingBarthird> -->
-      <div style="margin-left:29px; margin-right:15px; cursor:pointer;">
-        <!-- <v-avatar size="30" color="#aaa" @click="gotoLogin()">
-          <div style="height:20px; width:20px; background-color:#aaaaaa"></div>
-        </v-avatar> -->
+      <div style="margin-left:25px; margin-right:15px; cursor:pointer;">
         <UserCard size="37"></UserCard>
       </div>
     </v-card>

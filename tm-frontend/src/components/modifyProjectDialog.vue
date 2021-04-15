@@ -1,6 +1,13 @@
 <template>
   <div>
-    <v-btn icon @click="showModifyProject = true" color="primary">
+    <v-btn
+      text
+      @click="showModifyProject = true"
+      color="primary"
+      style="width:120px; display:flex; justify-content:flex-start; padding:0px 10px 0px 10px"
+    >
+      Edit
+      <v-spacer></v-spacer>
       <v-icon>mdi-pencil-outline</v-icon></v-btn
     >
     <v-dialog v-model="showModifyProject" persistent max-width="600px">

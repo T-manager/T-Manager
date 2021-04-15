@@ -33,7 +33,8 @@
                     label="project name"
                     v-model="newProject.projectName"
                     required
-                    hint="less than 20"
+                    :rules="rules.nameRules"
+                    hint="more than 1 and less than 20"
                   ></v-text-field>
                 </v-col>
                 <v-col cols="12">
@@ -42,7 +43,8 @@
                     label="project detail"
                     v-model="newProject.projectDetail"
                     required
-                    hint="more than 1 and less than 100"
+                    :rules="rules.detailRules"
+                    hint="less than 100"
                   ></v-text-field>
                 </v-col>
                 <!-- <v-col cols="12">
@@ -60,6 +62,7 @@
                     :items="['personal', 'team']"
                     label="project type"
                     v-model="newProject.projectType"
+                    :rules="rules.selectRules"
                   ></v-autocomplete>
                 </v-col>
               </v-row>
@@ -89,7 +92,7 @@
               :loading="loadAddProject"
               :disabled="loadAddProject"
             >
-              Save
+              Comfirm
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -104,7 +107,21 @@ export default {
   data: function() {
     return {
       dialog: false,
-
+      rules: {
+        nameRules: [
+          v =>
+            (typeof v != "undefined" && v.length <= 20 && v.length >= 1) ||
+            "the length of name should be 1-20"
+        ],
+        detailRules: [
+          v =>
+            (typeof v != "undefined" && v.length <= 100) ||
+            "the length of detail should less than 100"
+        ],
+        selectRules: [
+          v => !!v ||  "please choose a type"
+        ]
+      },
       showProjects: false,
       loadAddProject: false,
       loadAddMember: false,
@@ -124,8 +141,40 @@ export default {
     };
   },
   methods: {
+    checkNameRules(v) {
+      if (typeof v == "undefined") return false;
+      return v.length <= 20 && v.length >= 1;
+    },
+    checkDetailRules(v) {
+      if (typeof v == "undefined") return false;
+      return v.length <= 100;
+    },
+    checkSelectRule(v){
+      if (typeof v == "undefined"||v=="") return false;
+      return true;
+    },
+    checkRules() {
+      if (!this.checkNameRules(this.newProject.projectName)) {
+        alert("check the name");
+        return false;
+      }
+      if (!this.checkDetailRules(this.newProject.projectDetail)) {
+        alert("check the detail");
+        return false;
+      }
+      if (!this.checkSelectRule(this.newProject.projectType)) {
+        alert("check the type");
+        return false;
+      }
+      
+      return true;
+    },
     addProject() {
       this.loadAddProject = true;
+      if (!this.checkRules()) {
+        this.loadAddProject = false;
+        return;
+      }
       this.$axios({
         method: "post",
         url: this.$store.state.host + "project/add",
