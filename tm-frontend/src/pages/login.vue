@@ -90,7 +90,7 @@ export default {
         .then(res => {
           //if (res.data.data == 2000) 登录成功返回的直接就是cookie
           if (res.data.data == 2001) alert("Wrong password");
-          if (res.data.data == 2002) alert("User not exist");
+          else if (res.data.data == 2002) alert("User not exist");
           else {
             this.$store.commit("set_username", this.userName);
             this.$store.commit("set_token", res.data.data);

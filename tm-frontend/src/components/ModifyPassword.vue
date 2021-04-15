@@ -108,7 +108,10 @@ export default {
         })
           .then(res => {
             alert("Reset password successfully!");
+            this.$store.commit("set_username", null);
+            this.$store.commit("set_token", null);
             this.showModifyPwd = false;
+            this.$router.push("/login");
           })
           .catch(error => {
             console.log(error);
