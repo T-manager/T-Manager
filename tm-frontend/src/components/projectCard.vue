@@ -1,48 +1,88 @@
 <template>
   <v-card max-width="344">
-    <v-card @click="gotoProjectDetail" flat>
+    <v-card @click="gotoProjectDetail" style="border-radius:0px" flat>
       <v-img
-        src="https://cdn.vuetifyjs.com/images/cards/sunshine.jpg"
+        :src="
+          project.projectType == 'team'
+            ? 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
+            : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'
+        "
         height="200px"
         class="white--text"
         gradient="to bottom, rgba(0,0,0,0), rgba(100,100,100, 0.5)"
       >
-        <v-card-title
-          style="font-size: 1.5em; width:100%; height:100%; display:flex; justify-content:flex-end; align-items:flex-end"
-          >{{ project.projectType }}</v-card-title
-        ></v-img
-      >
+        <div
+          style="font-size:25px; height:200px; display:flex; flex-direction:column; justify-content:space-between; 
+          align-items:flex-end; padding:10px"
+        >
+          <v-menu offset-x :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                small
+                style="width:40px; height:38px"
+              >
+                <v-icon style="font-size:30px; color:#757575"
+                  >mdi-dots-vertical</v-icon
+                >
+              </v-btn>
+            </template>
+            <v-list style="padding:0px;">
+              <v-list-item
+                style="padding:0px 5px 0px 5px"
+                v-if="project.projectOwner == $store.getters.getUsername"
+              >
+                <!-- 点击铅笔修改项目 -->
+                <modifyProjectDialog :project="project"></modifyProjectDialog>
+              </v-list-item>
+              <v-list-item style="padding:0px 5px 0px 5px">
+                <memberDialog
+                  v-if="project.projectType == 'team'"
+                  :project="project"
+                ></memberDialog
+              ></v-list-item>
+              <v-list-item style="padding:0px 5px 0px 5px">
+                <!-- 解散project -->
+                <v-btn
+                  text
+                  color="primary"
+                  @click="deleteProject()"
+                  v-if="project.projectOwner == $store.getters.getUsername"
+                  style="width:120px; display:flex; justify-content:flex-start; padding:0px 10px 0px 10px"
+                >
+                  Disband
+                  <v-spacer></v-spacer>
+                  <v-icon>mdi-account-multiple-remove-outline</v-icon></v-btn
+                >
+                <!-- 退出project -->
+                <v-btn
+                  text
+                  color="primary"
+                  @click="quitProject()"
+                  v-else
+                  style="width:120px; display:flex; justify-content:flex-start; padding:0px 10px 0px 10px"
+                >
+                  Quit
+                  <v-spacer></v-spacer>
+                  <v-icon>mdi-account-remove-outline</v-icon></v-btn
+                >
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          <div>{{ project.projectType }}</div>
+        </div>
+      </v-img>
     </v-card>
     <div
-      style="display:flex; align-items:center; padding-left:20px; padding-right:20px; padding-top:10px"
+      style="display:flex; justify-content:flex-end; padding-left:20px; padding-right:20px; padding-bottom:10px; padding-top:10px;
+      "
     >
       <div style="font-size:25px">
         {{ project.projectName }}
       </div>
       <v-spacer></v-spacer>
-      <!-- 点击铅笔修改项目 -->
-      <modifyProjectDialog :project="project"></modifyProjectDialog>
-      <v-btn
-        icon
-        color="primary"
-        @click="deleteProject()"
-        v-if="project.projectOwner == $store.getters.getUsername"
-      >
-        <v-icon>mdi-account-multiple-remove-outline</v-icon></v-btn
-      >
-      <v-btn icon color="primary" @click="quitProject()" v-else>
-        <v-icon>mdi-account-remove-outline</v-icon></v-btn
-      >
-    </div>
-    <div
-      style="display:flex; justify-content:flex-end; padding-left:20px; padding-right:20px; padding-bottom:10px; padding-top:10px"
-    >
-      <memberDialog
-        v-if="project.projectType == 'team'"
-        :project="project"
-      ></memberDialog>
-      <v-spacer></v-spacer>
-      <v-btn color="primary" icon @click="showDetail = !showDetail">
+      <v-btn style="color:#757575" icon @click="showDetail = !showDetail">
         <v-icon>{{
           showDetail ? "mdi-chevron-up" : "mdi-chevron-down"
         }}</v-icon>
@@ -68,7 +108,7 @@ export default {
     return {
       dialog: false,
 
-      showDetail: true,
+      showDetail: false,
       show: true,
       loading: {
         delete: false,
@@ -126,3 +166,5 @@ export default {
   props: ["project"]
 };
 </script>
+
+<style></style>

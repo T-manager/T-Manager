@@ -63,14 +63,19 @@ public class RelationServiceImpl implements RelationService{
     public List<MemberDTO> getProjectUser(Integer projectId){
         List<ProjectMember> projectMembers = relationRepository.findByProjectId(projectId);
         List<MemberDTO> memberDTOs = new ArrayList<>();
+        MemberDTO ownerDTO = new MemberDTO();
         for (ProjectMember projectMember : projectMembers){
             MemberDTO memberDTO = new MemberDTO();
             BeanUtils.copyProperties(projectMember, memberDTO);
             Optional<User> user = userRepository.findById(projectMember.getMemberId());
             memberDTO.setMemberName(user.get().getUserName());
             memberDTO.setMemberAvatar(user.get().getUserAvatar());
-            memberDTOs.add(memberDTO);
+            if (memberDTO.getMemberRole().equals("owner"))
+                ownerDTO = memberDTO;
+            else
+                memberDTOs.add(memberDTO);
         }
+        memberDTOs.add(0, ownerDTO);
         return memberDTOs;
     }
 }
