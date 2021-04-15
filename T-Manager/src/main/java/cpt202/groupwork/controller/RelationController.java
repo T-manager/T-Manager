@@ -62,9 +62,6 @@ public class RelationController {
     @DeleteMapping("/delete/{projectMemberId}")
     @Operation(summary = "delete a relation")
     public Response<?> deleteRelation(@PathVariable Integer projectMemberId) {
-
-        Optional<ProjectMember> projectMember = relationRepository.findById(projectMemberId);
-
         relationRepository.deleteById(projectMemberId);
         return Response.ok();
     }

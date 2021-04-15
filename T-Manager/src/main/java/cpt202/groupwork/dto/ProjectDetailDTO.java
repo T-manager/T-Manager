@@ -10,6 +10,8 @@ public class ProjectDetailDTO {
     // all attributes needed when create a new project
     private Integer projectId;
 
+    private Integer projectMemberId;
+
     // name of the project
     private String projectName;
 

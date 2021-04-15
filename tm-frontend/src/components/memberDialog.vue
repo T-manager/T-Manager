@@ -28,21 +28,38 @@
                   </v-avatar>
                   {{ member.memberName }}
                   <v-spacer></v-spacer>
-                  <v-btn
-                    icons-and-text
-                    :color="
-                      member.memberRole == 'owner' ? '#f8e71c' : '#7ed321'
-                    "
-                  >
-                    {{ member.memberRole
-                    }}<v-icon
-                      :color="
-                        member.memberRole == 'owner' ? '#f8e71c' : '#7ed321'
-                      "
-                      style="font-size:35px"
-                      >mdi-account</v-icon
-                    >
-                  </v-btn>
+                  <v-menu offset-x style="min-width:50px">
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                        icons-and-text
+                        depressed
+                        @click="deleteRelation"
+                        :style="
+                          member.memberRole == 'owner'
+                            ? 'color:#f8e71c'
+                            : 'color:#7ed321'
+                        "
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        {{ member.memberRole
+                        }}<v-icon
+                          :color="
+                            member.memberRole == 'owner' ? '#f8e71c' : '#7ed321'
+                          "
+                          style="font-size:35px"
+                          >mdi-account</v-icon
+                        >
+                      </v-btn>
+                    </template>
+                    <v-list style="padding:0px;">
+                      <v-list-item
+                        @click="deleteRelation(member.projectMemberId)"
+                      >
+                        <v-list-item-title>Remove</v-list-item-title>
+                      </v-list-item>
+                    </v-list>
+                  </v-menu>
                 </div>
               </template>
             </v-list-item>
@@ -84,17 +101,6 @@
           >
             Close
           </v-btn>
-          <!-- 保存dialog数据 -->
-          <v-btn
-            depressed
-            color="primary"
-            text
-            @click="modifyProject(), (showMember = false)"
-            :loading="loading"
-            :disabled="loading"
-          >
-            Save
-          </v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -129,6 +135,23 @@ export default {
           console.log(error);
           this.$store.commit("response", error);
           this.loading = false;
+        });
+    },
+    deleteRelation(memberId) {
+      console.log(memberId);
+      this.$axios({
+        method: "delete",
+        url: this.$store.state.host + "relation/delete/" + memberId,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
+      })
+        .then(res => {
+          this.showMenber = false;
+          this.$router.go(0);
+        })
+        .catch(error => {
+          this.$store.commit("response", error);
         });
     }
   },

@@ -28,7 +28,10 @@
         @click="deleteProject()"
         v-if="project.projectOwner == $store.getters.getUsername"
       >
-        <v-icon>mdi-delete-outline</v-icon></v-btn
+        <v-icon>mdi-account-multiple-remove-outline</v-icon></v-btn
+      >
+      <v-btn icon color="primary" @click="quitProject()" v-else>
+        <v-icon>mdi-account-remove-outline</v-icon></v-btn
       >
     </div>
     <div
@@ -75,36 +78,29 @@ export default {
     };
   },
   methods: {
+    quitProject() {
+      console.log("quit");
+      this.$axios({
+        method: "delete",
+        url:
+          this.$store.state.host +
+          "relation/delete/" +
+          this.project.projectMemberId,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
+      })
+        .then(res => {
+          this.$router.go(0);
+        })
+        .catch(error => {
+          this.$store.commit("response", error);
+        });
+    },
     gotoProjectDetail() {
       this.$router.replace({
         path: "/projectdetail/todolist/projectid=" + this.project.projectId
       });
-    },
-    async modifyProject() {
-      this.loading.modify = true;
-      console.log(this.project.projectId);
-      await this.$axios({
-        method: "put",
-        url: this.$store.state.host + "project/modify",
-        data: {
-          projectId: this.project.projectId,
-          projectName: this.project.projectName,
-          projectDetail: this.project.projectDetail,
-          projectOwner: this.project.projectOwner
-          //projectType: this.newProjectType
-        }
-      })
-        .then(res => {
-          console.log(res);
-          this.loading.modify = false;
-          this.showModifyDialog = false;
-          this.$router.go(0);
-        })
-        .catch(error => {
-          console.log(error);
-          this.$store.commit("response", error);
-          this.loading.modify = false;
-        });
     },
     deleteProject() {
       this.$axios({

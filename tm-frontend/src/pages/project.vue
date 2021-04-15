@@ -143,24 +143,6 @@ export default {
           this.$store.commit("response", error);
           this.loadAddProject = false;
         });
-    },
-    deleteRelation() {
-      this.$axios({
-        method: "delete",
-        url:
-          this.$store.state.host +
-          "relation/delete/" +
-          this.relation.relationId,
-        headers: {
-          Authorization: "Bearer " + this.$store.getters.getToken
-        }
-      })
-        .then(res => {
-          this.showMenber = false;
-        })
-        .catch(error => {
-          this.$store.commit("response", error);
-        });
     }
   },
   created() {

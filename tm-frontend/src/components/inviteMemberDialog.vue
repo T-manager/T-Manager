@@ -80,7 +80,7 @@ export default {
             this.showMenber = true;
             console.log(res);
             this.loadAddMember = false;
-            //   this.$router.go(0);
+            this.$router.go(0);
           })
           .catch(error => {
             console.log("error");
