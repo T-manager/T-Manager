@@ -5,15 +5,17 @@
     >
     <v-dialog v-model="showModifyPwd" persistent max-width="600px">
       <div
-        style="height:400px;background-color:#FFFFFF;display:flex;flex-direction:column;align-items:flex-start;padding-left:25px"
+        style="height:400px;background-color:#FFFFFF;display:flex;flex-direction:column;align-items:center;"
       >
         <div
           @click="showModifyPwd = false"
           style="display:flex;justify-content:flex-end;margin-top:5px;height:30px;width:570px"
         >
-          <v-icon style="font-size:26px"> mdi-close</v-icon>
+          <v-icon style="font-size:26px;cursor:pointer;"> mdi-close</v-icon>
         </div>
-        <div style="font-size:24px;color:#101010;margin-top:-15px">
+        <div
+          style="font-size:24px;color:#101010;margin-top:-10px;width:520px;text-align:start;"
+        >
           Edit Password
         </div>
         <div
@@ -24,6 +26,7 @@
             outlined
             label="New password"
             v-model="newPassword"
+            :rules="rules.required"
             type="password"
           ></v-text-field>
           <v-text-field
@@ -31,6 +34,7 @@
             label="Confirmation"
             style="width:375px"
             v-model="confirmPassword"
+            :rules="rules.required"
             type="password"
           ></v-text-field>
         </div>
@@ -49,7 +53,9 @@
           <v-btn
             style="width:94px;height:39px;border-radius:10px"
             depressed
-            color="#B3EDCD"
+            color="primary"
+            :loading="loading"
+            :disabled="loading"
             @click="submit"
             >SUBMIT</v-btn
           >
@@ -62,11 +68,29 @@
 <script>
 export default {
   data() {
-    return { showModifyPwd: false, newPassword: "", confirmPassword: "" };
+    return {
+      showModifyPwd: false,
+      newPassword: "",
+      confirmPassword: "",
+      loading: false,
+      rules: {
+        required: [v => v.length > 0 || "This item is required!"]
+      }
+    };
   },
   props: ["userEdit"],
   methods: {
+    checkPwdRules(v) {
+      if (typeof v == "undefined") return false;
+      return v.length > 0;
+    },
     async submit() {
+      this.loading = true;
+      if (!this.checkPwdRules(this.confirmPassword)) {
+        this.loading = false;
+        return;
+      }
+
       if (this.newPassword != this.confirmPassword) {
         alert("The two passwords are inconsistent");
       } else {
@@ -97,4 +121,37 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+</style>

@@ -1,22 +1,18 @@
 <template>
   <div style="display:flex;justify-content:center;padding-top:20px">
-    <v-avatar size="150">
-      <v-img src="https://picsum.photos/200"></v-img>
-    </v-avatar>
-
+    <UploadImg :userName="this.$store.getters.getUsername"></UploadImg>
     <div
       v-model="valid"
-      style=" margin-left:50px;display:flex;flex-direction:column;padding:25px;height:400px;width:900px;background-color:#ffffff;border-radius:20px"
+      style=" margin-left:50px;display:flex;flex-direction:column;align-items:center;padding:25px;height:420px;width:900px;background-color:#ffffff;border-radius:20px"
     >
-      <div style="font-size:26px;color:#101010;width:900px;text-align:start">
+      <div
+        style="margin-left:75px;margin-top:10px;font-size:26px;color:#101010;font-weight:bold;width:900px;text-align:start"
+      >
         {{ !submit ? "Personal Profile" : "Edit Profile" }}
       </div>
-      <div v-if="submit" style="margin-left:100px;display:flex; ">
-        <UploadImg :userName="this.$store.getters.getUsername"></UploadImg>
-        <ModifyPassword :userEdit="userEdit"></ModifyPassword>
-      </div>
+
       <!-- 编辑信息 -->
-      <div v-if="submit" style="width:700px;margin-left:75px">
+      <div v-if="submit" style="width:700px;">
         <v-text-field
           outlined
           ref="username"
@@ -24,7 +20,7 @@
           :rules="[rules.required]"
           label="Enter username"
           color="primary"
-          style="margin-top: 8px"
+          style="margin-top: 40px"
         ></v-text-field>
         <v-text-field
           outlined
@@ -33,12 +29,13 @@
           :rules="[rules.required, rules.email]"
           label="Enter E-mail"
           color="primary"
+          style="margin-top:20px"
         ></v-text-field>
       </div>
       <!-- 查看信息 -->
       <div
         v-if="!submit"
-        style="width:500px;display:flex;flex-direction:column;justify-self:center;font-size:20px;"
+        style="width:700px;display:flex;flex-direction:column;font-size:20px;margin-bottom:30px;"
       >
         <div class="line">
           <div style="width:200px">User Name:</div>
@@ -46,19 +43,41 @@
         </div>
         <div class="line">
           <div style="width:200px">Email:</div>
-          <div style="margin-left:30px">{{ userInfo.userEmail }}</div>
+          <div style="margin-left:30px;">{{ userInfo.userEmail }}</div>
+        </div>
+        <div class="line">
+          <div style="width:200px">Password:</div>
+          <div style="margin-left:30px;  line-height: 40px;">********</div>
+          <div style="margin-left:100px;display:flex; ">
+            <ModifyPassword :userEdit="userEdit"></ModifyPassword>
+          </div>
         </div>
       </div>
-      <div style="margin-top:0px;display:flex;width:700px;margin-left:75px">
+      <v-btn
+        v-if="!submit"
+        style="width:600px;margin-top:20px"
+        color="primary"
+        outlined
+        text
+        @click="submit = true"
+      >
+        Edit
+      </v-btn>
+      <div style="display:flex;width:500px;margin-top:25px">
         <v-btn v-if="submit" text @click="submit = false"> Cancel </v-btn>
         <v-spacer></v-spacer>
 
         <v-btn
+          v-if="submit"
+          style=""
           color="primary"
+          outlined
           text
-          @click="submit == true ? editProfile() : (submit = true)"
+          :loading="loading"
+          :disabled="loading"
+          @click="editProfile()"
         >
-          {{ submit == true ? "Submit" : "Edit" }}
+          Submit
         </v-btn>
       </div>
     </div>
@@ -160,7 +179,44 @@ export default {
 .line {
   display: flex;
   text-align: start;
-  margin-top: 50px;
+  margin-top: 30px;
   margin-left: 30px;
+  height: 40px;
+
+  font-size: 20px;
+  color: #101010;
+}
+
+@-moz-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@-o-keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 </style>
