@@ -7,19 +7,22 @@
       <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
       <div
         style="margin-left:29px; cursor:pointer; font-size:20px; color:#535353"
-        @click="gotoHome"
+        @click="gotoProjectPage"
       >
         T-Manager
       </div>
-      <div style="display:flex; margin-left:37px; align-items:center">
+      <div
+        style="display:flex; margin-left:37px; align-items:center"
+        v-if="$route.path.split('/')[1] == 'projectdetail'"
+      >
         <div
           style="margin-right:17px;"
           :class="
             $route.path == '/home/teaforence' ? 'choose_home' : 'unchoose_home'
           "
-          @click="gotoTeaforenceHome()"
+          @click="gotoTodoList()"
         >
-          Project
+          Dashboard
         </div>
 
         <div style="height:23px;">
@@ -30,17 +33,15 @@
           :class="
             $route.path == '/home/community' ? 'choose_home' : 'unchoose_home'
           "
-          @click="gotoCommunityHome()"
+          @click="gotoGantt()"
         >
-          My Schedule
+          Gantt
         </div>
       </div>
       <v-spacer></v-spacer>
+      <div style="font-size:20px">{{ $store.getters.getUsername }}</div>
       <!-- <SearchingBarthird></SearchingBarthird> -->
-      <div style="margin-left:29px; margin-right:15px; cursor:pointer;">
-        <!-- <v-avatar size="30" color="#aaa" @click="gotoLogin()">
-          <div style="height:20px; width:20px; background-color:#aaaaaa"></div>
-        </v-avatar> -->
+      <div style="margin-left:25px; margin-right:15px; cursor:pointer;">
         <UserCard size="37"></UserCard>
       </div>
     </v-card>
@@ -61,8 +62,8 @@ export default {
     };
   },
   methods: {
-    gotoHome() {
-      this.$router.replace({ path: "/todolist" });
+    gotoProjectPage() {
+      this.$router.replace({ path: "/project" });
     },
     showUser() {
       if (this.user.avatar == null) this.$store.state.show.showLogin = true;

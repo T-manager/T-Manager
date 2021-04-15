@@ -50,44 +50,9 @@ export default {
       showAddTodolist: false,
       loadAddTodoList: false,
       newTodolistName: "",
+      projectId: 0,
       todolists: "",
-      todolist: {
-        todolistId: 0,
-        projectId: 0,
-        todolistName: "这学期的ddl",
-        todolistTotalNum: 3,
-        todolistCompleteNum: 1,
-        todos: [
-          {
-            todoId: 0,
-            todolistId: 0,
-            todoName: "CPT202中期",
-            todoDetail: "CPT202项目的中期汇报",
-            todoDdl: "2021-5-21 12:00:00",
-            todoMember: 0,
-            todoCheck: false
-          },
-          {
-            todoId: 1,
-            todolistId: 0,
-            todoName: "CPT208第一次pre",
-            todoDetail:
-              "CPT208的第一次presentation，CPT208的第一次presentation",
-            todoDdl: "2021-3-17 12:00:00",
-            todoMember: 1,
-            todoCheck: true
-          },
-          {
-            todoId: 2,
-            todolistId: 0,
-            todoName: "CPT208第二次pre",
-            todoDetail: "CPT208第二次presentation，讲prototyping",
-            todoDdl: "2021-4-14 12:00:00",
-            todoMember: 0,
-            todoCheck: false
-          }
-        ]
-      }
+      todolist: {}
     };
   },
   methods: {
@@ -103,8 +68,11 @@ export default {
         method: "post",
         url: this.$store.state.host + "todolist/add",
         data: {
-          projectId: 0,
+          projectId: this.projectId,
           todolistName: this.newTodolistName
+        },
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
         }
       })
         .then(res => {
@@ -119,12 +87,13 @@ export default {
     }
   },
   created() {
+    this.projectId = this.$route.path.split("projectid=")[1];
     this.$axios({
       method: "get",
-      url: this.$store.state.host + "todolist/get/0"
-      // headers: {
-      //   Authorization: "Bearer " + this.$store.getters.getToken
-      // }
+      url: this.$store.state.host + "todolist/get/" + this.projectId,
+      headers: {
+        Authorization: "Bearer " + this.$store.getters.getToken
+      }
     })
       .then(res => {
         console.log(res);

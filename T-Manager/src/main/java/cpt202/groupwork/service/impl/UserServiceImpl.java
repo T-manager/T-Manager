@@ -17,6 +17,7 @@ import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
 /**
  * @description: implement User service
  * @author: Zhonghao
@@ -25,6 +26,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
+
   @Autowired
   UserRepository userRepository;
 
@@ -36,8 +38,7 @@ public class UserServiceImpl implements UserService {
     Optional<User> user = userRepository.findById(userId);
     if (user.isPresent()) {
       return Response.ok(user.get());
-    }
-    else {
+    } else {
       return Response.ok("user not found");
     }
   }
@@ -47,14 +48,14 @@ public class UserServiceImpl implements UserService {
     Optional<User> user = userRepository.findByUserName(username);
     if (user.isPresent()) {
       return Response.ok(user.get());
-    }
-    else {
+    } else {
       return Response.ok("username not found");
     }
   }
 
   /**
    * 普通的用户注册，自动给它role=USER,并将密码加密保存
+   *
    * @param user
    * @return
    */
@@ -69,7 +70,7 @@ public class UserServiceImpl implements UserService {
       user.setUserRole("USER");
       userRepository.save(user);
       return Response.ok(1000); //User created successfully
-    } catch (Exception e){
+    } catch (Exception e) {
       return Response.fail(1001); // User already exists
     }
   }
@@ -80,8 +81,7 @@ public class UserServiceImpl implements UserService {
     if (user.isPresent()) {
       userRepository.deleteById(userId);
       return Response.ok(user.get());
-    }
-    else {
+    } else {
       return Response.ok("user not found");
     }
   }
@@ -92,8 +92,7 @@ public class UserServiceImpl implements UserService {
     if (user.isPresent()) {
       userRepository.delete(user.get());
       return Response.ok(user.get());
-    }
-    else {
+    } else {
       return Response.ok("user not found");
     }
   }
@@ -109,16 +108,16 @@ public class UserServiceImpl implements UserService {
       Set<String> emptyNames = new HashSet<String>();
       for (java.beans.PropertyDescriptor pd : pds) {
         Object srcValue = src.getPropertyValue(pd.getName());
-        if (srcValue == null)
+        if (srcValue == null) {
           emptyNames.add(pd.getName());
+        }
       }
       String[] result = new String[emptyNames.size()];
       //找出为空的属性传入copyProperties
-      BeanUtils.copyProperties(userMod,user.get(),emptyNames.toArray(result));
+      BeanUtils.copyProperties(userMod, user.get(), emptyNames.toArray(result));
       userRepository.save(user.get());
       return Response.ok(user.get());
-    }
-    else {
+    } else {
       return Response.ok("user not found");
     }
   }
@@ -127,6 +126,10 @@ public class UserServiceImpl implements UserService {
   public Response<?> userModify(String username, User userMod) {
     Optional<User> user = userRepository.findByUserName(username);
     if (user.isPresent()) {
+      if (userMod.getUserPassword() != null) {
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        userMod.setUserPassword(encoder.encode(userMod.getUserPassword()));
+      }
       //找出值为空的属性
       final BeanWrapper src = new BeanWrapperImpl(userMod);
       java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
@@ -134,16 +137,16 @@ public class UserServiceImpl implements UserService {
       Set<String> emptyNames = new HashSet<String>();
       for (java.beans.PropertyDescriptor pd : pds) {
         Object srcValue = src.getPropertyValue(pd.getName());
-        if (srcValue == null)
+        if (srcValue == null) {
           emptyNames.add(pd.getName());
+        }
       }
       String[] result = new String[emptyNames.size()];
       //找出为空的属性传入copyProperties
-      BeanUtils.copyProperties(userMod,user.get(),emptyNames.toArray(result));
+      BeanUtils.copyProperties(userMod, user.get(), emptyNames.toArray(result));
       userRepository.save(user.get());
       return Response.ok(user.get());
-    }
-    else {
+    } else {
       return Response.ok("user not found");
     }
   }
@@ -151,18 +154,17 @@ public class UserServiceImpl implements UserService {
   @Override
   public Response<?> userLogin(User postUser) {
     Optional<User> user = userRepository.findByUserName(postUser.getUserName());
-    if(user.isPresent()) {
+    if (user.isPresent()) {
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
       // matches参数: 第一个参数为未加密密码，第二个为数据库中存储的加密后的密码，返回值为其是否匹配
-      if(encoder.matches(postUser.getUserPassword(), user.get().getUserPassword())){
+      if (encoder.matches(postUser.getUserPassword(), user.get().getUserPassword())) {
         System.out.println(tokenUtils.createToken(user.get()));
         return Response.ok(tokenUtils.createToken(user.get()));
-      }
-      else{
+      } else {
         return Response.fail(2001); // Wrong password
       }
-    }
-    else
+    } else {
       return Response.fail(2002); // User not found
+    }
   }
 }

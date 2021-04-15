@@ -15,6 +15,7 @@
         @click="toUserPage"
         style="background-color:#aaaaaa"
       >
+        <v-img src="https://picsum.photos/200"></v-img>
       </v-avatar>
     </template>
 
@@ -24,6 +25,7 @@
       <router-link to="/register">注册</router-link>
       <router-link to="/login">登录</router-link>
       <router-link to="/my">个人主页</router-link>
+      <div @click="logout" style="cursor:pointer;text-decoration:underline">退出登录</div>
     </v-card>
   </v-menu>
 </template>
@@ -45,7 +47,7 @@ export default {
       this.user.username = this.$store.getters.getUsername;
       if (this.user.username == null) return;
       this.showContent = false;
-      this.axios({
+      this.$axios({
         // 获取发起人信息
         method: "get",
         url: this.$store.state.host + "user/" + this.user.username
@@ -67,7 +69,7 @@ export default {
       console.log("user");
       console.log(this.user);
       if (this.user.username != null) {
-        var path = "/userpage/username=" + this.user.username;
+        var path = "/profile";
         this.$router.push({ path: path });
       } else {
         this.$store.state.show.showLogin = true;
@@ -77,7 +79,9 @@ export default {
       this.$store.commit("del_token");
       this.$store.commit("del_username");
       this.$store.commit("del_userphoto");
-      this.$router.go(0);
+      alert("Log out successfully！");
+      var path = "/login";
+      this.$router.push({ path: path });
       return;
     }
   }

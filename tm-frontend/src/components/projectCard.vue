@@ -1,0 +1,173 @@
+<template>
+  <v-card max-width="344">
+    <v-card
+      @click="gotoProjectDetail"
+      style="border-bottom-left-radius:0px; border-bottom-right-radius:0px"
+      flat
+    >
+      <v-img
+        :src="
+          project.projectType == 'team'
+            ? 'https://cdn.vuetifyjs.com/images/cards/sunshine.jpg'
+            : 'https://cdn.vuetifyjs.com/images/cards/cooking.png'
+        "
+        height="200px"
+        class="white--text"
+        gradient="to bottom, rgba(0,0,0,0), rgba(100,100,100, 0.5)"
+      >
+        <div
+          style="font-size:25px; height:200px; display:flex; flex-direction:column; justify-content:space-between; 
+          align-items:flex-end; padding:10px"
+        >
+          <v-menu offset-x :close-on-content-click="false">
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                v-bind="attrs"
+                v-on="on"
+                small
+                style="width:40px; height:38px"
+              >
+                <v-icon style="font-size:30px; color:#757575"
+                  >mdi-dots-vertical</v-icon
+                >
+              </v-btn>
+            </template>
+            <v-list style="padding:0px;">
+              <v-list-item
+                style="padding:0px 5px 0px 5px"
+                v-if="project.projectOwner == $store.getters.getUsername"
+              >
+                <!-- 点击铅笔修改项目 -->
+                <modifyProjectDialog :project="project"></modifyProjectDialog>
+              </v-list-item>
+              <v-list-item style="padding:0px 5px 0px 5px">
+                <memberDialog
+                  v-if="project.projectType == 'team'"
+                  :project="project"
+                ></memberDialog
+              ></v-list-item>
+              <v-list-item style="padding:0px 5px 0px 5px">
+                <!-- 解散project -->
+                <v-btn
+                  text
+                  color="primary"
+                  @click="deleteProject()"
+                  v-if="project.projectOwner == $store.getters.getUsername"
+                  style="width:120px; display:flex; justify-content:flex-start; padding:0px 10px 0px 10px"
+                >
+                  Disband
+                  <v-spacer></v-spacer>
+                  <v-icon>mdi-account-multiple-remove-outline</v-icon></v-btn
+                >
+                <!-- 退出project -->
+                <v-btn
+                  text
+                  color="primary"
+                  @click="quitProject()"
+                  v-else
+                  style="width:120px; display:flex; justify-content:flex-start; padding:0px 10px 0px 10px"
+                >
+                  Quit
+                  <v-spacer></v-spacer>
+                  <v-icon>mdi-account-remove-outline</v-icon></v-btn
+                >
+              </v-list-item>
+            </v-list>
+          </v-menu>
+          <div>{{ project.projectType }}</div>
+        </div>
+      </v-img>
+    </v-card>
+    <div
+      style="display:flex; justify-content:flex-end; padding-left:20px; padding-right:20px; padding-bottom:10px; padding-top:10px;"
+    >
+      <div style="font-size:25px">
+        {{ project.projectName }}
+      </div>
+      <v-spacer></v-spacer>
+      <v-btn style="color:#757575" icon @click="showDetail = !showDetail">
+        <v-icon>{{
+          showDetail ? "mdi-chevron-up" : "mdi-chevron-down"
+        }}</v-icon>
+      </v-btn>
+    </div>
+    <v-expand-transition>
+      <div v-if="showDetail">
+        <v-divider></v-divider>
+        <v-card-text
+          style="width:100%; display:flex; justify-content:flex-start"
+          >{{ project.projectDetail }}
+        </v-card-text>
+      </div>
+    </v-expand-transition>
+  </v-card>
+</template>
+
+<script>
+import modifyProjectDialog from "@/components/modifyProjectDialog";
+import memberDialog from "@/components/memberDialog";
+export default {
+  data: function() {
+    return {
+      dialog: false,
+
+      showDetail: false,
+      show: true,
+      loading: {
+        delete: false,
+        modify: false
+      },
+      showModifyDialog: false
+    };
+  },
+  methods: {
+    quitProject() {
+      console.log("quit");
+      this.$axios({
+        method: "delete",
+        url:
+          this.$store.state.host +
+          "relation/delete/" +
+          this.project.projectMemberId,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
+      })
+        .then(res => {
+          this.$router.go(0);
+        })
+        .catch(error => {
+          this.$store.commit("response", error);
+        });
+    },
+    gotoProjectDetail() {
+      this.$router.replace({
+        path: "/projectdetail/todolist/projectid=" + this.project.projectId
+      });
+    },
+    deleteProject() {
+      this.$axios({
+        method: "delete",
+        url:
+          this.$store.state.host + "project/delete/" + this.project.projectId,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
+      })
+        .then(res => {
+          this.$router.go(0);
+        })
+        .catch(error => {
+          this.$store.commit("response", error);
+        });
+    }
+  },
+  components: {
+    modifyProjectDialog,
+    memberDialog
+  },
+  props: ["project"]
+};
+</script>
+
+<style></style>

@@ -47,9 +47,9 @@
     <v-dialog v-model="showTodoDetail" max-width="600px">
       <v-card v-if="showModifyTodo == false" class="card">
         <div style="width:100%; display:flex; justify-content:flex-end">
-          <v-icon>mdi-close</v-icon>
+          <v-icon @click="showTodoDetail = false">mdi-close</v-icon>
         </div>
-        <v-card-title>
+        <v-card-title style="margin-top:-20px">
           <span class="headline">Modify todo</span>
           <v-icon
             color="primary"

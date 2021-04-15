@@ -1,5 +1,6 @@
 package cpt202.groupwork;
 
+import cpt202.groupwork.exception.ConflictException;
 import cpt202.groupwork.exception.NotFoundException;
 import cpt202.groupwork.exception.PermissionDeniedException;
 import cpt202.groupwork.exception.UnAuthException;
@@ -67,9 +68,19 @@ public class Response<T> {
         return Response.builder().status(HttpStatus.OK.value()).message("Fail").data(data).build();
     }
 
+    // 未通过 + 携带相关 message
+    public static Response<?> fail(String message) {
+        return Response.builder().status(HttpStatus.BAD_REQUEST.value()).message(message).build();
+    }
+
     // 未通过 + 携带相关 data 数据
     public static Response<?> fail(String message, Object data) {
         return Response.builder().status(HttpStatus.OK.value()).message(message).data(data).build();
+    }
+
+    // 已经存在了, 不能再添加此类信息, 信息冲突
+    public static Response<?> conflict(String message) {
+        throw new ConflictException(message);
     }
 
 }

@@ -12,6 +12,7 @@ export default new Vuex.Store({
   },
   getters: {
     getToken() {
+      console.log(localStorage.getItem("token"));
       return localStorage.getItem("token");
     },
     getUsername() {
@@ -42,6 +43,8 @@ export default new Vuex.Store({
       localStorage.removeItem("userphoto");
     },
     response(state, token) {
+      console.log("token");
+      console.log(typeof token);
       if (token.response) {
         alert(token.response.data.message);
         // console.log(typeof token.response.data.status);
@@ -57,10 +60,6 @@ export default new Vuex.Store({
         }
       } else {
         alert(token.message);
-        // if (token.request.data.status == "401") {
-        //   var path = "/login";
-        //   router.push({ path: path });
-        // }
       }
     }
   },

@@ -23,24 +23,8 @@ new Vue({
   template: "<App/>"
 });
 
-axios.defaults.baseURL = "http://localhost:6767/";
-axios.defaults.headers.common["Authorization"] =
-  "Bearer " + localStorage.getItem("token");
-axios.defaults.headers.post["Content-Type"] = "application/json";
-
-// axios.interceptors.request.use(
-//   config => {
-//     let token = localStorage.getItem("token");
-//     console.log("token");
-//     console.log(token);
-//     if (token) {
-//       //这里面获取的请求头的键(tokenHeader)根据每个后端的习惯封装的名称各不相同
-//       config.headers.common["Authorization"] = "Bearer " + token;
-//     }
-//     return config;
-//   },
-//   error => {
-//     console.log("error");
-//     // return Promise.reject(error);
-//   }
-// );
+// axios.defaults.baseURL = "http://localhost:6767/";
+// axios.defaults.headers.common["Authorization"] =
+//   "Bearer " + localStorage.getItem("token");
+// axios.defaults.headers.post["Content-Type"] =
+//   "application/x-www=form-urlencoded";
