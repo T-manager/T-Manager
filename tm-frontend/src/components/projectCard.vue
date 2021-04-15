@@ -1,6 +1,10 @@
 <template>
   <v-card max-width="344">
-    <v-card @click="gotoProjectDetail" style="border-radius:0px" flat>
+    <v-card
+      @click="gotoProjectDetail"
+      style="border-bottom-left-radius:0px; border-bottom-right-radius:0px"
+      flat
+    >
       <v-img
         :src="
           project.projectType == 'team'
@@ -75,8 +79,7 @@
       </v-img>
     </v-card>
     <div
-      style="display:flex; justify-content:flex-end; padding-left:20px; padding-right:20px; padding-bottom:10px; padding-top:10px;
-      "
+      style="display:flex; justify-content:flex-end; padding-left:20px; padding-right:20px; padding-bottom:10px; padding-top:10px;"
     >
       <div style="font-size:25px">
         {{ project.projectName }}
@@ -89,7 +92,7 @@
       </v-btn>
     </div>
     <v-expand-transition>
-      <div v-show="showDetail">
+      <div v-if="showDetail">
         <v-divider></v-divider>
         <v-card-text
           style="width:100%; display:flex; justify-content:flex-start"
