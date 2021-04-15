@@ -82,27 +82,30 @@ export default {
       method: "get",
       url: this.$store.state.host + "gantt/get/" + this.projectId,
       headers: {
-        Authorization: "Bearer" + this.$store.getters.getToken
+        Authorization: "Bearer " + this.$store.getters.getToken
       }
     })
       .then(res => {
         console.log("get all", res);
-        this.gantt = res.data.data[0];
-        for (let i = this.gantt.missionViewDTO.length - 1; i >= 0; i--) {
-          this.gantt.missionViewDTO[i].loading = false;
-          var mission = this.gantt.missionViewDTO[i];
-          var newTask = {
-            id: mission.missionId,
-            text: mission.missionName,
-            start_date: mission.missionStart,
-            duration: mission.missionDuration,
-            progress: mission.missionProgress,
-            parent: mission.missionParent
-          };
-          var taskId = gantt.addTask(newTask);
-          console.log(gantt.getTask(taskId));
-          gantt.getTask(taskId).id = taskId;
-          gantt.updateTask(newTask.id); //renders the updated task
+        if (res.data.data.length == 0) this.gantt = {};
+        else {
+          this.gantt = res.data.data[0];
+          for (let i = this.gantt.missionViewDTO.length - 1; i >= 0; i--) {
+            this.gantt.missionViewDTO[i].loading = false;
+            var mission = this.gantt.missionViewDTO[i];
+            var newTask = {
+              id: mission.missionId,
+              text: mission.missionName,
+              start_date: mission.missionStart,
+              duration: mission.missionDuration,
+              progress: mission.missionProgress,
+              parent: mission.missionParent
+            };
+            var taskId = gantt.addTask(newTask);
+            console.log(gantt.getTask(taskId));
+            gantt.getTask(taskId).id = taskId;
+            gantt.updateTask(newTask.id); //renders the updated task
+          }
         }
       })
       .catch(error => {
@@ -129,7 +132,7 @@ export default {
               missionParent: task.parent
             },
             headers: {
-              Authorization: "Bearer" + that.$store.getters.getToken
+              Authorization: "Bearer " + that.$store.getters.getToken
             }
           })
           .then(res => {
@@ -160,7 +163,7 @@ export default {
             missionParent: task.parent
           },
           headers: {
-            Authorization: "Bearer" + that.$store.getters.getToken
+            Authorization: "Bearer " + that.$store.getters.getToken
           }
         })
         .then(res => {
@@ -180,7 +183,7 @@ export default {
           method: "delete",
           url: that.$store.state.host + "mission/delete/" + id,
           headers: {
-            Authorization: "Bearer" + that.$store.getters.getToken
+            Authorization: "Bearer " + that.$store.getters.getToken
           }
         })
         .then(res => {
