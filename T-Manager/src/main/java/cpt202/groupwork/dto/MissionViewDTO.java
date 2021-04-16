@@ -26,6 +26,4 @@ public class MissionViewDTO {
   //mission 进度
   private Float missionProgress;
 
-  //mission parent
-  private Long missionParent;
 }

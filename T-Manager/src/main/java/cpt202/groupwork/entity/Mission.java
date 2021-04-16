@@ -62,9 +62,4 @@ public class Mission implements Serializable {
   @Column(name = "mission_progress")
   private Float missionProgress;
 
-  /**
-   * gantt的 parent
-   */
-  @Column(name = "gantt_parent")
-  private Long missionParent;
 }

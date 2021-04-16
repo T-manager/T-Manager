@@ -81,7 +81,7 @@ export default {
       method: "get",
       url: this.$store.state.host + "gantt/get/0",
       headers: {
-        Authorization: "Bearer" + this.$store.getters.getToken,
+        Authorization: "Bearer " + this.$store.getters.getToken,
       },
     })
       .then((res) => {
@@ -96,7 +96,6 @@ export default {
             start_date: mission.missionStart,
             duration: mission.missionDuration,
             progress: mission.missionProgress,
-            parent: mission.missionParent,
           };
           var taskId = gantt.addTask(newTask);
           console.log(gantt.getTask(taskId));
@@ -125,10 +124,9 @@ export default {
               missionName: task.text,
               missionStart: date,
               missionDuration: task.duration,
-              missionParent: task.parent,
             },
             headers: {
-              Authorization: "Bearer" + that.$store.getters.getToken,
+              Authorization: "Bearer " + that.$store.getters.getToken,
             },
           })
           .then((res) => {
@@ -157,10 +155,9 @@ export default {
             missionName: task.text,
             missionStart: date,
             missionDuration: task.duration,
-            missionParent: task.parent,
           },
           headers: {
-            Authorization: "Bearer" + that.$store.getters.getToken,
+            Authorization: "Bearer " + that.$store.getters.getToken,
           },
         })
         .then((res) => {
@@ -180,7 +177,7 @@ export default {
           method: "delete",
           url: that.$store.state.host + "mission/delete/" + id,
           headers: {
-            Authorization: "Bearer" + that.$store.getters.getToken,
+            Authorization: "Bearer " + that.$store.getters.getToken,
           },
         })
         .then((res) => {

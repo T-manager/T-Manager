@@ -31,6 +31,5 @@ public class MissionDTO {
   // mission的进度
   private Float missionProgress;
 
-  private Long missionParent;
 
 }
