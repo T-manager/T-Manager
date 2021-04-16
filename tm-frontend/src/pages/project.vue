@@ -1,7 +1,7 @@
 <template>
   <div style="display:flex;flex-direction:column;align-items:center ">
     <div
-      style="display:flex;padding: 35px;max-width:1350px;justify-items:center;"
+      style="display:flex; padding:35px; width:1350px; justify-content:flex-start;"
     >
       <v-row>
         <!-- 已经创建的的所有项目CARD -->
@@ -91,7 +91,7 @@
                 depressed
                 color="primary"
                 text
-                @click="addProject(), (dialog = false)"
+                @click="addProject()"
                 :loading="loadAddProject"
                 :disabled="loadAddProject"
               >

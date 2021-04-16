@@ -102,8 +102,6 @@
         <v-divider></v-divider>
         <v-card-text class="Omit" style="max-width:400px;text-align:start"
           >{{ project.projectDetail }}
-          {{ project.projectOwner }}
-          {{ $store.getters.getUsername }}
         </v-card-text>
       </div>
     </v-expand-transition>
@@ -173,7 +171,6 @@ export default {
       });
     },
     deleteProject() {
-      alert("delete!");
       this.$axios({
         method: "delete",
         url:

@@ -14,6 +14,8 @@
             color="primary"
             prepend-icon="mdi-leaf"
             v-model="todolist.todolistName"
+            hint="more than 1 and less than 20"
+            :rules="rules.nameRules"
           ></v-text-field>
         </v-card-text>
         <div class="card_action">
@@ -45,12 +47,11 @@ export default {
     return {
       loading: false,
       showModifyTodolist: false,
-
       rules: {
         nameRules: [
           v =>
-            (typeof v != "undefined" && v.length <= 20 && v.length >= 3) ||
-            "the length of name should be 3-20"
+            (typeof v != "undefined" && v.length <= 20 && v.length >= 1) ||
+            "the length of name should be 1-20"
         ]
       }
     };
@@ -59,7 +60,7 @@ export default {
   methods: {
     checkNameRules(v) {
       if (typeof v == "undefined") return false;
-      return v.length <= 20 && v.length >= 3;
+      return v.length <= 20 && v.length >= 1;
     },
     checkRules() {
       if (!this.checkNameRules(this.todolist.todolistName)) {
@@ -70,6 +71,10 @@ export default {
     },
     async modifyTodolist() {
       this.loading = true;
+      if (!this.checkRules()) {
+        this.loading = false;
+        return;
+      }
       await this.$axios({
         method: "put",
         url: this.$store.state.host + "todolist/modify",
@@ -79,11 +84,11 @@ export default {
           console.log(res);
           this.loading = false;
           this.showModifyTodolist = false;
-          //   this.$router.go(0);
+          this.$router.go(0);
         })
         .catch(error => {
           console.log(error);
-          //   this.$store.commit("response", error);
+          this.$store.commit("response", error);
           this.loading = false;
         });
     }

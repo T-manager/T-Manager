@@ -240,13 +240,13 @@ export default {
       rules: {
         nameRules: [
           v =>
-            (typeof v != "undefined" && v.length <= 20 && v.length >= 3) ||
-            "the length of name should be 3-20"
+            (typeof v != "undefined" && v.length <= 20 && v.length >= 1) ||
+            "the length of name should be 1-20"
         ],
         detailRules: [
           v =>
-            (typeof v != "undefined" && v.length >= 5 && v.length <= 100) ||
-            "the length of detail should be 5-100"
+            (typeof v != "undefined"&& v.length <= 100) ||
+            "the length of detail should be less than 100"
         ],
         notNull: [v => typeof v != "undefined" || "please enter"]
       }
@@ -280,11 +280,11 @@ export default {
     },
     checkNameRules(v) {
       if (typeof v == "undefined") return false;
-      return v.length <= 20 && v.length >= 3;
+      return v.length <= 20 && v.length >= 1;
     },
     checkDetailRules(v) {
       if (typeof v == "undefined") return false;
-      return v.length >= 5 && v.length <= 100;
+      return v.length <= 100;
     },
     checkDateTimeRules(v) {
       return typeof v != "undefined";
