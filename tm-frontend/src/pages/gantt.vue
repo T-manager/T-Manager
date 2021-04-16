@@ -90,7 +90,7 @@ export default {
         if (res.data.data.length == 0) this.gantt = {};
         else {
           this.gantt = res.data.data[0];
-          for (let i = this.gantt.missionViewDTO.length - 1; i >= 0; i--) {
+          for (var i in this.gantt.missionViewDTO) {
             this.gantt.missionViewDTO[i].loading = false;
             var mission = this.gantt.missionViewDTO[i];
             var newTask = {
