@@ -102,6 +102,17 @@ public class GanttController {
     List<GanttViewDTO> ganttViewDTOs = new ArrayList<>();
 //    Optional<String> username = SecurityUtils.getCurrentUsername();
     ganttViewDTOs = ganttService.getGantt(projectId);
+    if(ganttViewDTOs.size() == 0) {
+      GanttViewDTO ganttViewDTO = new GanttViewDTO();
+      ganttViewDTO.setProjectId(projectId);
+      ganttViewDTO.setGanttName("new Gantt");
+      ganttViewDTO.setGanttTotalNum(0);
+      Gantt newGantt = new Gantt();
+      BeanUtils.copyProperties(ganttViewDTO, newGantt);
+      ganttRepository.save(newGantt);
+      ganttViewDTOs.add(ganttViewDTO) ;
+    }
+
     return Response.ok(ganttViewDTOs);
   }
 }

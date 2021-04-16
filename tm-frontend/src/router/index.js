@@ -3,6 +3,7 @@ import Router from "vue-router";
 import todolist from "@/pages/todolist";
 import test from "@/pages/test";
 import login from "@/pages/login";
+import gantt from "@/pages/gantt";
 import project from "@/pages/project";
 import profile from "@/pages/profile";
 
@@ -26,6 +27,11 @@ export default new Router({
       path: "/login",
       name: "login",
       component: login
+    },
+    {
+      path: "/projectdetail/gantt/*",
+      name: "gantt",
+      component: gantt
     },
     {
       path: "/profile",

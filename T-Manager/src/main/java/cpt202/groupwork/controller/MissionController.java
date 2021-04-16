@@ -67,7 +67,8 @@ public class MissionController {
     Optional<Gantt> gantt = ganttRepository.findById(ganttId);
     Mission mission = new Mission();
     BeanUtils.copyProperties(missionDTO, mission);
-    mission.setMissionCheck(false);
+    //mission.setMissionProgress(0);
+    //mission.setMissionDuration(1);
     mission.setGanttId(ganttId);
     gantt.get().setGanttTotalNum(gantt.get().getGanttTotalNum() + 1);
     ganttRepository.save(gantt.get());
@@ -77,7 +78,7 @@ public class MissionController {
 
   @DeleteMapping("/delete/{missionId}")
   @Operation(summary = "删除mission")
-  public Response<?> deleteMission(@PathVariable Integer missionId) {
+  public Response<?> deleteMission(@PathVariable Long missionId) {
 //    Optional<String> username = SecurityUtils.getCurrentUsername();
 //    if (username.isEmpty()) {
 //      return Response.unAuth();
@@ -105,7 +106,7 @@ public class MissionController {
 //    if (username.isEmpty()) {
 //      return Response.unAuth();
 //    }
-    Integer missionId = missionInfo.getMissionId();
+    Long missionId = missionInfo.getMissionId();
     Optional<Mission> mission = missionRepository.findById(missionId);
 
 //    if (mission.isEmpty()) {
@@ -117,27 +118,10 @@ public class MissionController {
   }
 
 
-  @PutMapping("/check/{missionId}")
-  @Operation(summary = "完成Mission")
-  public Response<?> checkMission(@PathVariable Integer missionId) {
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
-    // 没有登陆
-//    if (username.isEmpty()) {
-//      return Response.unAuth();
-//    }
-    Optional<Mission> mission = missionRepository.findById(missionId);
-
-//    if (mission.isEmpty()) {
-//      return Response.notFound("没有找到todo哦！");
-//    }
-
-    mission.get().setMissionCheck(!mission.get().getMissionCheck());
-    return Response.ok(missionRepository.save(mission.get()));
-  }
 
   @GetMapping("/get/{missionId}")
   @Operation(summary = "查看mission详情")
-  public Response<?> getMission(@PathVariable Integer missionId) {
+  public Response<?> getMission(@PathVariable Long missionId) {
     Optional<Mission> mission = missionRepository.findById(missionId);
 //  UserSelfVO userSelfVO = new UserSelfVO();
 //  BeanUtils.copyProperties(user.get(), userSelfVO);

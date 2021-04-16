@@ -27,8 +27,8 @@ public class Mission implements Serializable {
    * 主键，唯一标识mission
    */
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer missionId;
+  @Column(name = "mission_id")
+  private Long missionId;
 
   /**
    * gantt的id
@@ -51,33 +51,15 @@ public class Mission implements Serializable {
   private Date missionStart;
 
   /**
-   * mission的结束时间
+   * mission的持续时间
    */
-  @Column(name = "mission_end")
-  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-  private Date missionEnd;
+  @Column(name = "mission_duration")
+  private Integer missionDuration;
 
   /**
-   * mission的行数
+   * mission的持续时间
    */
-  @Column(name = "mission_line")
-  private Integer missionLine;
+  @Column(name = "mission_progress")
+  private Float missionProgress;
 
-  /**
-   * mission的描述
-   */
-  @Column(length = 100, name = "mission_detail")
-  private String missionDetail;
-
-  /**
-   * mission的执行人
-   */
-  @Column(name = "mission_member")
-  private String missionMember;
-
-  /**
-   * mission的是否完成
-   */
-  @Column(name = "mission_check")
-  private Boolean missionCheck;
 }

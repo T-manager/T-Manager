@@ -18,7 +18,9 @@
         <div
           style="margin-right:17px;"
           :class="
-            $route.path == '/home/teaforence' ? 'choose_home' : 'unchoose_home'
+            $route.path.split('/')[2] == 'todolist'
+              ? 'choose_home'
+              : 'unchoose_home'
           "
           @click="gotoTodoList()"
         >
@@ -31,7 +33,9 @@
         <div
           style="margin-left:17px;"
           :class="
-            $route.path == '/home/community' ? 'choose_home' : 'unchoose_home'
+            $route.path.split('/')[2] == 'gantt'
+              ? 'choose_home'
+              : 'unchoose_home'
           "
           @click="gotoGantt()"
         >
@@ -64,6 +68,20 @@ export default {
   methods: {
     gotoProjectPage() {
       this.$router.replace({ path: "/project" });
+    },
+    gotoTodoList() {
+      this.$router.replace({
+        path:
+          "/projectdetail/todolist/projectid=" +
+          this.$route.path.split("projectid=")[1]
+      });
+    },
+    gotoGantt() {
+      this.$router.replace({
+        path:
+          "/projectdetail/gantt/projectid=" +
+          this.$route.path.split("projectid=")[1]
+      });
     },
     showUser() {
       if (this.user.avatar == null) this.$store.state.show.showLogin = true;
@@ -107,7 +125,7 @@ export default {
   display: flex;
   justify-content: center;
   padding-top: 6px;
-  border-bottom: #428675 6px solid;
+  border-bottom: #7f8ccd 6px solid;
   line-height: 43px;
 }
 .unchoose_home {

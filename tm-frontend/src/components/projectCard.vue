@@ -1,5 +1,5 @@
 <template>
-  <v-card max-width="344">
+  <v-card width="400px" :style="showDetail ? '' : 'height:256px'">
     <v-card
       @click="gotoProjectDetail"
       style="border-bottom-left-radius:0px; border-bottom-right-radius:0px"
@@ -16,7 +16,7 @@
         gradient="to bottom, rgba(0,0,0,0), rgba(100,100,100, 0.5)"
       >
         <div
-          style="font-size:25px; height:200px; display:flex; flex-direction:column; justify-content:space-between; 
+          style="font-size:25px; height:200px; display:flex; flex-direction:column; justify-content:space-between;
           align-items:flex-end; padding:10px"
         >
           <v-menu offset-x :close-on-content-click="false">
@@ -51,7 +51,7 @@
                 <v-btn
                   text
                   color="primary"
-                  @click="deleteProject()"
+                  @click="showPopupMethod"
                   v-if="project.projectOwner == $store.getters.getUsername"
                   style="width:120px; display:flex; justify-content:flex-start; padding:0px 10px 0px 10px"
                 >
@@ -79,9 +79,15 @@
       </v-img>
     </v-card>
     <div
-      style="display:flex; justify-content:flex-end; padding-left:20px; padding-right:20px; padding-bottom:10px; padding-top:10px;"
+      style="display:flex; align-items:center; justify-content:flex-end; padding-left:20px; padding-right:20px; padding-bottom:10px; padding-top:10px;"
     >
-      <div style="font-size:25px">
+      <div
+        :style="
+          project.projectName.length > 13
+            ? ';font-size:16px'
+            : ';font-size:20px'
+        "
+      >
         {{ project.projectName }}
       </div>
       <v-spacer></v-spacer>
@@ -94,23 +100,39 @@
     <v-expand-transition>
       <div v-if="showDetail">
         <v-divider></v-divider>
-        <v-card-text
-          style="width:100%; display:flex; justify-content:flex-start"
+        <v-card-text class="Omit" style="max-width:400px;text-align:start"
           >{{ project.projectDetail }}
         </v-card-text>
       </div>
     </v-expand-transition>
+    <popup
+      :message="
+        'Are you sure you want to ' +
+          (project.projectOwner == $store.getters.getUsername
+            ? 'disband'
+            : 'quit') +
+          ' this project team?'
+      "
+      :showPopup="showPopup"
+      @showPopupMethod="showPopupMethod"
+      @confirmOperation="
+        project.projectOwner == $store.getters.getUsername
+          ? deleteProject()
+          : quitProject()
+      "
+    ></popup>
   </v-card>
 </template>
 
 <script>
 import modifyProjectDialog from "@/components/modifyProjectDialog";
 import memberDialog from "@/components/memberDialog";
+import popup from "@/components/popup";
 export default {
   data: function() {
     return {
       dialog: false,
-
+      showPopup: false,
       showDetail: false,
       show: true,
       loading: {
@@ -121,6 +143,9 @@ export default {
     };
   },
   methods: {
+    showPopupMethod() {
+      this.showPopup = !this.showPopup;
+    },
     quitProject() {
       console.log("quit");
       this.$axios({
@@ -164,10 +189,18 @@ export default {
   },
   components: {
     modifyProjectDialog,
-    memberDialog
+    memberDialog,
+    popup
   },
   props: ["project"]
 };
 </script>
 
-<style></style>
+<style>
+.Omit {
+  display: block;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+</style>

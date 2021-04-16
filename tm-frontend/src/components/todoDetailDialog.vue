@@ -57,8 +57,8 @@
             style="margin-left:10px"
             >mdi-pencil-outline</v-icon
           >
-          <v-icon @click="deleteTodo" style="margin-left:10px"
-            >mdi-delete-outline</v-icon
+          <v-btn @click="showPopupMethod" style="margin-left:10px" icon
+            ><v-icon>mdi-delete-outline</v-icon></v-btn
           >
         </v-card-title>
         <v-card-text
@@ -214,16 +214,24 @@
         </div>
       </v-card>
     </v-dialog>
+    <popup
+      message="Are you sure you want to delete this todo list?"
+      :showPopup="showPopup"
+      @showPopupMethod="showPopupMethod"
+      @confirmOperation="deleteTodo"
+    ></popup>
   </div>
 </template>
 
 <script>
+import popup from "@/components/popup";
 export default {
   data() {
     return {
       loading: false,
       showTodoDetail: false,
       showModifyTodo: false,
+      showPopup: false,
       todoChange: {},
 
       dateFormat: new Date().toISOString().substr(0, 10),
@@ -232,26 +240,33 @@ export default {
       rules: {
         nameRules: [
           v =>
-            (typeof v != "undefined" && v.length <= 20 && v.length >= 3) ||
-            "the length of name should be 3-20"
+            (typeof v != "undefined" && v.length <= 20 && v.length >= 1) ||
+            "the length of name should be 1-20"
         ],
         detailRules: [
           v =>
-            (typeof v != "undefined" && v.length >= 5 && v.length <= 100) ||
-            "the length of detail should be 5-100"
+            (typeof v != "undefined"&& v.length <= 100) ||
+            "the length of detail should be less than 100"
         ],
         notNull: [v => typeof v != "undefined" || "please enter"]
       }
     };
   },
+  components: { popup },
   props: ["todolistName", "todo"],
   methods: {
+    showPopupMethod() {
+      this.showPopup = !this.showPopup;
+    },
     checkTodo() {
       var todoId = this.todo.todoId;
       this.todo.loading = true;
       this.$axios({
         method: "put",
-        url: this.$store.state.host + "todo/check/" + todoId
+        url: this.$store.state.host + "todo/check/" + todoId,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
       })
         .then(res => {
           console.log(res);
@@ -265,11 +280,11 @@ export default {
     },
     checkNameRules(v) {
       if (typeof v == "undefined") return false;
-      return v.length <= 20 && v.length >= 3;
+      return v.length <= 20 && v.length >= 1;
     },
     checkDetailRules(v) {
       if (typeof v == "undefined") return false;
-      return v.length >= 5 && v.length <= 100;
+      return v.length <= 100;
     },
     checkDateTimeRules(v) {
       return typeof v != "undefined";
@@ -306,7 +321,10 @@ export default {
       this.$axios({
         method: "put",
         url: this.$store.state.host + "todo/edit",
-        data: this.todo
+        data: this.todo,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
       })
         .then(res => {
           this.loading = false;
@@ -321,7 +339,10 @@ export default {
     deleteTodo() {
       this.$axios({
         method: "delete",
-        url: this.$store.state.host + "todo/delete/" + this.todo.todoId
+        url: this.$store.state.host + "todo/delete/" + this.todo.todoId,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
       })
         .then(res => {
           this.$router.go(0);
