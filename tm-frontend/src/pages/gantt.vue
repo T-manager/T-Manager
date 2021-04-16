@@ -98,8 +98,7 @@ export default {
               text: mission.missionName,
               start_date: mission.missionStart,
               duration: mission.missionDuration,
-              progress: mission.missionProgress,
-              parent: mission.missionParent
+              progress: mission.missionProgress,              
             };
             var taskId = gantt.addTask(newTask);
             console.log(gantt.getTask(taskId));
@@ -128,8 +127,7 @@ export default {
               missionProgress: task.progress,
               missionName: task.text,
               missionStart: date,
-              missionDuration: task.duration,
-              missionParent: task.parent
+              missionDuration: task.duration,           
             },
             headers: {
               Authorization: "Bearer " + that.$store.getters.getToken
@@ -160,7 +158,6 @@ export default {
             missionName: task.text,
             missionStart: date,
             missionDuration: task.duration,
-            missionParent: task.parent
           },
           headers: {
             Authorization: "Bearer " + that.$store.getters.getToken
