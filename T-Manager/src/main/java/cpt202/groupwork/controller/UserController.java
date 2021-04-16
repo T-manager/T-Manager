@@ -30,7 +30,7 @@ public class UserController {
 
   @GetMapping("/get/{username}")
   public Response<?> getUserInfo(@PathVariable String username) {
-    return userService.userNameExists(username);
+    return userService.userGetInfoByName(username);
   }
 
   @PutMapping("/edit/{username}")

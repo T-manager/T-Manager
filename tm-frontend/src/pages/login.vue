@@ -27,6 +27,7 @@
             </v-card-text>
             <v-card-actions>
               <user-register-dialog></user-register-dialog>
+              <forget-pwd-dialog></forget-pwd-dialog>
               <v-slide-x-reverse-transition>
                 <v-tooltip v-if="valid" right>
                   <template v-slot:activator="{ on, attrs }">
@@ -45,7 +46,7 @@
               </v-slide-x-reverse-transition>
               <v-spacer></v-spacer>
               <v-btn :disabled="!this.valid" color="primary" @click="submit">
-                Submit
+                SUBMIT
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -56,14 +57,17 @@
 </template>
 
 <script>
-import UserRegisterDialog from "@/components/UserRegisterDialog";
+import UserRegisterDialog from '@/components/UserRegisterDialog.vue';
+import ForgetPwdDialog from '@/components/forgetPwdDialog.vue';
 export default {
-  components: { UserRegisterDialog },
+  components: { UserRegisterDialog, ForgetPwdDialog},
   data() {
     return {
       valid: false,
-      userName: null,
-      userPassword: null,
+      userName: "",
+      userPassword: "",
+      showBeginReset: false,
+      showVerifyInfo: false,
       rules: {
         required: value => !!value || "This field is required."
       },

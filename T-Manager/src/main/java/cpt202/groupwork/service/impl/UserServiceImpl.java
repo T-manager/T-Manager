@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import javax.annotation.Resource;
+import javax.swing.text.html.Option;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -22,16 +23,13 @@ import org.springframework.stereotype.Service;
  * @description: implement User service
  * @author: Zhonghao
  * @create: 2021-04-07 16:48
- **/
-
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
-  @Autowired
-  UserRepository userRepository;
+  @Autowired UserRepository userRepository;
 
-  @Resource
-  TokenUtils tokenUtils;
+  @Resource TokenUtils tokenUtils;
 
   @Override
   public Response<?> userIdExists(Integer userId) {
@@ -44,7 +42,7 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Response<?> userNameExists(String username) {
+  public Response<?> userGetInfoByName(String username) {
     Optional<User> user = userRepository.findByUserName(username);
     if (user.isPresent()) {
       return Response.ok(user.get());
@@ -69,7 +67,7 @@ public class UserServiceImpl implements UserService {
       user.setUserPassword(encoder.encode(user.getUserPassword()));
       user.setUserRole("USER");
       userRepository.save(user);
-      return Response.ok(1000); //User created successfully
+      return Response.ok(1000); // User created successfully
     } catch (Exception e) {
       return Response.fail(1001); // User already exists
     }
@@ -101,7 +99,7 @@ public class UserServiceImpl implements UserService {
   public Response<?> userModify(Integer userId, User userMod) {
     Optional<User> user = userRepository.findById(userId);
     if (user.isPresent()) {
-      //找出值为空的属性
+      // 找出值为空的属性
       final BeanWrapper src = new BeanWrapperImpl(userMod);
       java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
 
@@ -113,7 +111,7 @@ public class UserServiceImpl implements UserService {
         }
       }
       String[] result = new String[emptyNames.size()];
-      //找出为空的属性传入copyProperties
+      // 找出为空的属性传入copyProperties
       BeanUtils.copyProperties(userMod, user.get(), emptyNames.toArray(result));
       userRepository.save(user.get());
       return Response.ok(user.get());
@@ -130,7 +128,7 @@ public class UserServiceImpl implements UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         userMod.setUserPassword(encoder.encode(userMod.getUserPassword()));
       }
-      //找出值为空的属性
+      // 找出值为空的属性
       final BeanWrapper src = new BeanWrapperImpl(userMod);
       java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
 
@@ -142,7 +140,7 @@ public class UserServiceImpl implements UserService {
         }
       }
       String[] result = new String[emptyNames.size()];
-      //找出为空的属性传入copyProperties
+      // 找出为空的属性传入copyProperties
       BeanUtils.copyProperties(userMod, user.get(), emptyNames.toArray(result));
       userRepository.save(user.get());
       return Response.ok(user.get());
@@ -165,6 +163,28 @@ public class UserServiceImpl implements UserService {
       }
     } else {
       return Response.fail(2002); // User not found
+    }
+  }
+
+  @Override
+  public Response<?> userInfoCheck(User postUser) {
+    Optional<User> user = userRepository.findByUserName(postUser.getUserName());
+    if (user.isPresent()) {
+      if (user.get().getUserEmail().equals(postUser.getUserEmail()))
+        return Response.ok(2000); // Match
+      else return Response.fail(2001); // Not match
+    } else {
+      return Response.fail(2002); // Not found
+    }
+  }
+
+  @Override
+  public Response<?> userNameExists(String username){
+    Optional<User> user = userRepository.findByUserName(username);
+    if (user.isPresent()) {
+      return Response.ok(2000); // Found
+    } else {
+      return Response.fail(2002); // Not found
     }
   }
 }

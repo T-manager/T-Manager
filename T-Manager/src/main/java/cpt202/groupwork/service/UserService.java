@@ -7,7 +7,7 @@ public interface UserService {
 
   Response<?> userIdExists(final Integer userId);
 
-  Response<?> userNameExists(final String username);
+  Response<?> userGetInfoByName(final String username);
 
   Response<?> userCreate(final User user);
 
@@ -21,4 +21,7 @@ public interface UserService {
 
   Response<?> userLogin(final User postUser);
 
+  Response<?> userNameExists(final String username);
+
+  Response<?> userInfoCheck(final User postUser);
 }
