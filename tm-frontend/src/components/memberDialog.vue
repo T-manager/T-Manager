@@ -68,15 +68,19 @@
                       </v-btn>
                     </template>
                     <v-list style="padding:0px;">
-                      <v-list-item
-                        @click="deleteRelation(member.projectMemberId)"
-                      >
+                      <v-list-item @click="showPopupMethod">
                         <v-list-item-title>Remove</v-list-item-title>
                       </v-list-item>
                     </v-list>
                   </v-menu>
                 </div>
               </template>
+              <popup
+                message="Are you sure you want to remove this member?"
+                :showPopup="showPopup"
+                @showPopupMethod="showPopupMethod"
+                @confirmOperation="deleteRelation(member.projectMemberId)"
+              ></popup>
             </v-list-item>
           </v-list-item-group>
         </v-list>
@@ -102,11 +106,15 @@
 
 <script>
 import inviteMemberDialog from "@/components/inviteMemberDialog";
+import popup from "@/components/popup";
 export default {
   data: function() {
-    return { showMember: false, loading: false, members: [] };
+    return { showMember: false, showPopup: false, loading: false, members: [] };
   },
   methods: {
+    showPopupMethod() {
+      this.showPopup = !this.showPopup;
+    },
     async modifyProject() {
       this.loading = true;
       console.log(this.project.projectId);
@@ -131,6 +139,7 @@ export default {
         });
     },
     deleteRelation(memberId) {
+      console.log("!!");
       console.log(memberId);
       this.$axios({
         method: "delete",
@@ -167,6 +176,6 @@ export default {
       });
   },
   props: ["project"],
-  components: { inviteMemberDialog }
+  components: { inviteMemberDialog, popup }
 };
 </script>

@@ -15,10 +15,11 @@ export default {
   name: "ganttEchart",
   data() {
     return {
+      projectId: 0,
       tasks: {
         data: [],
-        links: [],
-      },
+        links: []
+      }
     };
   },
 
@@ -28,7 +29,7 @@ export default {
     gantt.config.xml_date = "%Y-%m-%d";
     // 在时间线上增加一行年份显示
     gantt.config.subscales = [{ unit: "year", step: 1, date: "%Y" }];
-    gantt.templates.grid_header_class = function (columnName, column) {
+    gantt.templates.grid_header_class = function(columnName, column) {
       // console.log(columnName)
       // console.log(column)
       return "updColor";
@@ -38,7 +39,7 @@ export default {
       $.post(
         "${ctx}/ganttlinks/ganttLinks/delete",
         e,
-        function (json) {
+        function(json) {
           console.log(json.status);
         },
         "json"
@@ -53,14 +54,14 @@ export default {
         label: "Mission name",
         width: "*",
         tree: true,
-        resize: true,
+        resize: true
       },
       { name: "start_date", label: "Start time", align: "center", width: 90 },
       { name: "duration", label: "Duration", align: "center" },
-      { name: "add", label: "", width: 44 },
+      { name: "add", label: "", width: 44 }
     ];
 
-    gantt.templates.grid_row_class = function (start, end, task) {
+    gantt.templates.grid_row_class = function(start, end, task) {
       if (task.$level >= 0) {
         return "nested_task";
       }
@@ -75,41 +76,45 @@ export default {
     // 数据解析
     gantt.parse(this.tasks);
     // #E8EAF6
-
+    this.projectId = this.$route.path.split("projectid=")[1];
     //加载全部mission
     this.$axios({
       method: "get",
-      url: this.$store.state.host + "gantt/get/0",
+      url: this.$store.state.host + "gantt/get/" + this.projectId,
       headers: {
-        Authorization: "Bearer " + this.$store.getters.getToken,
-      },
+        Authorization: "Bearer " + this.$store.getters.getToken
+      }
     })
-      .then((res) => {
+      .then(res => {
         console.log("get all", res);
-        this.gantt = res.data.data[0];
-        for (let i = this.gantt.missionViewDTO.length - 1; i >= 0; i--) {
-          this.gantt.missionViewDTO[i].loading = false;
-          var mission = this.gantt.missionViewDTO[i];
-          var newTask = {
-            id: mission.missionId,
-            text: mission.missionName,
-            start_date: mission.missionStart,
-            duration: mission.missionDuration,
-            progress: mission.missionProgress,
-          };
-          var taskId = gantt.addTask(newTask);
-          console.log(gantt.getTask(taskId));
-          gantt.getTask(taskId).id = taskId;
-          gantt.updateTask(newTask.id); //renders the updated task
+        if (res.data.data.length == 0) this.gantt = {};
+        else {
+          this.gantt = res.data.data[0];
+          for (let i = this.gantt.missionViewDTO.length - 1; i >= 0; i--) {
+            this.gantt.missionViewDTO[i].loading = false;
+            var mission = this.gantt.missionViewDTO[i];
+            var newTask = {
+              id: mission.missionId,
+              text: mission.missionName,
+              start_date: mission.missionStart,
+              duration: mission.missionDuration,
+              progress: mission.missionProgress,
+              parent: mission.missionParent
+            };
+            var taskId = gantt.addTask(newTask);
+            console.log(gantt.getTask(taskId));
+            gantt.getTask(taskId).id = taskId;
+            gantt.updateTask(newTask.id); //renders the updated task
+          }
         }
       })
-      .catch((error) => {
+      .catch(error => {
         this.$store.commit("response", error);
       });
 
     var that = this;
     //add mission
-    gantt.attachEvent("onLightboxSave", function (id, task, is_new) {
+    gantt.attachEvent("onLightboxSave", function(id, task, is_new) {
       if (is_new) {
         var formatFunc = gantt.date.date_to_str("%Y-%m-%d %H:%m:%s");
         var date = formatFunc(task.start_date); // date format
@@ -124,24 +129,24 @@ export default {
               missionName: task.text,
               missionStart: date,
               missionDuration: task.duration,
+              missionParent: task.parent
             },
             headers: {
-              Authorization: "Bearer " + that.$store.getters.getToken,
-            },
+              Authorization: "Bearer " + that.$store.getters.getToken
+            }
           })
-          .then((res) => {
+          .then(res => {
             console.log("add", res, task.id);
           })
-          .catch((error) => {
+          .catch(error => {
             that.$store.commit("response", error);
           });
       }
       return true;
     });
 
-
     //update mission
-    gantt.attachEvent("onAfterTaskUpdate", function (id, task) {
+    gantt.attachEvent("onAfterTaskUpdate", function(id, task) {
       var formatFunc = gantt.date.date_to_str("%Y-%m-%d %H:%m:%s");
       var date = formatFunc(task.start_date); // date format
       that
@@ -155,44 +160,44 @@ export default {
             missionName: task.text,
             missionStart: date,
             missionDuration: task.duration,
+            missionParent: task.parent
           },
           headers: {
-            Authorization: "Bearer " + that.$store.getters.getToken,
-          },
+            Authorization: "Bearer " + that.$store.getters.getToken
+          }
         })
-        .then((res) => {
+        .then(res => {
           console.log("edit", res, task.id);
         })
-        .catch((error) => {
+        .catch(error => {
           that.$store.commit("response", error);
           //this.loadAddTodoList = false;
         });
     });
 
     //delete mission
-    gantt.attachEvent("onBeforeTaskDelete", function (id, item) {
+    gantt.attachEvent("onBeforeTaskDelete", function(id, item) {
       console.log(gantt.getTask(id).id);
       that
         .$axios({
           method: "delete",
           url: that.$store.state.host + "mission/delete/" + id,
           headers: {
-            Authorization: "Bearer " + that.$store.getters.getToken,
-          },
+            Authorization: "Bearer " + that.$store.getters.getToken
+          }
         })
-        .then((res) => {
+        .then(res => {
           console.log("delete", res, id);
           //that.$router.go(0);
         })
-        .catch((error) => {
+        .catch(error => {
           that.$store.commit("response", error);
         });
       return true;
     });
-  },
+  }
 };
 </script>
-
 
 <style>
 html,

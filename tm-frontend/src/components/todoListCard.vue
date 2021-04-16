@@ -16,7 +16,7 @@
           <modifyTodoDialog :todolist="todolist"></modifyTodoDialog>
           <v-btn
             icon
-            @click="deleteTodolist"
+            @click="showPopupMethod"
             :loading="loading.delete"
             :disabled="loading.delete"
           >
@@ -41,6 +41,12 @@
         </v-list-item-group>
       </v-list>
     </v-card>
+    <popup
+      message="Are you sure you want to delete this todo list?"
+      :showPopup="showPopup"
+      @showPopupMethod="showPopupMethod"
+      @confirmOperation="deleteTodolist"
+    ></popup>
   </div>
 </template>
 
@@ -48,16 +54,21 @@
 import addTodoDialog from "@/components/addTodoDialog";
 import modifyTodoDialog from "@/components/modifyTodoDialog";
 import todoDetailDialog from "@/components/todoDetailDialog";
+import popup from "@/components/popup";
 export default {
   data: function() {
     return {
       show: true,
+      showPopup: false,
       loading: {
         delete: false
       }
     };
   },
   methods: {
+    showPopupMethod() {
+      this.showPopup = !this.showPopup;
+    },
     changeCompleteNum(index) {
       if (this.todolist.todoViewDTO[index].todoCheck == false)
         this.todolist.todolistCompleteNum--;
@@ -68,10 +79,16 @@ export default {
       this.$axios({
         method: "delete",
         url:
-          this.$store.state.host + "todolist/delete/" + this.todolist.todolistId
+          this.$store.state.host +
+          "todolist/delete/" +
+          this.todolist.todolistId,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
       })
         .then(res => {
           this.show = false;
+          this.$router.go(0);
         })
         .catch(error => {
           this.$store.commit("response", error);
@@ -82,7 +99,8 @@ export default {
   components: {
     addTodoDialog,
     modifyTodoDialog,
-    todoDetailDialog
+    todoDetailDialog,
+    popup
   }
 };
 </script>
