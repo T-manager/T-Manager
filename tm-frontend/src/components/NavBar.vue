@@ -96,6 +96,7 @@ export default {
           "/projectdetail/todolist/projectid=" +
           this.$route.path.split("projectid=")[1]
       });
+      this.$router.go(0);
     },
     gotoGantt() {
       this.$router.replace({
@@ -103,6 +104,7 @@ export default {
           "/projectdetail/gantt/projectid=" +
           this.$route.path.split("projectid=")[1]
       });
+      this.$router.go(0);
     },
     showUser() {
       if (this.user.avatar == null) this.$store.state.show.showLogin = true;
