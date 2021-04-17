@@ -6,27 +6,26 @@
       </v-list-item-content>
     </v-list-item>
     <v-dialog v-model="showAddTodo" persistent max-width="600px">
-      <v-card class="card">
-        <v-card-title>
-          <span class="headline" style="font-weight:bold">Create a new todo</span>
-        </v-card-title>
-        <v-card-text>
+      <v-card class="card-background" style="padding: 30px 35px 50px 35px;">
+        <div
+          style="font-size:30px; margin-left:10px; width:100%; text-align:left; display:flex; align-items:center"
+        >
+          Create New Todo
+          <v-btn color="primary" style="margin-left:10px" icon>
+            <v-icon size="28">mdi-help-circle-outline</v-icon>
+          </v-btn>
+        </div>
+        <v-card-text style="margin-top:30px; padding:10px">
           <div
-            style="display:flex;flex-direction:row;font-size:16px;color:#101010;margin-top:20px;margin-bottom:20px"
+            style="display:flex; flex-direction:row; font-size:16px; color:#101010; margin-bottom:20px"
           >
             <v-icon>mdi-subtitles-outline</v-icon>
-            <div style="margin-right:10px;margin-left:10px">{{ todolist.projectName }}</div>
-            <div style="color:#bdbdbd;font-size:22px">/</div>
+            <div style="margin-right:10px; margin-left:10px">
+              {{ todolist.projectName }}
+            </div>
+            <div style="color:#bdbdbd; font-size:22px">/</div>
             <div style="margin-left:10px">{{ todolist.todolistName }}</div>
           </div>
-
-          <!-- <v-text-field
-            label="todo list name"
-            color="primary"
-            prepend-icon="mdi-leaf"
-            v-model="todolist.todolistName"
-            readonly
-          ></v-text-field> -->
           <v-text-field
             label="todo name"
             color="primary"
@@ -131,15 +130,16 @@
         </v-card-text>
         <div class="card_action">
           <v-btn
-            color="indigo lighten-5"
-            class="indigo--text"
+            depressed
+            style="border:#cccccc solid 1px; color:#777777; width:120px"
             @click="showAddTodo = false"
           >
             <v-icon class="pr-2">mdi-cancel</v-icon>Cancel
           </v-btn>
           <v-btn
+            depressed
             color="primary"
-            style="color:#fff; margin-left:20px"
+            style="color:#fff; width:120px; margin-left:50px; "
             @click="createTodo()"
             :loading="loading"
             :disabled="loading"
@@ -244,12 +244,16 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  padding: 20px;
+.card-background {
+  background-image: url("../assets/TmanagerLogo_l5.svg");
+  /* background-image: url("../assets/TManagerLogo.png"); */
+  background-size: 520px;
+  background-repeat: no-repeat;
+  background-position: 140px -65px;
 }
 .card_action {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
 }
 </style>

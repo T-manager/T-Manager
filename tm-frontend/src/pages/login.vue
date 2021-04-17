@@ -26,11 +26,16 @@
           <div style="width:300px;">
             <v-img
               :src="require('../assets/TmanagerLogo.svg')"
-              height="200"
+              height="175"
               contain
               style="margin-right:20px"
             ></v-img>
-            <div></div>
+            <v-img
+              :src="require('../assets/TManager_text.svg')"
+              height="100"
+              width="200"
+              style="margin-top:-15px; margin-left:45px"
+            ></v-img>
           </div>
           <div style="width:300px">
             <v-text-field
@@ -38,7 +43,8 @@
               ref="userName"
               v-model="userName"
               :rules="[rules.required]"
-              label="Enter username"
+              label="Username"
+              placeholder="Please enter your username"
               color="primary"
               style="margin-top: 8px"
             ></v-text-field>
@@ -47,7 +53,8 @@
               ref="userPassword"
               v-model="userPassword"
               :rules="[rules.required]"
-              label="Enter password"
+              label="Password"
+              placeholder="Please enter your password"
               color="primary"
               type="password"
             ></v-text-field>
@@ -124,7 +131,6 @@ export default {
             this.$store.commit("set_token", res.data.data);
             alert("Login sucessfully");
             this.$router.push("/project");
-            this.$router.go(0);
           }
         })
         .catch(error => {
@@ -151,5 +157,7 @@ export default {
   justify-content: center;
   align-items: center;
   padding: 30px 35px 20px 35px;
+  border-radius: 10px;
+  opacity: 0.9;
 }
 </style>

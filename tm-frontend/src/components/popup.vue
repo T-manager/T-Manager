@@ -1,22 +1,26 @@
 <template>
   <v-dialog v-model="showPopup" persistent max-width="400px">
     <v-card
-      class="background"
-      style="padding:20px; display:flex; align-items:center; flex-direction:column"
+      class="popup-background"
+      style="padding:20px 20px 30px 20px; display:flex; align-items:center; flex-direction:column"
     >
-      <div style="margin-bottom:40px; margin-top:30px; font-size:18px">
+      <div style="color:#D9DDF0; text-align:left; width:100%;">T-Manager</div>
+      <div style="margin-bottom:30px; margin-top:10px; font-size:18px;">
         {{ message }}
       </div>
       <div style="display:flex; width:250px">
         <v-btn
-          style="border:1px solid #aab2de; background-color:#fff"
-          class="indigo--text"
-          @click="cancel"
           depressed
+          style="border:#cccccc solid 1px; color:#777777; width:100px"
+          @click="cancel"
           >Cancel</v-btn
         >
         <v-spacer></v-spacer>
-        <v-btn color="primary" class="white--text" @click="confirm" depressed
+        <v-btn
+          @click="confirm"
+          depressed
+          color="primary"
+          style="color:#fff; width:100px"
           >Confirm</v-btn
         >
       </div>
@@ -41,12 +45,12 @@ export default {
 };
 </script>
 
-<style scope>
-.background {
-  background-image: url("../assets/TManager.png");
+<style scoped>
+.popup-background {
+  background-image: url("../assets/TmanagerLogo_l5.svg");
   /* background-image: url("../assets/TManagerLogo.png"); */
-  background-size: 100px;
+  background-size: 240px;
   background-repeat: no-repeat;
-  background-position: 0px -25px;
+  background-position: 175px -35px;
 }
 </style>

@@ -13,7 +13,7 @@
         "
         height="200px"
         class="white--text"
-        gradient="to bottom, rgba(0,0,0,0), rgba(100,100,100, 0.5)"
+        gradient="to bottom, rgba(0,0,0,0), rgba(10,10,10, 0.5)"
       >
         <div
           style="font-size:25px; height:200px; display:flex; flex-direction:column; justify-content:space-between;

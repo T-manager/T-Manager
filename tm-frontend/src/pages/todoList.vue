@@ -1,5 +1,5 @@
 <template>
-  <div style="display:flex; padding:35px">
+  <div style="display:flex; padding: 0px 58px 5px 58px; overflow-x:auto;">
     <div v-for="(todolist, index) in todolists" :key="index">
       <todolistCard :todolist="todolist"></todolistCard>
     </div>
@@ -122,7 +122,8 @@ export default {
 <style scoped>
 .plusTodoList {
   margin: 15px;
-  width: 400px;
+  min-width: 400px;
+  max-width: 400px;
   height: 70px;
   display: flex;
   justify-content: center;

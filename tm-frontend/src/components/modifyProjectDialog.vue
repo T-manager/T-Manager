@@ -16,63 +16,57 @@
       <v-icon>mdi-pencil-outline</v-icon></v-btn
     >
     <v-dialog v-model="showModifyProject" persistent max-width="600px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">Modify Project</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  outlined
-                  label="project name"
-                  v-model="project.projectName"
-                  required
-                  :rules="rules.nameRules"
-                  hint="more than 1 and less than 20"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  outlined
-                  label="project detail"
-                  v-model="project.projectDetail"
-                  required
-                  :rules="rules.detailRules"
-                  hint="less than 100"
-                ></v-text-field>
-              </v-col>
-            </v-row>
-          </v-container>
+      <v-card style="padding: 30px 35px 50px 35px;" class="card-background">
+        <div
+          style="font-size:30px; margin-left:10px; width:100%; text-align:left"
+        >
+          Modify Project
+        </div>
+        <v-card-text style="margin-top:30px; padding:10px">
+          <v-text-field
+            outlined
+            label="project name"
+            v-model="project.projectName"
+            required
+            :rules="rules.nameRules"
+            hint="more than 1 and less than 20"
+          ></v-text-field>
+          <v-textarea
+            outlined
+            label="project detail"
+            v-model="project.projectDetail"
+            required
+            auto-grow
+            rows="1"
+            :rules="rules.detailRules"
+            hint="less than 100"
+          ></v-textarea>
           <!-- <small>*indicates required field</small> -->
         </v-card-text>
 
-        <v-card-actions>
-          <v-spacer></v-spacer>
+        <div style="display:flex; justify-content:center; margin-top:10px">
           <!-- 关闭dialog -->
           <v-btn
             depressed
-            color="primary"
-            text
+            style="border:#cccccc solid 1px; color:#777777; width:100px"
             @click="showModifyProject = false"
             :loading="loading"
             :disabled="loading"
           >
-            Close
+            Cancel
           </v-btn>
           <!-- 保存dialog数据 -->
           <v-btn
             depressed
             color="primary"
-            text
+            style="color:#fff; width:100px; margin-left:50px"
             @click="modifyProject()"
             :loading="loading"
             :disabled="loading"
           >
-            Save
+            Submit
           </v-btn>
-        </v-card-actions>
+        </div>
       </v-card>
     </v-dialog>
   </div>
@@ -152,3 +146,13 @@ export default {
   props: ["project"]
 };
 </script>
+
+<style scoped>
+.card-background {
+  background-image: url("../assets/TmanagerLogo_l5.svg");
+  /* background-image: url("../assets/TManagerLogo.png"); */
+  background-size: 520px;
+  background-repeat: no-repeat;
+  background-position: 140px -65px;
+}
+</style>

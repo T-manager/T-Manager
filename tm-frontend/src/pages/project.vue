@@ -13,7 +13,7 @@
           :project="project"
         ></projectCard>
         <!--新建项目dialog-->
-        <v-dialog v-model="dialog" persistent max-width="600px">
+        <v-dialog v-model="dialog" persistent max-width="550px">
           <!-- 点击加号新建项目 -->
           <template v-slot:activator="{ on, attrs }">
             <v-card class="plusProject">
@@ -23,81 +23,66 @@
               </v-btn>
             </v-card>
           </template>
-          <v-card>
-            <v-card-title>
-              <span class="headline">Create Project</span>
-            </v-card-title>
-            <v-card-text>
-              <v-container>
-                <v-row>
-                  <v-col cols="12">
-                    <v-text-field
-                      outlined
-                      label="project name"
-                      v-model="newProject.projectName"
-                      required
-                      :rules="rules.nameRules"
-                      hint="more than 1 and less than 20"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col cols="12">
-                    <v-text-field
-                      outlined
-                      label="project detail"
-                      v-model="newProject.projectDetail"
-                      required
-                      :rules="rules.detailRules"
-                      hint="less than 100"
-                    ></v-text-field>
-                  </v-col>
-                  <!-- <v-col cols="12">
-                  <v-text-field
-                    outlined
-                    label="user name"
-                    v-model="newProjectOwner"
-                    required
-                    hint="you user name"
-                  ></v-text-field>
-                </v-col> -->
-                  <!-- 待定 -->
-                  <v-col cols="12">
-                    <v-autocomplete
-                      :items="['personal', 'team']"
-                      label="project type"
-                      v-model="newProject.projectType"
-                      :rules="rules.selectRules"
-                    ></v-autocomplete>
-                  </v-col>
-                </v-row>
-              </v-container>
-              <!-- <small>*indicates required field</small> -->
+          <v-card style="padding: 30px 35px 50px 35px;" class="card-background">
+            <div
+              style="font-size:30px; margin-left:10px; width:100%; text-align:left"
+            >
+              <v-img></v-img>
+              Create Project
+            </div>
+            <v-card-text style="margin-top:30px; padding:10px">
+              <v-text-field
+                outlined
+                label="project name"
+                v-model="newProject.projectName"
+                required
+                :rules="rules.nameRules"
+                counter
+                hint="more than 1 and less than 20"
+              ></v-text-field>
+              <v-textarea
+                outlined
+                label="project detail"
+                v-model="newProject.projectDetail"
+                required
+                counter
+                auto-grow
+                rows="1"
+                :rules="rules.detailRules"
+                hint="less than 100"
+              ></v-textarea>
+              <v-autocomplete
+                outlined
+                :items="['personal', 'team']"
+                label="project type"
+                v-model="newProject.projectType"
+                :rules="rules.selectRules"
+              ></v-autocomplete>
             </v-card-text>
 
-            <v-card-actions>
-              <v-spacer></v-spacer>
+            <div style="display:flex; justify-content:center; margin-top:10px">
               <!-- 关闭dialog -->
               <v-btn
                 depressed
-                color="primary"
-                text
+                style="border:#cccccc solid 1px; color:#777777; width:100px"
                 @click="dialog = false"
                 :loading="loadAddProject"
                 :disabled="loadAddProject"
               >
-                Close
+                Cancel
               </v-btn>
               <!-- 保存dialog数据 -->
               <v-btn
                 depressed
                 color="primary"
-                text
+                style="color:#fff; width:100px; margin-left:50px"
                 @click="addProject()"
                 :loading="loadAddProject"
                 :disabled="loadAddProject"
               >
-                Comfirm
+                Submit
               </v-btn>
-            </v-card-actions>
+            </div>
           </v-card>
         </v-dialog>
       </v-row>
@@ -245,5 +230,12 @@ export default {
   opacity: 1 !important;
   position: absolute;
   width: 100%;
+}
+.card-background {
+  background-image: url("../assets/TmanagerLogo_l5.svg");
+  /* background-image: url("../assets/TManagerLogo.png"); */
+  background-size: 520px;
+  background-repeat: no-repeat;
+  background-position: 140px -65px;
 }
 </style>

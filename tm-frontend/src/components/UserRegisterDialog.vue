@@ -18,7 +18,6 @@
               <template v-slot:activator="{ on, attrs }">
                 <v-btn
                   icon
-                  class="my-0"
                   v-bind="attrs"
                   @click="resetForm"
                   v-on="on"
@@ -29,7 +28,7 @@
               <span>Refresh form</span>
             </v-tooltip>
           </div>
-          <v-card-text style="margin-top:20px">
+             <v-card-text style="margin-top:30px; padding:10px">
             <v-text-field
               outlined
               ref="userName"
@@ -37,7 +36,6 @@
               :rules="[rules.required]"
               label="Enter username"
               color="primary"
-              style="margin-top: 8px"
             ></v-text-field>
             <v-text-field
               outlined

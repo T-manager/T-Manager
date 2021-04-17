@@ -27,9 +27,9 @@
             <div class="todo_detail">
               {{ todo.todoDetail }}
             </div>
-            <div class="todo_ddl">
+            <!-- <div class="todo_ddl">
               {{ todo.todoDdl }}
-            </div>
+            </div> -->
           </div>
         </v-list-item-content>
         <!-- TODO check 按键 -->
@@ -44,34 +44,52 @@
     </v-list-item>
 
     <!-- TODO 详情弹窗 -->
-    <v-dialog v-model="showTodoDetail" max-width="600px">
-      <v-card v-if="showModifyTodo == false" class="card">
-        <div style="width:100%; display:flex; justify-content:flex-end">
+    <v-dialog v-model="showTodoDetail" max-width="550px">
+      <v-card
+        v-if="showModifyTodo == false"
+        style="padding: 30px 35px 50px 35px;"
+        class="card-background"
+      >
+        <div
+          style="width:100%; display:flex; justify-content:flex-end; margin-top:-15px; margin-left:20px"
+        >
           <v-icon @click="showTodoDetail = false">mdi-close</v-icon>
         </div>
-        <v-card-title style="margin-top:-20px">
-          <span class="headline">Modify todo</span>
-          <v-icon
+        <div
+          style="font-size:30px; margin-left:10px; width:100%; text-align:left; display:flex; align-items:center"
+        >
+          Modify Todo
+          <v-btn
             color="primary"
             @click="showModifyTodo = true"
             style="margin-left:10px"
-            >mdi-pencil-outline</v-icon
+            icon
           >
-          <v-btn @click="showPopupMethod" style="margin-left:10px" icon
+            <v-icon>mdi-pencil-outline</v-icon>
+          </v-btn>
+          <v-btn @click="showPopupMethod" icon
             ><v-icon>mdi-delete-outline</v-icon></v-btn
           >
-        </v-card-title>
+        </div>
         <v-card-text
-          style="display:flex; flex-direction:column; align-items:flex-start;"
+          style="display:flex; flex-direction:column; margin-top:15px; padding:10px; color:#434343"
         >
-          <span class="todo_detail_info">
-            Todolist Name: {{ todolistName }}
-          </span>
-          <span class="todo_detail_info"> Todo Name: {{ todo.todoName }} </span>
-          <span class="todo_detail_info">
-            Todo Detail: {{ todo.todoDetail }}
-          </span>
-          <span class="todo_detail_info">Todo DDL: {{ todo.todoDdl }}</span>
+          <div class="todo_detail_info">
+            <div style="width:150px">Todolist Name:</div>
+            <div style="width:350px; color:#838383">{{ todolistName }}</div>
+          </div>
+          <div class="todo_detail_info">
+            <div style="width:150px">Todo Name:</div>
+            <div style="width:350px; color:#838383">{{ todo.todoName }}</div>
+          </div>
+          <div class="todo_detail_info">
+            <div style="width:150px">Detail:</div>
+            <div style="width:350px; color:#838383">{{ todo.todoDetail }}</div>
+          </div>
+          <div class="todo_detail_info">
+            <div style="width:150px">Todo Deadline:</div>
+            <div style="width:350px; color:#838383">{{ todo.todoDdl }}</div>
+          </div>
 
           <!-- 选择负责人 -->
         </v-card-text>
@@ -80,11 +98,13 @@
 
     <!-- 编辑 TODO -->
     <v-dialog v-model="showModifyTodo" persistent max-width="600px">
-      <v-card class="card">
-        <v-card-title>
-          <span class="headline">Modify a new todo</span>
-        </v-card-title>
-        <v-card-text>
+      <v-card style="padding: 30px 35px 50px 35px;" class="card-background">
+        <div
+          style="font-size:30px; margin-left:10px; width:100%; text-align:left"
+        >
+          Modify Todo
+        </div>
+        <v-card-text style="margin-top:30px; padding:10px">
           <div
             style="display:flex;flex-direction:row;font-size:16px;color:#101010;margin-top:20px;margin-bottom:20px"
           >
@@ -198,17 +218,18 @@
 
           <!-- 选择负责人 -->
         </v-card-text>
-        <div class="card_action">
+        <div style="display:flex; justify-content:center; margin-top:10px">
           <v-btn
-            color="indigo lighten-5"
-            class="indigo--text"
+            depressed
+            style="border:#cccccc solid 1px; color:#777777; width:120px; margin-right:50px"
             @click="showModifyTodo = false"
           >
             <v-icon class="pr-2">mdi-cancel</v-icon>Cancel
           </v-btn>
           <v-btn
+            depressed
             color="primary"
-            style="color:#fff; margin-left:20px"
+            style="color:#fff; width:120px"
             @click="modifyTodo()"
             :loading="loading"
             :disabled="loading"
@@ -257,7 +278,7 @@ export default {
     };
   },
   components: { popup },
-  props: ["todolistName", "todo","projectName"],
+  props: ["todolistName", "todo", "projectName"],
   methods: {
     showPopupMethod() {
       this.showPopup = !this.showPopup;
@@ -392,16 +413,18 @@ export default {
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.card {
-  padding: 20px;
-}
-.card_action {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
+.card-background {
+  background-image: url("../assets/TmanagerLogo_l5.svg");
+  /* background-image: url("../assets/TManagerLogo.png"); */
+  background-size: 520px;
+  background-repeat: no-repeat;
+  background-position: 140px -65px;
 }
 .todo_detail_info {
-  margin-top: 10px;
-  font-size: 16px;
+  text-align: left;
+  margin-top: 15px;
+  font-size: 18px;
+  display: flex;
+  justify-content: flex-start;
 }
 </style>

@@ -1,8 +1,11 @@
 <template>
-  <div style="display:flex; justify-content:center; margin-bottom:30px">
+  <div
+    style="display:flex; justify-content:center; margin-bottom:30px; width:100%; padding: 0px 70px 0px 70px"
+  >
     <!-- 顶栏 -->
+    <!-- width:1392px;  -->
     <v-card
-      style="width:1392px; height:51px; box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.26); border-radius:20px; display:flex; align-items:center; margin-top:16px"
+      style="width:100%; height:51px; box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.26); border-radius:20px; display:flex; align-items:center; margin-top:16px"
     >
       <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
       <div

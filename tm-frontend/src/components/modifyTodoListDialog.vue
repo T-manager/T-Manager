@@ -3,12 +3,14 @@
     <v-btn icon @click="showModifyTodolist = true" color="primary">
       <v-icon>mdi-pencil-outline</v-icon></v-btn
     >
-    <v-dialog v-model="showModifyTodolist" persistent max-width="600px">
-      <v-card class="card">
-        <v-card-title>
-          <span class="headline">Modify todolist</span>
-        </v-card-title>
-        <v-card-text>
+    <v-dialog v-model="showModifyTodolist" persistent max-width="550px">
+      <v-card style="padding: 30px 35px 50px 35px;" class="card-background">
+        <div
+          style="font-size:30px; margin-left:10px; width:100%; text-align:left"
+        >
+          Modify Todolist
+        </div>
+        <v-card-text style="margin-top:30px; padding:10px">
           <v-text-field
             label="todo list name"
             color="primary"
@@ -20,15 +22,16 @@
         </v-card-text>
         <div class="card_action">
           <v-btn
-            color="indigo lighten-5"
-            class="indigo--text"
+            depressed
+            style="border:#cccccc solid 1px; color:#777777; width:120px; margin-right:50px; "
             @click="showModifyTodolist = false"
           >
             <v-icon class="pr-2">mdi-cancel</v-icon>Cancel
           </v-btn>
           <v-btn
+            depressed
             color="primary"
-            style="color:#fff; margin-left:20px"
+            style="color:#fff; width:120px"
             @click="modifyTodolist()"
             :loading="loading"
             :disabled="loading"
@@ -100,12 +103,16 @@ export default {
 </script>
 
 <style scoped>
-.card {
-  padding: 20px;
+.card-background {
+  background-image: url("../assets/TmanagerLogo_l5.svg");
+  /* background-image: url("../assets/TManagerLogo.png"); */
+  background-size: 520px;
+  background-repeat: no-repeat;
+  background-position: 140px -65px;
 }
 .card_action {
   display: flex;
-  justify-content: flex-end;
-  align-items: center;
+  justify-content: center;
+  margin-top: 10px;
 }
 </style>

@@ -1,8 +1,8 @@
 <template>
   <div v-if="show" style="margin:15px">
     <!-- todolist card -->
-    <v-card class="todolist">
-      <div style="display:flex; padding: 0px 30px 0px 30px;">
+    <v-card class="todolist" style="border-radius:10px">
+      <div style="display:flex; padding: 0px 25px 0px 25px;">
         <div class="todolist_info">
           <div style="font-size:24px;">{{ todolist.todolistName }}</div>
           <div>
@@ -13,7 +13,7 @@
         </div>
         <v-spacer></v-spacer>
         <div style="display:flex; align-items:flex-start">
-          <modifyTodoDialog :todolist="todolist"></modifyTodoDialog>
+          <modifyTodoListDialog :todolist="todolist"></modifyTodoListDialog>
           <v-btn
             icon
             @click="showPopupMethod"
@@ -25,8 +25,8 @@
         </div>
       </div>
 
-      <v-list flat>
-        <v-subheader>All</v-subheader>
+      <v-list flat style="max-height:490px; overflow-y:auto">
+        <!-- <v-subheader>All</v-subheader> -->
         <v-list-item-group multiple>
           <!-- 每个TODO -->
           <div v-for="(todo, index) in todolist.todoViewDTO" :key="index">
@@ -53,7 +53,7 @@
 
 <script>
 import addTodoDialog from "@/components/addTodoDialog";
-import modifyTodoDialog from "@/components/modifyTodoDialog";
+import modifyTodoListDialog from "@/components/modifyTodoListDialog";
 import todoDetailDialog from "@/components/todoDetailDialog";
 import popup from "@/components/popup";
 export default {
@@ -99,7 +99,7 @@ export default {
   props: ["todolist"],
   components: {
     addTodoDialog,
-    modifyTodoDialog,
+    modifyTodoListDialog,
     todoDetailDialog,
     popup
   }
@@ -108,8 +108,9 @@ export default {
 
 <style>
 .todolist {
-  width: 400px;
-  padding: 30px 0px 10px 0px;
+  border-radius: 10px;
+  width: 350px;
+  padding: 25px 0px 10px 0px;
 }
 .todolist_info {
   display: flex;
