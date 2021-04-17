@@ -78,7 +78,10 @@ export default {
       await this.$axios({
         method: "put",
         url: this.$store.state.host + "todolist/modify",
-        data: this.todolist
+        data: this.todolist,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
       })
         .then(res => {
           console.log(res);
