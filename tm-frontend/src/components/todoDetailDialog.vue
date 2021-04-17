@@ -85,13 +85,17 @@
           <span class="headline">Modify a new todo</span>
         </v-card-title>
         <v-card-text>
-          <v-text-field
-            label="todo list name"
-            color="primary"
-            prepend-icon="mdi-leaf"
-            v-model="todolistName"
-            readonly
-          ></v-text-field>
+          <div
+            style="display:flex;flex-direction:row;font-size:16px;color:#101010;margin-top:20px;margin-bottom:20px"
+          >
+            <v-icon>mdi-subtitles-outline</v-icon>
+            <div style="margin-right:10px;margin-left:10px">
+              {{ projectName }}
+            </div>
+            <div style="color:#bdbdbd;font-size:22px">/</div>
+            <div style="margin-left:10px">{{ todolistName }}</div>
+          </div>
+
           <v-text-field
             label="todo name"
             color="primary"
@@ -245,7 +249,7 @@ export default {
         ],
         detailRules: [
           v =>
-            (typeof v != "undefined"&& v.length <= 100) ||
+            (typeof v != "undefined" && v.length <= 100) ||
             "the length of detail should be less than 100"
         ],
         notNull: [v => typeof v != "undefined" || "please enter"]
@@ -253,7 +257,7 @@ export default {
     };
   },
   components: { popup },
-  props: ["todolistName", "todo"],
+  props: ["todolistName", "todo","projectName"],
   methods: {
     showPopupMethod() {
       this.showPopup = !this.showPopup;

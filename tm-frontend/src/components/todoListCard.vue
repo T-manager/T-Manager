@@ -34,6 +34,7 @@
               @changeCompleteNum="changeCompleteNum(index)"
               :todolistName="todolist.todolistName"
               :todo="todo"
+              :projectName="todolist.projectName"
             ></todoDetailDialog>
           </div>
           <!-- add new todo -->

@@ -45,7 +45,8 @@ public class ProjectController {
   public Response<?> addProject(@Valid @RequestBody ProjectDTO projectDTO) {
     Project project = new Project();
     BeanUtils.copyProperties(projectDTO, project);
-    project.setProjectOwnerId(userRepository.findByUserName(projectDTO.getProjectOwner()).get().getUserId());
+    project.setProjectOwnerId(
+        userRepository.findByUserName(projectDTO.getProjectOwner()).get().getUserId());
     projectRepository.save(project);
     ProjectMember pm = new ProjectMember();
     pm.setProjectId(project.getProjectId());
@@ -72,8 +73,9 @@ public class ProjectController {
   @PutMapping("/modify")
   @Operation(summary = "modify the information of a project")
   public Response<?> putProject(@Valid @RequestBody Project projectInfo) {
-    Integer projectId=projectInfo.getProjectId();
+    Integer projectId = projectInfo.getProjectId();
     Optional<Project> project = projectRepository.findById(projectId);
+    projectInfo.setProjectOwnerId(project.get().getProjectOwnerId());
     BeanUtils.copyProperties(projectInfo, project.get());
     return Response.ok(projectRepository.save(project.get()));
   }

@@ -80,22 +80,22 @@
 
 <script>
 export default {
-  data: function () {
+  data: function() {
     return {
       showModifyProject: false,
       loading: false,
       rules: {
         nameRules: [
-          (v) =>
+          v =>
             (typeof v != "undefined" && v.length <= 20 && v.length >= 1) ||
-            "the length of name should be 1-20",
+            "the length of name should be 1-20"
         ],
         detailRules: [
-          (v) =>
+          v =>
             (typeof v != "undefined" && v.length <= 100) ||
-            "the length of detail should less than 100",
-        ],       
-      },
+            "the length of detail should less than 100"
+        ]
+      }
     };
   },
   methods: {
@@ -120,7 +120,6 @@ export default {
     },
     async modifyProject() {
       this.loading = true;
-      console.log(this.project.projectId);
       if (!this.checkRules()) {
         this.loading = false;
         return;
@@ -130,22 +129,26 @@ export default {
         url: this.$store.state.host + "project/modify",
         data: this.project,
         headers: {
-          Authorization: "Bearer " + this.$store.getters.getToken,
-        },
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
       })
-        .then((res) => {
+        .then(res => {
           console.log(res);
           this.loading = false;
           this.showModifyDialog = false;
+          console.log("project");
+          console.log(this.project);
           this.$router.go(0);
         })
-        .catch((error) => {
+        .catch(error => {
+          console.log("project");
+          console.log(this.project);
           console.log(error);
           this.$store.commit("response", error);
           this.loading = false;
         });
-    },
+    }
   },
-  props: ["project"],
+  props: ["project"]
 };
 </script>

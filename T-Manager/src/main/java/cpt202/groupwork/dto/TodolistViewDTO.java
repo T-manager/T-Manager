@@ -16,6 +16,9 @@ public class TodolistViewDTO {
   //对应项目id
   private Integer projectId;
 
+  //对应项目名
+  private String projectName;
+
   //todolist的名字
   private String todolistName;
 
