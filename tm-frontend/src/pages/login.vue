@@ -4,7 +4,23 @@
       <v-col cols="6">
         <v-form v-model="valid">
           <v-card class="userLoginCard" ref="form" outlined>
-            <v-card-title>Sign in with your account</v-card-title>
+            <v-card-title
+              >Sign in with your account<v-spacer></v-spacer>
+              <v-tooltip v-if="valid" right>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    class="my-0"
+                    v-bind="attrs"
+                    @click="resetForm"
+                    v-on="on"
+                  >
+                    <v-icon>mdi-refresh</v-icon>
+                  </v-btn>
+                </template>
+                <span>Refresh form</span>
+              </v-tooltip>
+            </v-card-title>
             <v-card-text>
               <v-text-field
                 outlined
@@ -24,29 +40,28 @@
                 color="primary"
                 type="password"
               ></v-text-field>
+              <div
+                style="width:100%; display:flex; justify-content:flex-end; margin-top:-10px;"
+              >
+                <forget-pwd-dialog></forget-pwd-dialog>
+              </div>
             </v-card-text>
             <v-card-actions>
-              <user-register-dialog></user-register-dialog>
-              <forget-pwd-dialog></forget-pwd-dialog>
-              <v-slide-x-reverse-transition>
-                <v-tooltip v-if="valid" right>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      icon
-                      class="my-0"
-                      v-bind="attrs"
-                      @click="resetForm"
-                      v-on="on"
-                    >
-                      <v-icon>mdi-refresh</v-icon>
-                    </v-btn>
-                  </template>
-                  <span>Refresh form</span>
-                </v-tooltip>
-              </v-slide-x-reverse-transition>
+              <div
+                style="text-decoration:underline; color:#6271c2; cursor:pointer; margin-left:10px"
+              >
+                Help
+              </div>
               <v-spacer></v-spacer>
-              <v-btn :disabled="!this.valid" color="primary" @click="submit">
-                SUBMIT
+              <user-register-dialog></user-register-dialog>
+              <v-btn
+                :disabled="!this.valid"
+                color="primary"
+                @click="submit"
+                depressed
+                style="margin-left:10px; width:100px"
+              >
+                Sign In
               </v-btn>
             </v-card-actions>
           </v-card>
@@ -57,10 +72,10 @@
 </template>
 
 <script>
-import UserRegisterDialog from '@/components/UserRegisterDialog.vue';
-import ForgetPwdDialog from '@/components/forgetPwdDialog.vue';
+import UserRegisterDialog from "@/components/UserRegisterDialog.vue";
+import ForgetPwdDialog from "@/components/forgetPwdDialog.vue";
 export default {
-  components: { UserRegisterDialog, ForgetPwdDialog},
+  components: { UserRegisterDialog, ForgetPwdDialog },
   data() {
     return {
       valid: false,
@@ -70,7 +85,7 @@ export default {
       showVerifyInfo: false,
       rules: {
         required: value => !!value || "This field is required."
-      },
+      }
     };
   },
   computed: {
@@ -79,7 +94,7 @@ export default {
         userName: this.userName,
         userPassword: this.userPassword
       };
-    },
+    }
   },
   methods: {
     login: function() {
@@ -99,7 +114,7 @@ export default {
             this.$store.commit("set_username", this.userName);
             this.$store.commit("set_token", res.data.data);
             alert("Login sucessfully");
-            this.$router.push("/project")
+            this.$router.push("/project");
           }
         })
         .catch(error => {
@@ -117,8 +132,8 @@ export default {
     },
     register() {
       this.showRegisterDialog = true;
-    },
-  },
+    }
+  }
 };
 </script>
 <style scoped>

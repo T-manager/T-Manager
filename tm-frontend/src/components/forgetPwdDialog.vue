@@ -1,6 +1,11 @@
 <template>
   <div>
-    <v-btn @click="showBeginReset = true" text> Forget password </v-btn>
+    <div
+      style="text-decoration:underline; color:#6271c2; cursor:pointer"
+      @click="showBeginReset = true"
+    >
+      Forget password?
+    </div>
     <v-dialog v-model="showBeginReset" persistent max-width="500px">
       <v-row no-gutters>
         <v-col cols="12">
@@ -176,38 +181,38 @@ export default {
       confirmPassword: "",
       loading: false,
       rules: {
-        required: (value) => !!value || "This field is required.",
-        email: (value) => {
+        required: value => !!value || "This field is required.",
+        email: value => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || "Invalid e-mail.";
-        },
-      },
+        }
+      }
     };
   },
   methods: {
-    cancel: function () {
+    cancel: function() {
       this.userName = "";
       this.userEmail = "";
       this.confirmPassword = "";
-      this.newPassword = ""
+      this.newPassword = "";
       this.showBeginReset = false;
       this.showVerifyInfo = false;
       this.showModifyPwd = false;
     },
-    next1: function () {
+    next1: function() {
       this.showBeginReset = false;
       this.showVerifyInfo = true;
     },
-    next2: function () {
+    next2: function() {
       this.showVerifyInfo = false;
       this.showModifyPwd = true;
     },
-    checkExistUser: async function () {
+    checkExistUser: async function() {
       this.$axios({
         method: "get",
-        url: this.$store.state.host + "auth/check?username=" + this.userName,
+        url: this.$store.state.host + "auth/check?username=" + this.userName
       })
-        .then((res) => {
+        .then(res => {
           if (res.data.data == 2000) {
             this.next1();
           } else {
@@ -215,20 +220,20 @@ export default {
             this.userName = null;
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
-    checkUserInfo: async function () {
+    checkUserInfo: async function() {
       this.$axios({
         method: "post",
         url: this.$store.state.host + "auth/check",
         data: {
           userName: this.userName,
-          userEmail: this.userEmail,
-        },
+          userEmail: this.userEmail
+        }
       })
-        .then((res) => {
+        .then(res => {
           if (res.data.data == 2000) {
             this.next2();
           } else {
@@ -236,7 +241,7 @@ export default {
             this.userEmail = null;
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error);
         });
     },
@@ -264,25 +269,24 @@ export default {
             this.userName,
           data: {
             userName: this.userName,
-            userPassword: this.userPassword,
-          },
+            userPassword: this.userPassword
+          }
         })
-          .then((res) => {
+          .then(res => {
             alert("Reset password successfully!");
             this.$store.commit("set_username", null);
             this.$store.commit("set_token", null);
             this.$router.go(0);
           })
-          .catch((error) => {
+          .catch(error => {
             console.log(error);
             //   this.$store.commit("response", error);
             this.loading = false;
           });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>
