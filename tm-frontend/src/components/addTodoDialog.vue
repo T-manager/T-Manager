@@ -8,16 +8,25 @@
     <v-dialog v-model="showAddTodo" persistent max-width="600px">
       <v-card class="card">
         <v-card-title>
-          <span class="headline">Create a new todo</span>
+          <span class="headline" style="font-weight:bold">Create a new todo</span>
         </v-card-title>
         <v-card-text>
-          <v-text-field
+          <div
+            style="display:flex;flex-direction:row;font-size:16px;color:#101010;margin-top:20px;margin-bottom:20px"
+          >
+            <v-icon>mdi-subtitles-outline</v-icon>
+            <div style="margin-right:10px;margin-left:10px">{{ todolist.projectName }}</div>
+            <div style="color:#bdbdbd;font-size:22px">/</div>
+            <div style="margin-left:10px">{{ todolist.todolistName }}</div>
+          </div>
+
+          <!-- <v-text-field
             label="todo list name"
             color="primary"
             prepend-icon="mdi-leaf"
             v-model="todolist.todolistName"
             readonly
-          ></v-text-field>
+          ></v-text-field> -->
           <v-text-field
             label="todo name"
             color="primary"
