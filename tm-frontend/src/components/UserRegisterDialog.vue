@@ -29,7 +29,7 @@
               <span>Refresh form</span>
             </v-tooltip>
           </div>
-          <v-card-text>
+          <v-card-text style="margin-top:20px">
             <v-text-field
               outlined
               ref="userName"
@@ -149,6 +149,6 @@ export default {
 </script>
 <style scoped>
 .userRegistCard {
-  padding: 30px 20px 30px 20px;
+  padding: 30px 35px 50px 35px;
 }
 </style>

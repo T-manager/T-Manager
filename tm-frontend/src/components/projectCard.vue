@@ -40,31 +40,34 @@
                 <!-- 点击铅笔修改项目 -->
                 <modifyProjectDialog :project="project"></modifyProjectDialog>
               </v-list-item>
-              <v-list-item style="padding:0px 5px 0px 5px">
-                <memberDialog
-                  v-if="project.projectType == 'team'"
-                  :project="project"
-                ></memberDialog
+              <v-list-item
+                style="padding:0px 5px 0px 5px"
+                v-if="project.projectType == 'team'"
+              >
+                <memberDialog :project="project"></memberDialog
               ></v-list-item>
-              <v-list-item style="padding:0px 5px 0px 5px">
+              <v-list-item
+                style="padding:0px 5px 0px 5px"
+                v-if="project.projectOwner == $store.getters.getUsername"
+              >
                 <!-- 解散project -->
                 <v-btn
                   text
                   color="primary"
                   @click="showPopupMethod"
-                  v-if="project.projectOwner == $store.getters.getUsername"
                   style="width:120px; display:flex; justify-content:flex-start; padding:0px 10px 0px 10px"
                 >
                   Disband
                   <v-spacer></v-spacer>
                   <v-icon>mdi-account-multiple-remove-outline</v-icon></v-btn
                 >
-                <!-- 退出project -->
+              </v-list-item>
+              <!-- 退出project -->
+              <v-list-item style="padding:0px 5px 0px 5px" v-else>
                 <v-btn
                   text
                   color="primary"
                   @click="quitProject()"
-                  v-else
                   style="width:120px; display:flex; justify-content:flex-start; padding:0px 10px 0px 10px"
                 >
                   Quit

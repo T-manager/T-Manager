@@ -6,9 +6,16 @@
     >
       <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
       <div
-        style="margin-left:29px; cursor:pointer; font-size:20px; color:#535353"
+        style="margin-left:18px; cursor:pointer; font-size:20px; color:#535353; display:flex; align-items:center"
         @click="gotoProjectPage"
       >
+        <v-img
+          :src="require('../assets/TmanagerLogo.svg')"
+          height="35"
+          width="35"
+          contain
+          style="margin-right:10px;"
+        ></v-img>
         T-Manager
       </div>
       <div

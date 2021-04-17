@@ -92,6 +92,7 @@ export default {
       }
 
       if (this.newPassword != this.confirmPassword) {
+        this.loading = false;
         alert("The two passwords are inconsistent");
       } else {
         this.userEdit.userPassword = this.confirmPassword;

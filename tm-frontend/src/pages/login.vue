@@ -1,74 +1,83 @@
 <template>
-  <div style="display: flex; padding: 35px">
-    <v-row justify="center">
-      <v-col cols="6">
-        <v-form v-model="valid">
-          <v-card class="userLoginCard" ref="form" outlined>
-            <v-card-title
-              >Sign in with your account<v-spacer></v-spacer>
-              <v-tooltip v-if="valid" right>
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    icon
-                    class="my-0"
-                    v-bind="attrs"
-                    @click="resetForm"
-                    v-on="on"
-                  >
-                    <v-icon>mdi-refresh</v-icon>
-                  </v-btn>
-                </template>
-                <span>Refresh form</span>
-              </v-tooltip>
-            </v-card-title>
-            <v-card-text>
-              <v-text-field
-                outlined
-                ref="userName"
-                v-model="userName"
-                :rules="[rules.required]"
-                label="Enter username"
-                color="primary"
-                style="margin-top: 8px"
-              ></v-text-field>
-              <v-text-field
-                outlined
-                ref="userPassword"
-                v-model="userPassword"
-                :rules="[rules.required]"
-                label="Enter password"
-                color="primary"
-                type="password"
-              ></v-text-field>
-              <div
-                style="width:100%; display:flex; justify-content:flex-end; margin-top:-10px;"
+  <v-container style="display:flex; justify-content:center; padding:35px; ">
+    <v-form v-model="valid">
+      <v-card class="userLoginCard" ref="form" outlined>
+        <div style="display:flex;">
+          <div style="font-size:30px; margin-left:10px; margin-bottom:30px">
+            Sign In
+          </div>
+          <v-spacer></v-spacer>
+          <v-tooltip v-if="valid" right>
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                icon
+                class="my-0"
+                v-bind="attrs"
+                @click="resetForm"
+                v-on="on"
               >
-                <forget-pwd-dialog></forget-pwd-dialog>
-              </div>
-            </v-card-text>
-            <v-card-actions>
-              <div
-                style="text-decoration:underline; color:#6271c2; cursor:pointer; margin-left:10px"
-              >
-                Help
-              </div>
-              <v-spacer></v-spacer>
+                <v-icon>mdi-refresh</v-icon>
+              </v-btn>
+            </template>
+            <span>Refresh form</span>
+          </v-tooltip>
+        </div>
+        <div style="display:flex">
+          <div style="width:300px;">
+            <v-img
+              :src="require('../assets/TmanagerLogo.svg')"
+              height="200"
+              contain
+              style="margin-right:20px"
+            ></v-img>
+            <div></div>
+          </div>
+          <div style="width:300px">
+            <v-text-field
+              outlined
+              ref="userName"
+              v-model="userName"
+              :rules="[rules.required]"
+              label="Enter username"
+              color="primary"
+              style="margin-top: 8px"
+            ></v-text-field>
+            <v-text-field
+              outlined
+              ref="userPassword"
+              v-model="userPassword"
+              :rules="[rules.required]"
+              label="Enter password"
+              color="primary"
+              type="password"
+            ></v-text-field>
+            <div
+              style="width:100%; display:flex; justify-content:flex-end; margin-top:-10px;"
+            >
+              <forget-pwd-dialog></forget-pwd-dialog>
+            </div>
+            <div style="display:flex; justify-content:center; margin-top:40px">
               <user-register-dialog></user-register-dialog>
               <v-btn
                 :disabled="!this.valid"
                 color="primary"
                 @click="submit"
                 depressed
-                style="margin-left:10px; width:100px"
+                style="margin-left:10px; width:100px; margin-left:50px"
               >
                 Sign In
               </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-form>
-      </v-col>
-    </v-row>
-  </div>
+            </div>
+          </div>
+        </div>
+        <div
+          style="text-decoration:underline; color:#6271c2; cursor:pointer; margin:20px 0px 0px 10px; width:100%; text-align:left"
+        >
+          Help
+        </div>
+      </v-card>
+    </v-form>
+  </v-container>
 </template>
 
 <script>
@@ -115,6 +124,7 @@ export default {
             this.$store.commit("set_token", res.data.data);
             alert("Login sucessfully");
             this.$router.push("/project");
+            this.$router.go(0);
           }
         })
         .catch(error => {
@@ -138,10 +148,8 @@ export default {
 </script>
 <style scoped>
 .userLoginCard {
-  min-width: 450px;
-  margin: 15px;
   justify-content: center;
   align-items: center;
-  padding: 10px 10px 0px 10px;
+  padding: 30px 35px 20px 35px;
 }
 </style>
