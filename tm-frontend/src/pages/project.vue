@@ -197,6 +197,11 @@ export default {
     }
   },
   created() {
+    if (this.$store.getters.getToken == null) {
+      alert("You are not signned in yet!");
+      var path = "/login";
+      this.$router.push({ path: path });
+    }
     this.$axios({
       method: "get",
       url:

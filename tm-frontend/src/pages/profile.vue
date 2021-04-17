@@ -2,7 +2,6 @@
   <div style="display:flex;justify-content:center;padding-top:20px">
     <UploadImg :userName="this.$store.getters.getUsername"></UploadImg>
     <div
-      v-model="valid"
       style=" margin-left:50px;display:flex;flex-direction:column;align-items:center;padding:25px;height:420px;width:900px;background-color:#ffffff;border-radius:20px"
     >
       <div
@@ -10,7 +9,6 @@
       >
         {{ !submit ? "Personal Profile" : "Edit Profile" }}
       </div>
-
       <!-- 编辑信息 -->
       <div v-if="submit" style="width:700px;">
         <v-text-field
@@ -155,6 +153,11 @@ export default {
     }
   },
   created() {
+    if (this.$store.getters.getToken == null) {
+      alert("You are not signned in yet!");
+      var path = "/login";
+      this.$router.push({ path: path });
+    }
     this.$axios({
       method: "get",
       url:

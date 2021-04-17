@@ -99,6 +99,7 @@ export default {
       alert("Log out successfully！");
       var path = "/login";
       this.$router.push({ path: path });
+      this.$router.go(0);
       return;
     }
   }

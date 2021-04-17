@@ -98,7 +98,7 @@ export default {
               text: mission.missionName,
               start_date: mission.missionStart,
               duration: mission.missionDuration,
-              progress: mission.missionProgress,              
+              progress: mission.missionProgress
             };
             var taskId = gantt.addTask(newTask);
             console.log(gantt.getTask(taskId));
@@ -127,7 +127,7 @@ export default {
               missionProgress: task.progress,
               missionName: task.text,
               missionStart: date,
-              missionDuration: task.duration,           
+              missionDuration: task.duration
             },
             headers: {
               Authorization: "Bearer " + that.$store.getters.getToken
@@ -157,7 +157,7 @@ export default {
             missionProgress: task.progress,
             missionName: task.text,
             missionStart: date,
-            missionDuration: task.duration,
+            missionDuration: task.duration
           },
           headers: {
             Authorization: "Bearer " + that.$store.getters.getToken
@@ -192,6 +192,13 @@ export default {
         });
       return true;
     });
+  },
+  created() {
+    if (this.$store.getters.getToken == null) {
+      alert("You are not signned in yet!");
+      var path = "/login";
+      this.$router.push({ path: path });
+    }
   }
 };
 </script>
