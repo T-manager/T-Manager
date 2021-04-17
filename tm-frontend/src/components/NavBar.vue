@@ -45,19 +45,9 @@
       <v-spacer></v-spacer>
       <div style="font-size:20px">{{ $store.getters.getUsername }}</div>
       <!-- <SearchingBarthird></SearchingBarthird> -->
-      <div
-        style="margin-left:25px; margin-right:15px; cursor:pointer;"
-        v-if="$store.getters.getUsername != null"
-      >
+      <div style="margin-left:25px; margin-right:15px; cursor:pointer;">
         <UserCard size="37"></UserCard>
       </div>
-      <router-link
-        to="/login"
-        v-else
-        style="text-decoration:underline; margin-right:20px; color:#6271c2; cursor:pointer"
-      >
-        Please Sign In First
-      </router-link>
     </v-card>
   </div>
 </template>
@@ -77,8 +67,7 @@ export default {
   },
   methods: {
     gotoProjectPage() {
-      if (this.$store.getters.getUsername != null)
-        this.$router.replace({ path: "/project" });
+      this.$router.replace({ path: "/project" });
     },
     gotoTodoList() {
       this.$router.replace({

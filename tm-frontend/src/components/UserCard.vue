@@ -3,7 +3,7 @@
     open-on-hover
     rounded="lg"
     nudge-bottom="57"
-    nudge-right="-85"
+    nudge-right="-130"
     close-delay="800"
   >
     <template v-slot:activator="{ on }">
@@ -19,31 +19,14 @@
       </v-avatar>
     </template>
 
-    <v-list style="padding:0px; width:120px" flat>
-      <v-list-item-group style="padding:0px">
-        <v-list-item
-          link
-          to="/login"
-          class="list_item_center"
-          v-if="$store.getters.getUsername == null"
-        >
-          Sign In
-        </v-list-item>
-        <v-list-item link to="/profile" class="list_item_center">
-          Profile
-        </v-list-item>
-        <v-list-item class="list_item_center">
-          个人日历
-        </v-list-item>
-        <v-list-item
-          @click="logout"
-          class="list_item_center"
-          v-if="$store.getters.getUsername != null"
-        >
-          Sign Out
-        </v-list-item>
-      </v-list-item-group>
-    </v-list>
+    <v-card
+      style="height:207px; width:160px; padding-top:16px; background-color:#eeeeee; display:flex; flex-direction:column"
+    >
+      <router-link to="/register">注册</router-link>
+      <router-link to="/login">登录</router-link>
+      <router-link to="/my">个人主页</router-link>
+      <div @click="logout" style="cursor:pointer;text-decoration:underline">退出登录</div>
+    </v-card>
   </v-menu>
 </template>
 
@@ -105,11 +88,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.list_item_center {
-  margin: 0px 6px 0px 6px;
-  display: flex;
-  justify-content: center;
-  border-bottom: 1px solid #cccccc;
-}
-</style>
+<style scoped></style>
