@@ -1,6 +1,5 @@
 <template>
-  <div style="padding: 35px">
-    <h2 style="text-align: center">Gantt echart</h2>
+  <div style="padding: 10px 70px 0px 70px">
     <div style="font-size: 20px; color: red" class="app-container">
       <div ref="gantt" class="left-container" />
     </div>
