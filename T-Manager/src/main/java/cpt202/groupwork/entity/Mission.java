@@ -31,7 +31,7 @@ public class Mission implements Serializable {
   private Long missionId;
 
   /**
-   * gantt的id
+   *  project的id
    */
   @Column(name = "gantt_id")
   private Integer ganttId;
@@ -61,5 +61,9 @@ public class Mission implements Serializable {
    */
   @Column(name = "mission_progress")
   private Float missionProgress;
+
+
+  @Column(name = "mission_parent")
+  private Long missionParent;
 
 }
