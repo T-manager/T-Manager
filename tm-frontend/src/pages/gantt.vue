@@ -80,7 +80,7 @@ export default {
   },
   mounted() {
     gantt.config.autofit = true;
-    gantt.config.grid_width = 600;
+    gantt.config.grid_width = 500;
     gantt.config.xml_date = "%Y-%m-%d";
     // 在时间线上增加一行年份显示
     gantt.config.subscales = [{ unit: "year", step: 1, date: "%Y" }];
@@ -120,6 +120,8 @@ export default {
 
     gantt.config.scroll_size = 20;
     gantt.config.fit_tasks = true;
+    gantt.config.buttons_left = ["gantt_delete_btn"];
+    gantt.config.buttons_right = ["gantt_save_btn", "gantt_cancel_btn"];
 
     // 初始化
     gantt.init(this.$refs.gantt);
@@ -250,7 +252,7 @@ body {
   padding: 0;
 }
 .left-container {
-  height: 600px;
+  height: 730px;
 }
 .updColor {
   background-color: #5c6bc0 !important;
@@ -289,13 +291,18 @@ body {
 .gantt_grid_head_cell.gantt_grid_head_duration.updColor {
   font: 20px Helvetica;
   color: #f1ecec;
+  padding: 5px;
+ 
 }
 .gantt_grid_head_cell.gantt_grid_head_start_date.updColor {
   font: 20px Helvetica;
   color: #f1ecec;
+  padding: 5px;
 }
 .gantt_grid_head_cell.gantt_grid_head_text.updColor {
   font: 20px Helvetica;
   color: #f1ecec;
+  padding: 5px;
 }
+
 </style>
