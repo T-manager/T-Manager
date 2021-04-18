@@ -131,6 +131,7 @@ export default {
             this.$store.commit("set_token", res.data.data);
             alert("Login sucessfully");
             this.$router.push("/project");
+            this.$router.go(0);
           }
         })
         .catch(error => {
