@@ -274,8 +274,8 @@ export default {
         })
           .then(res => {
             alert("Reset password successfully!");
-            this.$store.commit("set_username", null);
-            this.$store.commit("set_token", null);
+            this.$store.commit("del_username");
+            this.$store.commit("del_token");
             this.$router.go(0);
           })
           .catch(error => {

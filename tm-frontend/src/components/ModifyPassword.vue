@@ -80,6 +80,15 @@ export default {
   },
   props: ["userEdit"],
   methods: {
+    logout(){
+      this.$store.commit("del_token");
+      this.$store.commit("del_username");
+      this.$store.commit("del_userphoto");
+      alert("Log out successfully！");
+      var path = "/login";
+      this.$router.push({ path: path });
+      this.$router.go(0);
+    },
     checkPwdRules(v) {
       if (typeof v == "undefined") return false;
       return v.length > 0;
@@ -108,11 +117,7 @@ export default {
           data: this.userEdit
         })
           .then(res => {
-            alert("Reset password successfully!");
-            this.$store.commit("set_username", null);
-            this.$store.commit("set_token", null);
-            this.showModifyPwd = false;
-            this.$router.push("/login");
+            this.logout()
           })
           .catch(error => {
             console.log(error);
