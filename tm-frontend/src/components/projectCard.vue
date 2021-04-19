@@ -67,7 +67,7 @@
                 <v-btn
                   text
                   color="primary"
-                  @click="quitProject()"
+                  @click="showPopupMethod"
                   style="width:120px; display:flex; justify-content:flex-start; padding:0px 10px 0px 10px"
                 >
                   Quit
