@@ -46,7 +46,7 @@ public class TodoController {
 
   @PostMapping("/add")
   @Operation(summary = "通过 todolistId 和 todoCreateDTO 添加 todo")
-  public Response<?> postTodo(@Valid @RequestBody TodoDTO todoDTO) {
+  public Response<?> createTodo(@Valid @RequestBody TodoDTO todoDTO) {
 //    Optional<String> username = SecurityUtils.getCurrentUsername();
 //    if (username.isEmpty()) {
 //      return Response.unAuth();
@@ -90,7 +90,7 @@ public class TodoController {
 
   @PutMapping("/edit")
   @Operation(summary = "修改todo信息")
-  public Response<?> putTodo(@Valid @RequestBody Todo todoInfo) {
+  public Response<?> modifyTodo(@Valid @RequestBody Todo todoInfo) {
 //    Optional<String> username = SecurityUtils.getCurrentUsername();
     // 没有登陆
 //    if (username.isEmpty()) {
@@ -106,7 +106,6 @@ public class TodoController {
     todoRepository.save(todo.get());
     return Response.ok();
   }
-
 
   @PutMapping("/check/{todoId}")
   @Operation(summary = "完成Todo")

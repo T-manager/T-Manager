@@ -58,7 +58,7 @@ public class MissionController {
 
   @PostMapping("/add")
   @Operation(summary = "通过 ganttId 和 missionDTO 添加 mission")
-  public Response<?> postMission(@Valid @RequestBody MissionDTO missionDTO) {
+  public Response<?> createMission(@Valid @RequestBody MissionDTO missionDTO) {
 //    Optional<String> username = SecurityUtils.getCurrentUsername();
 //    if (username.isEmpty()) {
 //      return Response.unAuth();

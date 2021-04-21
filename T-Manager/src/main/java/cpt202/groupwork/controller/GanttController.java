@@ -56,7 +56,7 @@ public class GanttController {
 
   @PostMapping("/add")
   @Operation(summary = "通过 projectId 和 ganttDTO 添加 gantt")
-  public Response<?> postGantt(@Valid @RequestBody GanttDTO ganttDTO) {
+  public Response<?> createGantt(@Valid @RequestBody GanttDTO ganttDTO) {
     //ganttId会自动按顺序生成
 
     Gantt gantt = new Gantt();
@@ -87,7 +87,7 @@ public class GanttController {
 
   @PutMapping("/modify")
   @Operation(summary = "修改gantt信息")
-  public Response<?> putProject(@Valid @RequestBody Gantt gantt) {
+  public Response<?> modifyProject(@Valid @RequestBody Gantt gantt) {
     Optional<Gantt> ganttOld = ganttRepository.findById(gantt.getGanttId());
 
     BeanUtils.copyProperties(gantt, ganttOld.get());

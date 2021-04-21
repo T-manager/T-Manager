@@ -42,7 +42,7 @@ public class ProjectController {
 
   @PostMapping("/add")
   @Operation(summary = "add a project")
-  public Response<?> addProject(@Valid @RequestBody ProjectDTO projectDTO) {
+  public Response<?> createProject(@Valid @RequestBody ProjectDTO projectDTO) {
     Project project = new Project();
     BeanUtils.copyProperties(projectDTO, project);
     project.setProjectOwnerId(
@@ -59,7 +59,6 @@ public class ProjectController {
   @DeleteMapping("/delete/{projectId}")
   @Operation(summary = "delete a project")
   public Response<?> deleteProject(@PathVariable Integer projectId) {
-
     Optional<Project> project = projectRepository.findById(projectId);
     List<ProjectMember> pms = relationRepository.findByProjectId(projectId);
     for (ProjectMember pm : pms) {
@@ -72,7 +71,7 @@ public class ProjectController {
 
   @PutMapping("/modify")
   @Operation(summary = "modify the information of a project")
-  public Response<?> putProject(@Valid @RequestBody Project projectInfo) {
+  public Response<?> modifyProject(@Valid @RequestBody Project projectInfo) {
     Integer projectId = projectInfo.getProjectId();
     Optional<Project> project = projectRepository.findById(projectId);
     projectInfo.setProjectOwnerId(project.get().getProjectOwnerId());
