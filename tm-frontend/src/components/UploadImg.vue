@@ -17,12 +17,13 @@
       </v-fade-transition>
     </v-avatar>
     <v-dialog v-model="showUploadImg" persistent max-width="450px">
-      <div
-        style="height:500px;background-color:#FFFFFF;display:flex;flex-direction:column;align-items:center;"
+      <v-card
+        style="height:500px;background-color:#FFFFFF;display:flex;flex-direction:column;align-items:center;
+        border-radius:10px"
       >
         <div
           @click="showUploadImg = false"
-          style="display:flex;justify-content:flex-end;margin-top:5px;height:30px;width:430px"
+          style="display:flex;justify-content:flex-end;margin-top:10px;height:30px;width:430px"
         >
           <v-icon style="font-size:26px;cursor:pointer;"> mdi-close</v-icon>
         </div>
@@ -54,14 +55,15 @@
           <v-spacer></v-spacer>
           <v-btn
             depressed
+            style="border:#cccccc solid 1px; color:#777777; width:100px"
             @click="uploadImg"
             :loading="loading"
-            :disabled="loading"
+            :disabled="loading || imgFile == ''"
           >
             upload</v-btn
           >
         </div>
-      </div>
+      </v-card>
     </v-dialog>
   </div>
 </template>

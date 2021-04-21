@@ -1,28 +1,28 @@
 <template>
   <div>
-    <v-btn icon @click="showModifyPwd = true" color="primary">
-      <v-icon>mdi-key</v-icon></v-btn
-    >
+    <v-tooltip right>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn icon @click="showModifyPwd = true" color="primary" v-on="on">
+          <v-icon>mdi-key-outline</v-icon></v-btn
+        >
+      </template>
+      <span>Modify Password</span>
+    </v-tooltip>
     <v-dialog v-model="showModifyPwd" persistent max-width="600px">
-      <div
-        style="height:400px;background-color:#FFFFFF;display:flex;flex-direction:column;align-items:center;"
-      >
+      <v-card style="padding:30px 35px 50px 35px; border-radius:10px">
         <div
           @click="showModifyPwd = false"
-          style="display:flex;justify-content:flex-end;margin-top:5px;height:30px;width:570px"
+          style="display:flex;justify-content:flex-end; width:100%"
         >
           <v-icon style="font-size:26px;cursor:pointer;"> mdi-close</v-icon>
         </div>
         <div
-          style="font-size:24px;color:#101010;margin-top:-10px;width:520px;text-align:start;"
+          style="font-size:30px;color:#101010;margin-top:-10px;width:520px;text-align:start;"
         >
           Edit Password
         </div>
-        <div
-          style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%;margin-top:20px"
-        >
+        <v-card-text style="margin-top:30px; padding:10px">
           <v-text-field
-            style="margin-top:20px;width:375px;"
             outlined
             label="New password"
             v-model="newPassword"
@@ -32,35 +32,29 @@
           <v-text-field
             outlined
             label="Confirmation"
-            style="width:375px"
             v-model="confirmPassword"
             :rules="rules.required"
             type="password"
           ></v-text-field>
-        </div>
-        <div
-          class="d-flex justify-center"
-          style="font-color:#101010;font-size:16px;margin-top:39px"
-        >
+        </v-card-text>
+        <div style="display:flex; justify-content:center; margin-top:10px">
           <v-btn
-            style="margin-left:194pxl;margin-right:194px;width:94px;height:39px;border: 1px solid rgba(187,187,187,100);border-radius:10px;"
             depressed
-            outlined
+            style="border:#cccccc solid 1px; color:#777777; width:100px"
             @click="showModifyPwd = false"
             >CANCLE</v-btn
           >
-          <v-spacer></v-spacer>
           <v-btn
-            style="width:94px;height:39px;border-radius:10px"
             depressed
             color="primary"
+            style="color:#fff; width:100px; margin-left:50px"
             :loading="loading"
             :disabled="loading"
             @click="submit"
             >SUBMIT</v-btn
           >
         </div>
-      </div>
+      </v-card>
     </v-dialog>
   </div>
 </template>
