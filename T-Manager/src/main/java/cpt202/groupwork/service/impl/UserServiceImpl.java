@@ -11,11 +11,15 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import javax.annotation.Resource;
+import javax.mail.internet.MimeMessage;
 import javax.swing.text.html.Option;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +31,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-  @Autowired UserRepository userRepository;
+  @Autowired
+  UserRepository userRepository;
 
-  @Resource TokenUtils tokenUtils;
+  @Resource
+  TokenUtils tokenUtils;
+
+  @Autowired
+  private JavaMailSender mailSender;
+
+  @Value("${spring.mail.username}")
+  private String emailUserName;
+
+  //定义发送的标题
+  public static String title="[T-Manager]获取验证码";
 
   @Override
   public Response<?> userIdExists(Integer userId) {
@@ -176,6 +191,43 @@ public class UserServiceImpl implements UserService {
     } else {
       return Response.fail(2002); // Not found
     }
+  }
+
+  @Override
+  public Response<?> verificationEmailSend(User user) {
+    try {
+      String emailAddr = user.getUserEmail();
+      String body = setEmailBody(emailAddr);
+      MimeMessage mimeMessage = this.mailSender.createMimeMessage();
+      MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+      message.setFrom(emailUserName);//set Sender
+      message.setTo(emailAddr);//Set receiver
+      message.setSubject(title);  //Set title
+      message.setText(body);
+      this.mailSender.send(mimeMessage);
+    } catch (Exception e) {
+      return Response.fail();
+    }
+    return Response.ok(2000);
+  }
+  private String setEmailBody(String email){
+    //generate random verification code
+    String emailCode = randomNumBuilder();
+
+    StringBuffer body = new StringBuffer();
+    body.append("Dear user:\n\n").append("    Your verification code is:  ").append(emailCode+"\n\n");
+    body.append("    Reminder: The verificationcode will be expired after 20 minutes\n\n");
+    return body.toString();
+  }
+  public static String randomNumBuilder(){
+
+    String result = "";
+    for(int i=0;i<6;i++){
+      result += Math.round(Math.random() * 9);
+    }
+
+    return result;
+
   }
 
   @Override

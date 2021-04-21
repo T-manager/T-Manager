@@ -24,4 +24,6 @@ public interface UserService {
   Response<?> userNameExists(final String username);
 
   Response<?> userInfoCheck(final User postUser);
+
+  Response<?> verificationEmailSend(final User user);
 }
