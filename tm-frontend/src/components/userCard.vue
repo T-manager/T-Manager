@@ -10,7 +10,7 @@
       <v-avatar
         :size="size"
         v-on="on"
-        @mouseover="(showCard = true), getDetail()"
+        @mouseover="showCard = true"
         @mouseleave="showCard = false"
         @click="toUserPage"
         style="background-color:#aaaaaa"
@@ -67,7 +67,10 @@ export default {
       this.$axios({
         // 获取发起人信息
         method: "get",
-        url: this.$store.state.host + "user/" + this.user.username
+        url: this.$store.state.host + "user/" + this.user.username,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
       })
         .then(res => {
           this.user = res.data.data;
