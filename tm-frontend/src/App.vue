@@ -22,7 +22,7 @@ export default Vue.extend({
     return {};
   },
   components: {
-    NavBar
+    navBar
   }
 });
 </script>

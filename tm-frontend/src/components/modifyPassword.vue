@@ -26,7 +26,7 @@
             outlined
             label="New password"
             v-model="newPassword"
-            :rules="rules.required"
+            :rules="[rules.required, rules.validChar, rules.length]"
             type="password"
           ></v-text-field>
           <v-text-field
@@ -68,7 +68,12 @@ export default {
       confirmPassword: "",
       loading: false,
       rules: {
-        required: [v => v.length > 0 || "This item is required!"]
+        required: [v => v.length > 0 || "This item is required!"],
+        length: (value) => value.length <= 20 || "Must be less than 20 characters",
+        validChar: (value) => {
+          const pattern = /^[a-zA-Z0-9&@.$%\-_,():;` ]+$/;
+          return pattern.test(value) || "Contains illegal characters";
+        }
       }
     };
   },
