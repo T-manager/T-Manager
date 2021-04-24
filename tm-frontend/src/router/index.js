@@ -1,7 +1,6 @@
 import Vue from "vue";
 import Router from "vue-router";
 import todolist from "@/pages/todolist";
-import test from "@/pages/test";
 import login from "@/pages/login";
 import gantt from "@/pages/gantt";
 import project from "@/pages/project";
@@ -37,11 +36,6 @@ export default new Router({
       path: "/profile",
       name: "profile",
       component: profile
-    },
-    {
-      path: "/test",
-      name: "test",
-      component: test
     },
     {
       path: "/project",

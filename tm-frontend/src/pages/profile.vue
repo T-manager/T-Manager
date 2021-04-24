@@ -1,6 +1,6 @@
 <template>
   <div style="display:flex;justify-content:center;padding-top:20px">
-    <UploadImg :userName="this.$store.getters.getUsername"></UploadImg>
+    <uploadImg :userName="this.$store.getters.getUsername"></uploadImg>
     <v-card
       style="margin-left:30px; margin-top:60px; display:flex;flex-direction:column;align-items:center; padding: 30px 50px 50px 50px; 
       height:420px; width:700px; border-radius:20px; border:1px solid #ddd"
@@ -50,7 +50,7 @@
           <div style="width:200px">Password:</div>
           <div style="margin-left:30px; margin-top:5px">********</div>
           <div style="margin-left:100px;display:flex; ">
-            <ModifyPassword :userEdit="userEdit"></ModifyPassword>
+            <modifyPassword :userEdit="userEdit"></modifyPassword>
           </div>
         </div>
         <v-btn
@@ -90,8 +90,8 @@
 </template>
 
 <script>
-import ModifyPassword from "@/components/ModifyPassword";
-import UploadImg from "@/components/UploadImg";
+import modifyPassword from "@/components/modifyPassword";
+import uploadImg from "@/components/uploadImg";
 
 export default {
   data() {
@@ -118,8 +118,8 @@ export default {
     };
   },
   components: {
-    ModifyPassword,
-    UploadImg
+    modifyPassword,
+    uploadImg
   },
 
   methods: {

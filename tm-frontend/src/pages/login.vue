@@ -61,10 +61,10 @@
             <div
               style="width:100%; display:flex; justify-content:flex-end; margin-top:-10px;"
             >
-              <forget-pwd-dialog></forget-pwd-dialog>
+              <forgetPwdDialog></forgetPwdDialog>
             </div>
             <div style="display:flex; justify-content:center; margin-top:40px">
-              <user-register-dialog></user-register-dialog>
+              <userRegisterDialog></userRegisterDialog>
               <v-btn
                 :disabled="!this.valid"
                 color="primary"
@@ -88,10 +88,10 @@
 </template>
 
 <script>
-import UserRegisterDialog from "@/components/UserRegisterDialog.vue";
-import ForgetPwdDialog from "@/components/forgetPwdDialog.vue";
+import userRegisterDialog from "@/components/userRegisterDialog.vue";
+import forgetPwdDialog from "@/components/forgetPwdDialog.vue";
 export default {
-  components: { UserRegisterDialog, ForgetPwdDialog },
+  components: { userRegisterDialog, forgetPwdDialog },
   data() {
     return {
       valid: false,

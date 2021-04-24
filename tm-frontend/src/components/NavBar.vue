@@ -59,7 +59,7 @@
         style="margin-left:25px; margin-right:15px; cursor:pointer;"
         v-if="$store.getters.getUsername != null"
       >
-        <UserCard size="37"></UserCard>
+        <userCard size="37"></userCard>
       </div>
       <router-link
         to="/login"
@@ -74,11 +74,11 @@
 
 <script>
 // import SearchingBarthird from "@/components/SearchingBarthird.vue";
-import UserCard from "@/components/UserCard.vue";
+import userCard from "@/components/userCard.vue";
 export default {
   components: {
     //   SearchingBarthird,
-    UserCard
+    userCard
   },
   data() {
     return {

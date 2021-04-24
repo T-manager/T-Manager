@@ -16,19 +16,14 @@
             <v-spacer></v-spacer>
             <v-tooltip v-if="this.valid" right>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  v-bind="attrs"
-                  @click="resetForm"
-                  v-on="on"
-                >
+                <v-btn icon v-bind="attrs" @click="resetForm" v-on="on">
                   <v-icon>mdi-refresh</v-icon>
                 </v-btn>
               </template>
               <span>Refresh form</span>
             </v-tooltip>
           </div>
-             <v-card-text style="margin-top:30px; padding:10px">
+          <v-card-text style="margin-top:30px; padding:10px">
             <v-text-field
               outlined
               ref="userName"
