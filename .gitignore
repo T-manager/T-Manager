@@ -9,3 +9,4 @@ tm-frontend/node_modules/
 T-Manager/.classpath
 T-Manager/.settings/
 T-Manager/.factorypath
+/log/
