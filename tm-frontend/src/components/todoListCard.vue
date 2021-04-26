@@ -25,17 +25,19 @@
         </div>
       </div>
 
-      <v-list flat style="max-height:490px; overflow-y:auto">
+      <v-list flat>
         <!-- <v-subheader>All</v-subheader> -->
         <v-list-item-group multiple>
           <!-- 每个TODO -->
-          <div v-for="(todo, index) in todolist.todoViewDTO" :key="index">
-            <todoDetailDialog
-              @changeCompleteNum="changeCompleteNum(index)"
-              :todolistName="todolist.todolistName"
-              :todo="todo"
-              :projectName="todolist.projectName"
-            ></todoDetailDialog>
+          <div style="max-height:490px; overflow-y:auto">
+            <div v-for="(todo, index) in todolist.todoViewDTO" :key="index">
+              <todoDetailDialog
+                @changeCompleteNum="changeCompleteNum(index)"
+                :todolistName="todolist.todolistName"
+                :todo="todo"
+                :projectName="todolist.projectName"
+              ></todoDetailDialog>
+            </div>
           </div>
           <!-- add new todo -->
           <addTodoDialog :todolist="todolist"></addTodoDialog>

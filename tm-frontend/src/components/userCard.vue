@@ -15,7 +15,11 @@
         @click="toUserPage"
         style="background-color:#aaaaaa"
       >
-        <v-img src="https://picsum.photos/200"></v-img>
+        <v-img
+          :src="$store.state.host + 'auth/images/123.jpg'"
+          height="35"
+          width="35"
+        ></v-img>
       </v-avatar>
     </template>
 
@@ -33,7 +37,7 @@
           Profile
         </v-list-item>
         <v-list-item class="list_item_center">
-          个人日历
+          Calender
         </v-list-item>
         <v-list-item
           @click="logout"
