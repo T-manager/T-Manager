@@ -1,14 +1,17 @@
 package cpt202.groupwork.controller;
 
-import java.util.Optional;
+import cpt202.groupwork.service.UserService;
 
 import cpt202.groupwork.entity.User;
-import cpt202.groupwork.repository.UserRepository;
 import cpt202.groupwork.Response;
-import org.springframework.beans.factory.annotation.Autowired;
+import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,19 +20,39 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/user")
 public class UserController {
-    @Autowired
-    UserRepository userRepository;
 
-    @GetMapping("/{username}")
-    public Response<?> getUserInfo(@PathVariable Integer userId) {
-        Optional<User> user = userRepository.findById(userId);
-        if (user.isPresent()) {
-            return Response.ok("user not found");
-        }
-        else {
-            return Response.ok(user.get());
-        }
-        // 没登录的人, 去访问别人的用户主页
-    }
+  @Resource
+  private UserService userService;
+
+  @GetMapping("/get/{username}")
+  public Response<?> getUserInfo(@PathVariable String username) {
+    return userService.userGetInfoByName(username);
+  }
+
+  @PutMapping("/edit/{username}")
+  public Response<?> putUser(@PathVariable String username, @RequestBody User user) {
+    return userService.userModify(username, user);
+  }
+
+  /**
+   * @param username
+   * @return
+   */
+  @DeleteMapping("/delete/{username}")
+//    @PreAuthorize("hasRole('ADMIN')")
+  public Response<?> deleteUser(@PathVariable String username) {
+
+    return userService.userDelete(username);
+  }
+
+
+  /**
+   * @description: 发送给指定邮箱验证码
+   * @param user
+   */
+  @PostMapping("/getCode")
+  public Response<?> getEmail(@RequestBody User user) {
+    return userService.verificationEmailSend(user);
+  }
 
 }

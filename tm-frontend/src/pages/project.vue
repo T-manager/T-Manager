@@ -1,0 +1,241 @@
+<template>
+  <div style="display:flex;flex-direction:column;align-items:center ">
+    <div
+      style="display:flex; padding:35px; width:1350px; justify-content:flex-start;"
+    >
+      <v-row>
+        <!-- 已经创建的的所有项目CARD -->
+        <projectCard
+          style="margin:15px"
+          v-for="(project, index) in projects"
+          :key="index"
+          v-if="showProjects"
+          :project="project"
+        ></projectCard>
+        <!--新建项目dialog-->
+        <v-dialog v-model="dialog" persistent max-width="550px">
+          <!-- 点击加号新建项目 -->
+          <template v-slot:activator="{ on, attrs }">
+            <v-card class="plusProject">
+              <v-card-title>Click to create new project</v-card-title>
+              <v-btn icon color="primary" dark v-bind="attrs" v-on="on">
+                <v-icon large>mdi-plus</v-icon>
+              </v-btn>
+            </v-card>
+          </template>
+          <v-card style="padding: 30px 35px 50px 35px;" class="card-background">
+            <div
+              style="font-size:30px; margin-left:10px; width:100%; text-align:left"
+            >
+              <v-img></v-img>
+              Create Project
+            </div>
+            <v-card-text style="margin-top:30px; padding:10px">
+              <v-text-field
+                outlined
+                label="project name"
+                v-model="newProject.projectName"
+                required
+                :rules="rules.nameRules"
+                counter
+                hint="more than 1 and less than 20"
+              ></v-text-field>
+              <v-textarea
+                outlined
+                label="project detail"
+                v-model="newProject.projectDetail"
+                required
+                counter
+                auto-grow
+                rows="1"
+                :rules="rules.detailRules"
+                hint="less than 100"
+              ></v-textarea>
+              <v-autocomplete
+                outlined
+                :items="['personal', 'team']"
+                label="project type"
+                v-model="newProject.projectType"
+                :rules="rules.selectRules"
+              ></v-autocomplete>
+            </v-card-text>
+
+            <div style="display:flex; justify-content:center; margin-top:10px">
+              <!-- 关闭dialog -->
+              <v-btn
+                depressed
+                style="border:#cccccc solid 1px; color:#777777; width:100px"
+                @click="dialog = false"
+                :loading="loadAddProject"
+                :disabled="loadAddProject"
+              >
+                Cancel
+              </v-btn>
+              <!-- 保存dialog数据 -->
+              <v-btn
+                depressed
+                color="primary"
+                style="color:#fff; width:100px; margin-left:50px"
+                @click="addProject()"
+                :loading="loadAddProject"
+                :disabled="loadAddProject"
+              >
+                Submit
+              </v-btn>
+            </div>
+          </v-card>
+        </v-dialog>
+      </v-row>
+    </div>
+  </div>
+</template>
+
+<script>
+import projectCard from "@/components/projectCard";
+export default {
+  data: function() {
+    return {
+      dialog: false,
+      rules: {
+        nameRules: [
+          v =>
+            (typeof v != "undefined" && v.length <= 20 && v.length >= 1) ||
+            "the length of name should be 1-20"
+        ],
+        detailRules: [
+          v =>
+            (typeof v != "undefined" && v.length <= 100) ||
+            "the length of detail should less than 100"
+        ],
+        selectRules: [v => !!v || "please choose a type"]
+      },
+      showProjects: false,
+      loadAddProject: false,
+      loadAddMember: false,
+      projects: [],
+      newProject: {
+        projectName: "",
+        projectDetail: "",
+        projectOwner: this.$store.getters.getUsername,
+        projectType: ""
+      },
+      memberItem: 1,
+      items: [
+        { text: "ProjectOwmer", icon: "mdi-account" },
+        { text: "member1", icon: "mdi-account" },
+        { text: "member2", icon: "mdi-account" }
+      ]
+    };
+  },
+  methods: {
+    checkNameRules(v) {
+      if (typeof v == "undefined") return false;
+      return v.length <= 20 && v.length >= 1;
+    },
+    checkDetailRules(v) {
+      if (typeof v == "undefined") return false;
+      return v.length <= 100;
+    },
+    checkSelectRule(v) {
+      if (typeof v == "undefined" || v == "") return false;
+      return true;
+    },
+    checkRules() {
+      if (!this.checkNameRules(this.newProject.projectName)) {
+        alert("check the name");
+        return false;
+      }
+      if (!this.checkDetailRules(this.newProject.projectDetail)) {
+        alert("check the detail");
+        return false;
+      }
+      if (!this.checkSelectRule(this.newProject.projectType)) {
+        alert("check the type");
+        return false;
+      }
+
+      return true;
+    },
+    addProject() {
+      this.loadAddProject = true;
+      if (!this.checkRules()) {
+        this.loadAddProject = false;
+        return;
+      }
+      this.$axios({
+        method: "post",
+        url: this.$store.state.host + "project/add",
+        data: this.newProject,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
+      })
+        .then(res => {
+          console.log(res);
+          this.loadAddProject = false;
+          this.$router.go(0);
+        })
+        .catch(error => {
+          this.$store.commit("response", error);
+          this.loadAddProject = false;
+        });
+    }
+  },
+  created() {
+    if (this.$store.getters.getToken == null) {
+      alert("You are not signned in yet!");
+      var path = "/login";
+      this.$router.push({ path: path });
+    }
+    this.$axios({
+      method: "get",
+      url:
+        this.$store.state.host +
+        "relation/getproject/" +
+        this.$store.getters.getUsername,
+      headers: {
+        Authorization: "Bearer " + this.$store.getters.getToken
+      }
+    })
+      .then(res => {
+        console.log(res);
+        // projects
+        this.projects = res.data.data;
+        console.log(this.projects);
+        this.showProjects = true;
+      })
+      .catch(error => {
+        console.log(error);
+        this.$store.commit("response", error);
+      });
+  },
+  //props: ["project"],
+  components: {
+    projectCard
+  }
+};
+</script>
+<style scoped>
+.plusProject {
+  margin: 15px;
+  width: 400px;
+  height: 70px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0px 10px 0px 10px;
+}
+.v-card--reveal {
+  bottom: 0;
+  opacity: 1 !important;
+  position: absolute;
+  width: 100%;
+}
+.card-background {
+  background-image: url("../assets/TmanagerLogo_l5.svg");
+  /* background-image: url("../assets/TManagerLogo.png"); */
+  background-size: 520px;
+  background-repeat: no-repeat;
+  background-position: 140px -65px;
+}
+</style>
