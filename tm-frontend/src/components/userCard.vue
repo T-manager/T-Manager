@@ -16,7 +16,9 @@
         style="background-color:#aaaaaa"
       >
         <v-img
-          :src="$store.state.host + 'auth/images/123.jpg'"
+          :src="
+            $store.state.host + 'auth/images/' + $store.getters.getUserphoto
+          "
           height="35"
           width="35"
         ></v-img>
@@ -78,6 +80,7 @@ export default {
       })
         .then(res => {
           this.user = res.data.data;
+          console.log("Userinfo", this.user);
           this.showContent = true;
         })
         .catch(error => {

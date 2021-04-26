@@ -55,7 +55,7 @@ public class ResourceController {
 
     String fileName = (file.getOriginalFilename());
     String fileType = fileName.split("\\.")[fileName.split("\\.").length - 1];
-    String filePath = "../images";
+    String filePath = "./images";
     DateFormat df = new SimpleDateFormat("yyyyMMddHHmmss");
     Calendar calendar = Calendar.getInstance();
     String dateName = df.format(calendar.getTime());
@@ -77,7 +77,7 @@ public class ResourceController {
   @DeleteMapping("/delete/{fileName}")
   @ResponseBody
   public void delete(@PathVariable String fileName) {
-    String filePath = "../images";
+    String filePath = "./images";
     File path = new File(filePath);
     File file = new File(path.getAbsolutePath() + "/" + fileName);
     if (file.exists()) {

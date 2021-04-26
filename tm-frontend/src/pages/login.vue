@@ -137,8 +137,8 @@ export default {
     }
   },
   methods: {
-    login: function() {
-      this.$axios({
+    async login() {
+      await this.$axios({
         method: "post",
         url: this.$store.state.host + "auth/login",
         data: {
@@ -154,8 +154,25 @@ export default {
             this.$store.commit("set_username", this.userName);
             this.$store.commit("set_token", res.data.data);
             alert("Login sucessfully");
-            this.$router.push("/project");
-            this.$router.go(0);
+
+            this.$axios({
+              method: "get",
+              url: this.$store.state.host + "user/get/" + this.userName,
+              headers: {
+                Authorization: "Bearer " + this.$store.getters.getToken
+              }
+            })
+              .then(response => {
+                console.log("username");
+                this.$store.commit(
+                  "set_userphoto",
+                  response.data.data.userAvatar
+                );
+
+                this.$router.push("/project");
+                this.$router.go(0);
+              })
+              .catch(error => {});
           }
         })
         .catch(error => {
