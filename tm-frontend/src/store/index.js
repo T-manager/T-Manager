@@ -6,7 +6,7 @@ export default new Vuex.Store({
   state: {
     token: null,
     // host: "http://localhost:6767/api/",
-    host: "http://1.15.171.21/api/",
+    host: "http://34.96.252.120/api/",
     show: {
       showModifyTodo: false
     }
