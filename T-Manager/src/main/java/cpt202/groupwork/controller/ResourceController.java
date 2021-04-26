@@ -1,6 +1,5 @@
 package cpt202.groupwork.controller;
 
-
 import cpt202.groupwork.entity.User;
 import cpt202.groupwork.repository.UserRepository;
 import java.io.File;
@@ -38,7 +37,7 @@ public class ResourceController {
   @GetMapping("/show/{filename}")
   public String showPhotos(@PathVariable String filename) {
     try {
-      String path = "///data/www/java01/images/";
+      String path = "///home/ubuntu/CPT202/images";
       // 由于是读取本机的文件，file是一定要加上的， path是在application配置文件中的路径
       return "file:" + path + filename;
     } catch (Exception e) {
