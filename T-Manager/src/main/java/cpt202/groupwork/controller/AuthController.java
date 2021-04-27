@@ -1,5 +1,6 @@
 package cpt202.groupwork.controller;
 
+import cpt202.groupwork.entity.VerificationCode;
 import cpt202.groupwork.service.UserService;
 import cpt202.groupwork.entity.User;
 import cpt202.groupwork.Response;
@@ -55,4 +56,21 @@ public class AuthController {
   public Response<?> modifyUser(@PathVariable String username, @RequestBody User user) {
     return userService.userModify(username, user);
   }
+
+  /**
+   * @description: 发送给指定邮箱验证码
+   * @param user(必须有email)
+   */
+  @PostMapping("/codesending")
+  public Response<?> getEmail(@RequestBody User user) {
+    return userService.verificationEmailSend(user);
+  }
+
+
+  @PostMapping("/codeVerification")
+  public Response<?> verifyCode(@RequestBody VerificationCode verificationCode) {
+    return userService.verifyCode(verificationCode);
+  }
+
+
 }

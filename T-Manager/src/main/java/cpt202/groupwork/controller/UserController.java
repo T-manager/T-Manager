@@ -41,18 +41,7 @@ public class UserController {
   @DeleteMapping("/delete/{username}")
 //    @PreAuthorize("hasRole('ADMIN')")
   public Response<?> deleteUser(@PathVariable String username) {
-
     return userService.userDelete(username);
-  }
-
-
-  /**
-   * @description: 发送给指定邮箱验证码
-   * @param user
-   */
-  @PostMapping("/getCode")
-  public Response<?> getEmail(@RequestBody User user) {
-    return userService.verificationEmailSend(user);
   }
 
 }

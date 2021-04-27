@@ -1,18 +1,20 @@
 package cpt202.groupwork.service.impl;
 
 
-import cpt202.groupwork.controller.UserController;
 import cpt202.groupwork.Response;
-import cpt202.groupwork.repository.UserRepository;
 import cpt202.groupwork.entity.User;
+import cpt202.groupwork.entity.VerificationCode;
+import cpt202.groupwork.repository.UserRepository;
+import cpt202.groupwork.repository.VerifyRepository;
 import cpt202.groupwork.security.TokenUtils;
 import cpt202.groupwork.service.UserService;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import javax.annotation.Resource;
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.swing.text.html.Option;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -33,6 +35,8 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   UserRepository userRepository;
+  @Autowired
+  VerifyRepository verifyRepository;
 
   @Resource
   TokenUtils tokenUtils;
@@ -195,9 +199,35 @@ public class UserServiceImpl implements UserService {
 
   @Override
   public Response<?> verificationEmailSend(User user) {
-    try {
-      String emailAddr = user.getUserEmail();
-      String body = setEmailBody(emailAddr);
+    String emailCode = randomNumBuilder();
+    Date current=new Date();
+    long time = 30*60*1000;//30minutes
+    if(user.getUserEmail()==null){
+      return Response.fail("Need email");
+    }
+    if(verifyRepository.existsByUserEmail(user.getUserEmail())){
+      return Response.fail("Email exist");
+    }
+    Optional<VerificationCode> verification=verifyRepository.findByUserEmail(user.getUserEmail());
+    verification.ifPresent(verificationCode -> verifyRepository.delete(verificationCode));
+
+    Date afterDate = new Date(current.getTime() + 300000);
+    VerificationCode verificationEmail=new VerificationCode();
+    verificationEmail.setUserEmail(user.getUserEmail());
+    verificationEmail.setVerifyPassword(emailCode);
+    verificationEmail.setExpireTime(afterDate);
+    verifyRepository.save(verificationEmail);
+
+    if(generateCodeandSend(emailCode, user.getUserEmail())){
+      return Response.ok();
+    }
+    else {
+      return Response.fail("Send email fail");
+    }
+  }
+  public boolean generateCodeandSend(String emailCode, String emailAddr){
+    try{
+      String body = setEmailBody(emailCode);
       MimeMessage mimeMessage = this.mailSender.createMimeMessage();
       MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
       message.setFrom(emailUserName);//set Sender
@@ -205,29 +235,46 @@ public class UserServiceImpl implements UserService {
       message.setSubject(title);  //Set title
       message.setText(body);
       this.mailSender.send(mimeMessage);
-    } catch (Exception e) {
-      return Response.fail();
+    } catch(Exception e){
+      return false;
     }
-    return Response.ok(2000);
+    return true;
   }
-  private String setEmailBody(String email){
-    //generate random verification code
-    String emailCode = randomNumBuilder();
 
+  @Override
+  public Response<?> verifyCode(VerificationCode verificationCode) {
+    Optional<VerificationCode> verification;
+    try{
+      verification=verifyRepository.findByUserEmail(verificationCode.getUserEmail());
+    }catch (Exception e) {
+      return Response.fail("No verification code");
+    }
+    if(!verification.isPresent()){
+      return Response.fail("No verification code");
+    }
+    Date current=new Date();
+    if(current.after(verification.get().getExpireTime())){
+      verifyRepository.delete(verification.get());
+      return Response.fail("Verification code expire");
+    }
+    if(!verificationCode.getVerifyPassword().equals(verification.get().getVerifyPassword())){
+      return Response.fail("Wrong Verification code");
+    }
+    return Response.ok("Verify successful");
+  }
+
+  private String setEmailBody(String emailCode){
     StringBuffer body = new StringBuffer();
     body.append("Dear user:\n\n").append("    Your verification code is:  ").append(emailCode+"\n\n");
-    body.append("    Reminder: The verificationcode will be expired after 20 minutes\n\n");
+    body.append("    Reminder: The verificationcode will be expired after 30 minutes\n\n");
     return body.toString();
   }
   public static String randomNumBuilder(){
-
     String result = "";
     for(int i=0;i<6;i++){
       result += Math.round(Math.random() * 9);
     }
-
     return result;
-
   }
 
   @Override
