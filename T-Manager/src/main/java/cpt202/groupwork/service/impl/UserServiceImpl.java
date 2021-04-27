@@ -205,9 +205,6 @@ public class UserServiceImpl implements UserService {
     if(user.getUserEmail()==null){
       return Response.fail("Need email");
     }
-    if(verifyRepository.existsByUserEmail(user.getUserEmail())){
-      return Response.fail("Email exist");
-    }
     Optional<VerificationCode> verification=verifyRepository.findByUserEmail(user.getUserEmail());
     verification.ifPresent(verificationCode -> verifyRepository.delete(verificationCode));
 
@@ -219,10 +216,10 @@ public class UserServiceImpl implements UserService {
     verifyRepository.save(verificationEmail);
 
     if(generateCodeandSend(emailCode, user.getUserEmail())){
-      return Response.ok();
+      return Response.ok(3000); // ok
     }
     else {
-      return Response.fail("Send email fail");
+      return Response.fail(3001); // fail to send email
     }
   }
   public boolean generateCodeandSend(String emailCode, String emailAddr){

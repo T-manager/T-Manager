@@ -64,16 +64,63 @@
             </v-btn>
             <v-btn
               :disabled="!this.valid"
+              :loading="loading"
               color="primary"
-              @click="submit"
+              @click="getVerifyCode"
               style="color: #fff; width: 100px"
               depressed
             >
-              Sign Up
+              NEXT
             </v-btn>
           </div>
         </v-card>
       </v-form>
+    </v-dialog>
+    <v-dialog v-model="showVerifyCode" persistent max-width="500px">
+      <v-row no-gutters>
+        <v-col cols="12">
+          <v-form v-model="valid">
+            <v-card ref="form">
+              <v-card-title
+                >Input the code recieved from your E-mail</v-card-title
+              >
+              <v-card-text>
+                <v-text-field
+                  outlined
+                  ref="userVerifyCode"
+                  v-model="userVerifyCode"
+                  :rules="[rules.required, rules.code]"
+                  label="Enter verification code"
+                  color="primary"
+                  style="margin-top: 8px"
+                ></v-text-field>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn text @click="cancel"> Cancel </v-btn>
+                <v-spacer></v-spacer>
+                <div
+                  style="
+                    text-decoration: underline;
+                    color: #6271c2;
+                    cursor: pointer;
+                  "
+                  @click="getVerifyCode"
+                >
+                  Resend code
+                </div>
+                <v-spacer></v-spacer>
+                <v-btn
+                  :disabled="!this.valid"
+                  color="primary"
+                  @click="checkVerifyCode"
+                >
+                  SIGN UP
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-form>
+        </v-col>
+      </v-row>
     </v-dialog>
   </div>
 </template>
@@ -83,10 +130,13 @@ export default {
   data() {
     return {
       valid: false,
+      loading: false,
       showRegisterDialog: false,
+      showVerifyCode: false,
       userName: "",
       userPassword: "",
       userEmail: "",
+      userVerifyCode: "",
       rules: {
         required: (value) => value.length > 0 || "This field is required.",
         email: (value) => {
@@ -98,6 +148,10 @@ export default {
         validChar: (value) => {
           const pattern = /^[a-zA-Z0-9&@.$%\-_,():;` ]+$/;
           return pattern.test(value) || "Contains illegal characters";
+        },
+        code: (value) => {
+          const pattern = /^\d{6}$/;
+          return pattern.test(value) || "6 digits only";
         },
       },
       userNameErr: [],
@@ -119,7 +173,8 @@ export default {
         url: this.$store.state.host + "auth/check?username=" + val,
       })
         .then((res) => {
-          this.userNameErr = res.data.data == 2000 ? ["Username already exists"]:[];
+          this.userNameErr =
+            res.data.data == 2000 ? ["Username already exists"] : [];
         })
         .catch((error) => {
           console.log(error);
@@ -153,12 +208,64 @@ export default {
         this.$refs[f].reset();
       });
     },
+    getVerifyCode: async function () {
+      this.loading = true;
+      this.$axios({
+        method: "post",
+        url: this.$store.state.host + "auth/codesending",
+        data: {
+          userName: this.userName,
+          userEmail: this.userEmail,
+        },
+      })
+        .then((res) => {
+          if (res.data.data == 3000) {
+            this.loading = false;
+            this.showRegisterDialog = false;
+            this.showVerifyCode = true;
+          } else {
+            alert("Email failed to send");
+            this.userEmail = null;
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    checkVerifyCode: async function () {
+      this.$axios({
+        method: "post",
+        url: this.$store.state.host + "auth/codeVerification",
+        data: {
+          userName: this.userName,
+          userEmail: this.userEmail,
+          verifyPassword: this.userVerifyCode,
+        },
+      })
+        .then((res) => {
+          if (res.data.data == "Verify successful") {
+            this.submit();
+          } else {
+            alert(res.data.message);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    },
     submit() {
       this.addNewUser();
-      this.showRegisterDialog = false;
+      this.cancel();
     },
     cancel() {
-      this.showRegisterDialog = false;
+      this.valid= false,
+      this.loading= false,
+      this.showRegisterDialog= false,
+      this.showVerifyCode=false,
+      this.userName= "",
+      this.userPassword= "",
+      this.userEmail= "",
+      this.userVerifyCode= ""
     },
   },
   watch: {

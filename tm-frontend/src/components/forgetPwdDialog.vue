@@ -1,7 +1,7 @@
 <template>
   <div>
     <div
-      style="text-decoration:underline; color:#6271c2; cursor:pointer"
+      style="text-decoration: underline; color: #6271c2; cursor: pointer"
       @click="showBeginReset = true"
     >
       Forget password?
@@ -63,6 +63,53 @@
                   :disabled="!this.valid"
                   color="primary"
                   @click="checkUserInfo"
+                  :loading="loading"
+                >
+                  NEXT
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-form>
+        </v-col>
+      </v-row>
+    </v-dialog>
+    <v-dialog v-model="showVerifyCode" persistent max-width="500px">
+      <v-row no-gutters>
+        <v-col cols="12">
+          <v-form v-model="valid">
+            <v-card ref="form">
+              <v-card-title
+                >Input the code recieved from your E-mail</v-card-title
+              >
+              <v-card-text>
+                <v-text-field
+                  outlined
+                  ref="userVerifyCode"
+                  v-model="userVerifyCode"
+                  :rules="[rules.required, rules.code]"
+                  label="Enter verification code"
+                  color="primary"
+                  style="margin-top: 8px"
+                ></v-text-field>
+              </v-card-text>
+              <v-card-actions>
+                <v-btn text @click="cancel"> Cancel </v-btn>
+                <v-spacer></v-spacer>
+                <div
+                  style="
+                    text-decoration: underline;
+                    color: #6271c2;
+                    cursor: pointer;
+                  "
+                  @click="getVerifyCode"
+                >
+                  Resend code
+                </div>
+                <v-spacer></v-spacer>
+                <v-btn
+                  :disabled="!this.valid"
+                  color="primary"
+                  @click="checkVerifyCode"
                 >
                   NEXT
                 </v-btn>
@@ -173,46 +220,58 @@ export default {
       valid: false,
       showBeginReset: false,
       showVerifyInfo: false,
+      showVerifyCode: false,
       showModifyPwd: false,
       userName: null,
       userEmail: null,
       userPassword: null,
+      userVerifyCode: null,
       newPassword: "",
       confirmPassword: "",
       loading: false,
       rules: {
-        required: value => !!value || "This field is required.",
-        email: value => {
+        required: (value) => !!value || "This field is required.",
+        email: (value) => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || "Invalid e-mail.";
-        }
-      }
+        },
+        code: (value) => {
+          const pattern = /^\d{6}$/;
+          return pattern.test(value) || "6 digits only";
+        },
+      },
     };
   },
   methods: {
-    cancel: function() {
+    cancel: function () {
       this.userName = "";
       this.userEmail = "";
+      this.userVerifyCode = "";
       this.confirmPassword = "";
       this.newPassword = "";
       this.showBeginReset = false;
       this.showVerifyInfo = false;
+      this.showVerifyCode = false;
       this.showModifyPwd = false;
     },
-    next1: function() {
+    next1: function () {
       this.showBeginReset = false;
       this.showVerifyInfo = true;
     },
-    next2: function() {
+    next2: function () {
       this.showVerifyInfo = false;
+      this.showVerifyCode = true;
+    },
+    next3: function () {
+      this.showVerifyCode = false;
       this.showModifyPwd = true;
     },
-    checkExistUser: async function() {
+    checkExistUser: async function () {
       this.$axios({
         method: "get",
-        url: this.$store.state.host + "auth/check?username=" + this.userName
+        url: this.$store.state.host + "auth/check?username=" + this.userName,
       })
-        .then(res => {
+        .then((res) => {
           if (res.data.data == 2000) {
             this.next1();
           } else {
@@ -220,28 +279,72 @@ export default {
             this.userName = null;
           }
         })
-        .catch(error => {
+        .catch((error) => {
           console.log(error);
         });
     },
-    checkUserInfo: async function() {
+    checkUserInfo: async function () {
+      (this.loading = true),
+        this.$axios({
+          method: "post",
+          url: this.$store.state.host + "auth/check",
+          data: {
+            userName: this.userName,
+            userEmail: this.userEmail,
+          },
+        })
+          .then((res) => {
+            if (res.data.data == 2000) {
+              this.getVerifyCode();
+            } else {
+              alert("Email not match");
+              this.userEmail = null;
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    },
+    getVerifyCode: async function () {
       this.$axios({
         method: "post",
-        url: this.$store.state.host + "auth/check",
+        url: this.$store.state.host + "auth/codesending",
         data: {
           userName: this.userName,
-          userEmail: this.userEmail
-        }
+          userEmail: this.userEmail,
+        },
       })
-        .then(res => {
-          if (res.data.data == 2000) {
+        .then((res) => {
+          if (res.data.data == 3000) {
+            this.loading = false;
             this.next2();
           } else {
-            alert("Email not match");
+            alert("Email failed to send");
             this.userEmail = null;
           }
         })
-        .catch(error => {
+        .catch((error) => {
+          console.log(error);
+        });
+    },
+    checkVerifyCode: async function () {
+      this.$axios({
+        method: "post",
+        url: this.$store.state.host + "auth/codeVerification",
+        data: {
+          userName: this.userName,
+          userEmail: this.userEmail,
+          verifyPassword: this.userVerifyCode,
+        },
+      })
+        .then((res) => {
+          if (res.data.data == "Verify successful") {
+            this.next3();
+          } else {
+            alert(res.data.message);
+          }
+        })
+        .catch((error) => {
           console.log(error);
         });
     },
@@ -269,23 +372,23 @@ export default {
             this.userName,
           data: {
             userName: this.userName,
-            userPassword: this.userPassword
-          }
+            userPassword: this.userPassword,
+          },
         })
-          .then(res => {
+          .then((res) => {
             alert("Reset password successfully!");
             this.$store.commit("del_username");
             this.$store.commit("del_token");
             this.$router.go(0);
           })
-          .catch(error => {
+          .catch((error) => {
             console.log(error);
             //   this.$store.commit("response", error);
             this.loading = false;
           });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
