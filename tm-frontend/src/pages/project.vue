@@ -4,7 +4,7 @@
       style="display:flex; padding:35px; width:1350px; justify-content:flex-start;"
     >
       <v-row>
-        <!-- 已经创建的的所有项目CARD -->
+        <!-- Card for all the projects that have been created -->
         <projectCard
           style="margin:15px"
           v-for="(project, index) in projects"
@@ -12,9 +12,9 @@
           v-if="showProjects"
           :project="project"
         ></projectCard>
-        <!--新建项目dialog-->
+        <!--Dialog for creating a new project-->
         <v-dialog v-model="dialog" persistent max-width="550px">
-          <!-- 点击加号新建项目 -->
+          <!-- Plus icon to create a new project -->
           <template v-slot:activator="{ on, attrs }">
             <v-card class="plusProject">
               <v-card-title>Click to create new project</v-card-title>
@@ -61,7 +61,7 @@
             </v-card-text>
 
             <div style="display:flex; justify-content:center; margin-top:10px">
-              <!-- 关闭dialog -->
+              <!-- Close the dialog -->
               <v-btn
                 depressed
                 style="border:#cccccc solid 1px; color:#777777; width:100px"
@@ -71,7 +71,7 @@
               >
                 Cancel
               </v-btn>
-              <!-- 保存dialog数据 -->
+              <!-- Button to save dialog data -->
               <v-btn
                 depressed
                 color="primary"
@@ -140,6 +140,7 @@ export default {
       if (typeof v == "undefined" || v == "") return false;
       return true;
     },
+    /**Form validation*/
     checkRules() {
       if (!this.checkNameRules(this.newProject.projectName)) {
         alert("check the name");
@@ -156,6 +157,7 @@ export default {
 
       return true;
     },
+    /**create a project*/
     addProject() {
       this.loadAddProject = true;
       if (!this.checkRules()) {
@@ -181,11 +183,13 @@ export default {
     }
   },
   created() {
+    /**check if the user has logged in*/
     if (this.$store.getters.getToken == null) {
       alert("You are not signned in yet!");
       var path = "/login";
       this.$router.push({ path: path });
     }
+    /**get all projects belongs to the user*/
     this.$axios({
       method: "get",
       url:
@@ -205,7 +209,6 @@ export default {
         this.$store.commit("response", error);
       });
   },
-  //props: ["project"],
   components: {
     projectCard
   }

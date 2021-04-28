@@ -123,6 +123,7 @@ export default {
   },
 
   methods: {
+    /** Modify personal information*/
     async editProfile() {
       this.loading = true;
       await this.$axios({
@@ -164,6 +165,7 @@ export default {
       var path = "/login";
       this.$router.push({ path: path });
     }
+    /** get personal information for a specific user*/
     this.$axios({
       method: "get",
       url:

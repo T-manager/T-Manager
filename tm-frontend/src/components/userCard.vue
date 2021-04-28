@@ -6,6 +6,7 @@
     nudge-right="-85"
     close-delay="800"
   >
+    <!-- The user avatar on the Navbar -->
     <template v-slot:activator="{ on }">
       <v-avatar
         :size="size"
@@ -25,6 +26,7 @@
       </v-avatar>
     </template>
 
+    <!-- Menu that appears when you hover over the Avatar -->
     <v-list style="padding:0px; width:120px" flat>
       <v-list-item-group style="padding:0px">
         <v-list-item
@@ -66,12 +68,12 @@ export default {
   },
   props: ["size"],
   methods: {
+    /**get personal information for a specific user*/
     getDetail() {
       this.user.username = this.$store.getters.getUsername;
       if (this.user.username == null) return;
       this.showContent = false;
       this.$axios({
-        // 获取发起人信息
         method: "get",
         url: this.$store.state.host + "user/" + this.user.username,
         headers: {
@@ -92,6 +94,7 @@ export default {
         path: "/user"
       });
     },
+    /** go to user profile page*/
     toUserPage() {
       if (this.user.username != null) {
         var path = "/profile";
@@ -100,6 +103,7 @@ export default {
         this.$store.state.show.showLogin = true;
       }
     },
+    /**user logout*/
     logout() {
       this.$store.commit("del_token");
       this.$store.commit("del_username");
