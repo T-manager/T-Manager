@@ -44,8 +44,14 @@ public class TodoController {
   @Autowired
   UserRepository userRepository;
 
+  /**
+   * Upload a todo
+   *
+   * @param todoDTO, the name of user who is current uploding the file
+   * @return filename, including filetype
+   */
   @PostMapping("/add")
-  @Operation(summary = "通过 todolistId 和 todoCreateDTO 添加 todo")
+  @Operation(summary = "Add todo with todoListId and todoCreateDTO")
   public Response<?> createTodo(@Valid @RequestBody TodoDTO todoDTO) {
 //    Optional<String> username = SecurityUtils.getCurrentUsername();
 //    if (username.isEmpty()) {

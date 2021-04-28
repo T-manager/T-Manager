@@ -30,26 +30,33 @@ public class ResourceController {
   UserRepository userRepository;
 
   /**
-   * 显示单张图片
+   * Displays a single image
    *
-   * @return
+   * @param filename, the full name of image file, including the name and file type
+   * @return path and filename
    */
   @GetMapping("/show/{filename}")
   public String showPhotos(@PathVariable String filename) {
     try {
       String path = "///home/ubuntu/images/";
-      // 由于是读取本机的文件，file是一定要加上的， path是在application配置文件中的路径
+      // Since you are reading files from the native, file must be added, and path is the path in the application configuration file
       return "file:" + path + filename;
     } catch (Exception e) {
       return "fail";
     }
   }
 
+  /**
+   * Upload a single image
+   *
+   * @param username, the name of user who is current uploding the file
+   * @return filename, including filetype
+   */
   @PostMapping("/upload/{username}")
   @ResponseBody
   public String upload(@PathVariable String username, @RequestParam("file") MultipartFile file) {
     if (file.isEmpty()) {
-      return "上传失败，请选择文件";
+      return "Upload failed, please select file";
     }
     Optional<User> user = userRepository.findByUserName(username);
 
@@ -71,9 +78,14 @@ public class ResourceController {
       return dateName + "." + fileType;
     } catch (IOException e) {
     }
-    return "上传失败！";
+    return "Upload failed!";
   }
 
+  /**
+   * Delete a single image
+   *
+   * @param filename, including the name and file type
+   */
   @DeleteMapping("/delete/{fileName}")
   @ResponseBody
   public void delete(@PathVariable String fileName) {
