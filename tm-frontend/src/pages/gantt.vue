@@ -17,15 +17,15 @@ export default {
       projectId: 0,
       tasks: {
         data: [],
-        links: [],
-      },
+        links: []
+      }
     };
   },
   methods: {
     updateMission() {
       //update mission
       var that = this;
-      gantt.attachEvent("onAfterTaskUpdate", function (id, task) {
+      gantt.attachEvent("onAfterTaskUpdate", function(id, task) {
         // alert("has updated!");
         var formatFunc = gantt.date.date_to_str("%Y-%m-%d %H:%m:%s");
         var date = formatFunc(task.start_date); // date format
@@ -40,16 +40,16 @@ export default {
               missionName: task.text,
               missionStart: date,
               missionDuration: task.duration,
-              missionParent: task.parent,
+              missionParent: task.parent
             },
             headers: {
-              Authorization: "Bearer " + that.$store.getters.getToken,
-            },
+              Authorization: "Bearer " + that.$store.getters.getToken
+            }
           })
-          .then((res) => {
+          .then(res => {
             // console.log("edit", res, task.id);
           })
-          .catch((error) => {
+          .catch(error => {
             that.$store.commit("response", error);
             //this.loadAddTodoList = false;
           });
@@ -57,26 +57,26 @@ export default {
     },
     deleteMission() {
       var that = this;
-      gantt.attachEvent("onBeforeTaskDelete", function (id, item) {
+      gantt.attachEvent("onBeforeTaskDelete", function(id, item) {
         // console.log(gantt.getTask(id).id);
         that
           .$axios({
             method: "delete",
             url: that.$store.state.host + "mission/delete/" + id,
             headers: {
-              Authorization: "Bearer " + that.$store.getters.getToken,
-            },
+              Authorization: "Bearer " + that.$store.getters.getToken
+            }
           })
-          .then((res) => {
+          .then(res => {
             // console.log("delete", res, id);
             //that.$router.go(0);
           })
-          .catch((error) => {
+          .catch(error => {
             that.$store.commit("response", error);
           });
         return true;
       });
-    },
+    }
   },
   mounted() {
     gantt.config.autofit = true;
@@ -84,7 +84,7 @@ export default {
     gantt.config.xml_date = "%Y-%m-%d";
     // 在时间线上增加一行年份显示
     gantt.config.subscales = [{ unit: "year", step: 1, date: "%Y" }];
-    gantt.templates.grid_header_class = function (columnName, column) {
+    gantt.templates.grid_header_class = function(columnName, column) {
       // console.log(columnName)
       // console.log(column)
       return "updColor";
@@ -94,7 +94,7 @@ export default {
       $.post(
         "${ctx}/ganttlinks/ganttLinks/delete",
         e,
-        function (json) {
+        function(json) {
           // console.log(json.status);
         },
         "json"
@@ -109,14 +109,12 @@ export default {
         label: "Mission name",
         width: "*",
         tree: true,
-        resize: true,
+        resize: true
       },
       { name: "start_date", label: "Start time", align: "center", width: 90 },
       { name: "duration", label: "Duration", align: "center" },
-      { name: "add", label: "", width: 44 },
+      { name: "add", label: "", width: 44 }
     ];
-
-  
 
     gantt.config.scroll_size = 20;
     gantt.config.fit_tasks = true;
@@ -134,10 +132,10 @@ export default {
       method: "get",
       url: this.$store.state.host + "gantt/get/" + this.projectId,
       headers: {
-        Authorization: "Bearer " + this.$store.getters.getToken,
-      },
+        Authorization: "Bearer " + this.$store.getters.getToken
+      }
     })
-      .then((res) => {
+      .then(res => {
         // console.log("get all", res);
         if (res.data.data.length == 0) this.gantt = {};
         else {
@@ -151,7 +149,7 @@ export default {
               start_date: mission.missionStart,
               duration: mission.missionDuration,
               progress: mission.missionProgress,
-              parent: mission.missionParent,
+              parent: mission.missionParent
             };
             var taskId = gantt.addTask(newTask);
             // console.log(gantt.getTask(taskId));
@@ -160,13 +158,13 @@ export default {
           }
         }
       })
-      .catch((error) => {
+      .catch(error => {
         this.$store.commit("response", error);
       });
 
     var that = this;
     //add mission
-    gantt.attachEvent("onLightboxSave", function (id, task, is_new) {
+    gantt.attachEvent("onLightboxSave", function(id, task, is_new) {
       if (is_new) {
         var formatFunc = gantt.date.date_to_str("%Y-%m-%d %H:%m:%s");
         var date = formatFunc(task.start_date); // date format
@@ -181,28 +179,25 @@ export default {
               missionName: task.text,
               missionStart: date,
               missionDuration: task.duration,
-              missionParent: task.parent,
+              missionParent: task.parent
             },
             headers: {
-              Authorization: "Bearer " + that.$store.getters.getToken,
-            },
+              Authorization: "Bearer " + that.$store.getters.getToken
+            }
           })
-          .then((res) => {
-             console.log("add", res, task.id);
-
-          })
-          .catch((error) => {
+          .then(res => {})
+          .catch(error => {
             that.$store.commit("response", error);
           });
       }
       return true;
     });
     //drag child mission
-    gantt.attachEvent("onTaskDrag", function (id, mode, task, original) {
+    gantt.attachEvent("onTaskDrag", function(id, mode, task, original) {
       var modes = gantt.config.drag_mode;
       if (mode == modes.move) {
         var diff = task.start_date - original.start_date;
-        gantt.eachTask(function (child) {
+        gantt.eachTask(function(child) {
           child.start_date = new Date(+child.start_date + diff);
           child.end_date = new Date(+child.end_date + diff);
           gantt.refreshTask(child.id, true);
@@ -210,15 +205,15 @@ export default {
       }
     });
     //rounds positions of the child items to scale
-    gantt.attachEvent("onAfterTaskDrag", function (id, mode, e) {
+    gantt.attachEvent("onAfterTaskDrag", function(id, mode, e) {
       var modes = gantt.config.drag_mode;
       if (mode == modes.move) {
         var state = gantt.getState();
-        gantt.eachTask(function (child) {
+        gantt.eachTask(function(child) {
           child.start_date = gantt.roundDate({
             date: child.start_date,
             unit: state.scale_unit,
-            step: state.scale_step,
+            step: state.scale_step
           });
           child.end_date = gantt.calculateEndDate(
             child.start_date,
@@ -240,7 +235,7 @@ export default {
       var path = "/login";
       this.$router.push({ path: path });
     }
-  },
+  }
 };
 </script>
 
@@ -292,7 +287,6 @@ body {
   font: 20px Helvetica;
   color: #f1ecec;
   padding: 5px;
- 
 }
 .gantt_grid_head_cell.gantt_grid_head_start_date.updColor {
   font: 20px Helvetica;
@@ -304,5 +298,4 @@ body {
   color: #f1ecec;
   padding: 5px;
 }
-
 </style>

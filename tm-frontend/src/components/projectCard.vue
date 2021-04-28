@@ -150,7 +150,6 @@ export default {
       this.showPopup = !this.showPopup;
     },
     quitProject() {
-      console.log("quit");
       this.$axios({
         method: "delete",
         url:

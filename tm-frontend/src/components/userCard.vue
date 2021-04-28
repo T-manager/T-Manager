@@ -80,7 +80,7 @@ export default {
       })
         .then(res => {
           this.user = res.data.data;
-          console.log("Userinfo", this.user);
+          // console.log("Userinfo", this.user);
           this.showContent = true;
         })
         .catch(error => {
@@ -93,8 +93,6 @@ export default {
       });
     },
     toUserPage() {
-      console.log("user");
-      console.log(this.user);
       if (this.user.username != null) {
         var path = "/profile";
         this.$router.push({ path: path });

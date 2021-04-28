@@ -230,20 +230,20 @@ export default {
       confirmPassword: "",
       loading: false,
       rules: {
-        required: (value) => !!value || "This field is required.",
-        email: (value) => {
+        required: value => !!value || "This field is required.",
+        email: value => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || "Invalid e-mail.";
         },
-        code: (value) => {
+        code: value => {
           const pattern = /^\d{6}$/;
           return pattern.test(value) || "6 digits only";
-        },
-      },
+        }
+      }
     };
   },
   methods: {
-    cancel: function () {
+    cancel: function() {
       this.userName = "";
       this.userEmail = "";
       this.userVerifyCode = "";
@@ -254,24 +254,24 @@ export default {
       this.showVerifyCode = false;
       this.showModifyPwd = false;
     },
-    next1: function () {
+    next1: function() {
       this.showBeginReset = false;
       this.showVerifyInfo = true;
     },
-    next2: function () {
+    next2: function() {
       this.showVerifyInfo = false;
       this.showVerifyCode = true;
     },
-    next3: function () {
+    next3: function() {
       this.showVerifyCode = false;
       this.showModifyPwd = true;
     },
-    checkExistUser: async function () {
+    checkExistUser: async function() {
       this.$axios({
         method: "get",
-        url: this.$store.state.host + "auth/check?username=" + this.userName,
+        url: this.$store.state.host + "auth/check?username=" + this.userName
       })
-        .then((res) => {
+        .then(res => {
           if (res.data.data == 2000) {
             this.next1();
           } else {
@@ -279,21 +279,21 @@ export default {
             this.userName = null;
           }
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(error => {
+          // console.log(error);
         });
     },
-    checkUserInfo: async function () {
+    checkUserInfo: async function() {
       (this.loading = true),
         this.$axios({
           method: "post",
           url: this.$store.state.host + "auth/check",
           data: {
             userName: this.userName,
-            userEmail: this.userEmail,
-          },
+            userEmail: this.userEmail
+          }
         })
-          .then((res) => {
+          .then(res => {
             if (res.data.data == 2000) {
               this.getVerifyCode();
             } else {
@@ -301,20 +301,20 @@ export default {
               this.userEmail = null;
             }
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(error => {
+            // console.log(error);
           });
     },
-    getVerifyCode: async function () {
+    getVerifyCode: async function() {
       this.$axios({
         method: "post",
         url: this.$store.state.host + "auth/codesending",
         data: {
           userName: this.userName,
-          userEmail: this.userEmail,
-        },
+          userEmail: this.userEmail
+        }
       })
-        .then((res) => {
+        .then(res => {
           if (res.data.data == 3000) {
             this.loading = false;
             this.next2();
@@ -323,29 +323,29 @@ export default {
             this.userEmail = null;
           }
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(error => {
+          // console.log(error);
         });
     },
-    checkVerifyCode: async function () {
+    checkVerifyCode: async function() {
       this.$axios({
         method: "post",
         url: this.$store.state.host + "auth/codeVerification",
         data: {
           userName: this.userName,
           userEmail: this.userEmail,
-          verifyPassword: this.userVerifyCode,
-        },
+          verifyPassword: this.userVerifyCode
+        }
       })
-        .then((res) => {
+        .then(res => {
           if (res.data.data == "Verify successful") {
             this.next3();
           } else {
             alert(res.data.message);
           }
         })
-        .catch((error) => {
-          console.log(error);
+        .catch(error => {
+          // console.log(error);
         });
     },
     checkPwdRules(v) {
@@ -372,23 +372,23 @@ export default {
             this.userName,
           data: {
             userName: this.userName,
-            userPassword: this.userPassword,
-          },
+            userPassword: this.userPassword
+          }
         })
-          .then((res) => {
+          .then(res => {
             alert("Reset password successfully!");
             this.$store.commit("del_username");
             this.$store.commit("del_token");
             this.$router.go(0);
           })
-          .catch((error) => {
-            console.log(error);
+          .catch(error => {
+            // console.log(error);
             //   this.$store.commit("response", error);
             this.loading = false;
           });
       }
-    },
-  },
+    }
+  }
 };
 </script>
 

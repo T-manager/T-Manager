@@ -78,13 +78,11 @@ export default {
         })
           .then(res => {
             this.showMenber = true;
-            console.log(res);
             this.loadAddMember = false;
             this.$router.go(0);
           })
           .catch(error => {
-            console.log("error");
-            console.log(error);
+            // console.log(error);
             this.$store.commit("response", error);
             this.loadAddMember = false;
           });

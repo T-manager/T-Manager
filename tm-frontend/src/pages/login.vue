@@ -147,7 +147,7 @@ export default {
         }
       })
         .then(res => {
-          //if (res.data.data == 2000) 登录成功返回的直接就是cookie
+          // if (res.data.data == 2000) 登录成功返回的直接就是cookie
           if (res.data.data == 2001) alert("Wrong password");
           else if (res.data.data == 2002) alert("User not exist");
           else {
@@ -163,7 +163,6 @@ export default {
               }
             })
               .then(response => {
-                console.log("username");
                 this.$store.commit(
                   "set_userphoto",
                   response.data.data.userAvatar
@@ -176,7 +175,7 @@ export default {
           }
         })
         .catch(error => {
-          console.log(error);
+          // console.log(error);
         });
     },
     resetForm() {

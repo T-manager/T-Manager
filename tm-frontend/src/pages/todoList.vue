@@ -101,13 +101,11 @@ export default {
       }
     })
       .then(res => {
-        console.log(res);
         // this.todolists = res.data.data.reverse();
         this.todolists = res.data.data;
         for (var i in this.todolist.todoViewDTO) {
           this.todolist.todiViewDTO[i].loading = false;
         }
-        console.log(this.todolist);
       })
       .catch(error => {
         this.$store.commit("response", error);

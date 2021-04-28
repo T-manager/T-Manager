@@ -127,17 +127,12 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
           this.loading = false;
           this.showModifyDialog = false;
-          console.log("project");
-          console.log(this.project);
           this.$router.go(0);
         })
         .catch(error => {
-          console.log("project");
-          console.log(this.project);
-          console.log(error);
+          // console.log(error);
           this.$store.commit("response", error);
           this.loading = false;
         });

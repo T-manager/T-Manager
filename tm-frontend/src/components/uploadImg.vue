@@ -107,19 +107,17 @@ export default {
           this.loading = false;
           if (this.$store.getters.getUserphoto != null) {
             this.deleteImg();
-            console.log(res);
             this.$store.commit("set_userphoto", res.data);
           }
           this.$router.go(0);
         })
         .catch(error => {
           this.loading = false;
-          console.log(error);
+          // console.log(error);
         });
     },
     Preview_image() {
       this.fileUrl = URL.createObjectURL(this.imgFile);
-      console.log(this.fileUrl);
     },
     deleteImg() {
       this.$axios({
@@ -131,9 +129,7 @@ export default {
         headers: {
           Authorization: "Bearer " + this.$store.getters.getToken
         }
-      }).then(res => {
-        console.log(res);
-      });
+      }).then(res => {});
     }
   }
 };
