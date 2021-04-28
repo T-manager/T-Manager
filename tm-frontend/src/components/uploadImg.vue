@@ -7,7 +7,9 @@
       @mouseover="showEditImg = true"
       @mouseleave="showEditImg = false"
     >
-      <v-img src="https://picsum.photos/200"></v-img>
+      <v-img
+        :src="$store.state.host + 'auth/images/' + $store.getters.getUserphoto"
+      ></v-img>
       <v-fade-transition>
         <v-overlay v-if="showEditImg" absolute color="#606060">
           <div style="font-fanily:SourceHanSansSC-regular;font-size:14px">
@@ -85,6 +87,7 @@ export default {
       if (this.imgFile == "") {
         alert("Need to select a picture!");
       }
+
       this.loading = true;
       var originalFile = new FormData();
       originalFile.append("file", this.imgFile);
@@ -102,16 +105,31 @@ export default {
         .then(res => {
           alert("Avatar uploaded successfully!");
           this.loading = false;
+          if (this.$store.getters.getUserphoto != null) {
+            this.deleteImg();
+            this.$store.commit("set_userphoto", res.data);
+          }
           this.$router.go(0);
         })
         .catch(error => {
           this.loading = false;
-          console.log(error);
+          // console.log(error);
         });
     },
     Preview_image() {
       this.fileUrl = URL.createObjectURL(this.imgFile);
-      console.log(this.fileUrl);
+    },
+    deleteImg() {
+      this.$axios({
+        method: "delete",
+        url:
+          this.$store.state.host +
+          "resource/delete/" +
+          this.$store.getters.getUserphoto,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
+      }).then(res => {});
     }
   }
 };

@@ -2,35 +2,37 @@ package cpt202.groupwork.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import java.util.Date;
-import javax.validation.constraints.NotNull;
 import lombok.Data;
 
 import javax.validation.constraints.Size;
 
+/**
+ * @className: MissionDTO
+ * @description: Attributed used when created a mission
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
 @Data
 public class MissionDTO {
-  //添加一个新的mission需要用到的属性
 
-
-  // mission所属的gantt
   private Long missionId;
-  // mission的名字
-  @Size(min = 1, max = 20, message = "mission名称必须在1到20个字之间哦")
+
+  @Size(min = 1, max = 20, message = "The mission name must be within 20 words")
   private String missionName;
 
-  // mission所属的gantt
+  // gantt id which mission belong to
   private Integer ganttId;
 
-  // mission开始时间
+  // start time of the mission
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
   private Date missionStart;
 
-  // mission持续时间
+  // duration time of the mission
   private Integer missionDuration;
 
-  // mission的进度
+  // progress of the mission
   private Float missionProgress;
 
-  //唯一标识一个mission
+  //key used to identify mission
   private Long missionParent;
 }

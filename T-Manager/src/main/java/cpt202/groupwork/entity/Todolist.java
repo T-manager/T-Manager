@@ -12,6 +12,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @className: Todolist
+ * @description: connect to the SQL database for Todolist entity
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
+
 @Entity
 @Data
 @AllArgsConstructor
@@ -21,7 +28,7 @@ public class Todolist implements Serializable {
   private static final long serialVersionUID = 1L;
 
   /**
-   * 主键，唯一标识todoList
+   * primary key, to identify the gantt
    */
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,13 +41,13 @@ public class Todolist implements Serializable {
   private Integer projectId;
 
   /**
-   * todoList的名字
+   * todoList name
    */
   @Column(length = 20, name = "todolist_name")
   private String todolistName;
 
   /**
-   * 总共有多少的todo
+   * all to-dos belong to this todolist
    */
 
   @Column(name = "todolist_total_num")
@@ -48,7 +55,7 @@ public class Todolist implements Serializable {
 
 
   /**
-   * 完成的todo的数量
+   * all finished to-dos
    */
   @Column(name = "todolist_complete_num")
   private Integer todolistCompleteNum = 0;

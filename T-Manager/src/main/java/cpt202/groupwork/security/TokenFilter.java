@@ -15,13 +15,14 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
-//import cpt202.groupwork.entity.User;
 
 /**
- * Jwt 拦截器，通过Token鉴权
- *
- * @author Zhonghao
+ * @className: TokenFilter
+ * @description: Jwt interceptor, using Token to determine permission
+ * @Author: CPT202 Group 2
+ * @version 1.0
  */
+
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @Service
 public class TokenFilter extends OncePerRequestFilter {
@@ -34,16 +35,16 @@ public class TokenFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
-        // 存储Token的Headers Key与Value
+        // store Token's Headers Key and Value
         final String authorizationKey = "Authorization";
         String authorizationValue;
-        //判断request的header中是否有token
+        //determine whether token exists in request's header
         try {
             authorizationValue = request.getHeader(authorizationKey);
         } catch (Exception e) {
             authorizationValue = null;
         }
-        // Token 开头部分
+        // Token header
         String bearer = "Bearer ";
         if (authorizationValue != null && authorizationValue.startsWith(bearer)) {
             // token
@@ -51,18 +52,18 @@ public class TokenFilter extends OncePerRequestFilter {
 
             cpt202.groupwork.entity.User user = tokenUtils.validationToken(token);
             if (user != null) {
-                // Spring Security 角色名称默认使用 "ROLE_" 开头
-                // authorities.add 可以增加多个用户角色，对于一个用户有多种角色的系统来说，
-                // 可以通过增加用户角色表、用户--角色映射表，存储多个用户角色信息
+                // Spring Security role name use "ROLE_" as default header
+                // authorities.add could add multiple character，for a system that one user have multiple role,
+                // adding user-role table could store data for many user
                 List<SimpleGrantedAuthority> authorities = new ArrayList<>();
                 authorities.add(new SimpleGrantedAuthority("ROLE_" + user.getUserRole()));
-                // 传入用户名、用户密码、用户角色。 这里的密码随便写的，用不上
+                // pass username, password, user role, password don't use
                 UserDetails userDetails = new User(user.getUserName(), "password", authorities);
-                //用户名与密码验证
+                //verify the password and username
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
                         userDetails, null, userDetails.getAuthorities());
                 authentication.setDetails(userDetails.getUsername());
-                // 授权
+                // authorized
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }

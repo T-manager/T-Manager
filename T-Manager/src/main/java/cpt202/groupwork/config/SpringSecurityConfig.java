@@ -20,10 +20,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * @description: Security Config
- * @author: wzh
- * @create: 2021-03-21 19:23
- **/
+ * @className: SpringSecurityConfig
+ * @description: TODO
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
 
 @SuppressWarnings("SpringJavaAutowiringInspection")
 @Configuration
@@ -43,18 +44,32 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
   @Resource
   private TokenFilter tokenFilter;
 
+  /**
+   *
+   * @param authenticationManagerBuilder
+   * @throws Exception
+   */
   @Autowired
   public void configureAuthentication(AuthenticationManagerBuilder authenticationManagerBuilder) throws Exception {
-    // 使用 BCryptPasswordEncoder 验证密码
+    // Use BCryptPasswordEncoder to verify the password
     authenticationManagerBuilder.userDetailsService(this.userDetailsService).passwordEncoder(passwordEncoder());
   }
 
+  /**
+   *
+   * @return
+   */
   @Bean
   public PasswordEncoder passwordEncoder() {
-    // BCrypt 密码
+    // BCrypt password
     return new BCryptPasswordEncoder();
   }
 
+  /**
+   *
+   * @return
+   * @throws Exception
+   */
   @Override
   @Bean
   public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -62,11 +77,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   /**
-   * 静态资源设置
+   *
+   * @param webSecurity
    */
   @Override
   public void configure(WebSecurity webSecurity) {
-    //不拦截静态资源,所有用户均可访问的资源
+    //Do not intercept static resources and resource all user could access
     webSecurity.ignoring().antMatchers(
         "/",
         "/css/**",
@@ -75,6 +91,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     );
   }
 
+  /**
+   *
+   * @param httpSecurity
+   * @throws Exception
+   */
   @Override
   public void configure(HttpSecurity httpSecurity) throws Exception {
     httpSecurity.headers().disable();
@@ -86,19 +107,19 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .authorizeRequests()
             .antMatchers("/").permitAll();
-    // 配置 CSRF 关闭,允许跨域访问
+    // config CSRF to off, allowcross-domain access
 //    httpSecurity.csrf().disable();
-    // 指定错误未授权访问的处理类
+    // determine class for handling unauthorized access
     httpSecurity.exceptionHandling().authenticationEntryPoint(errorAuthenticationEntryPoint);
-    // 关闭 Session
+    // turn off Session
     httpSecurity.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    // 允许 登录 注册的 api 的无授权访问，其他需要授权访问
+    // allow unauthorized api access for registered and logined user, ask authorized access for others
     httpSecurity.authorizeRequests()
         .antMatchers("/auth/**")
         .permitAll().anyRequest().authenticated();
-    // 添加拦截器
+    // add interceptor
     httpSecurity.addFilterBefore(tokenFilter, UsernamePasswordAuthenticationFilter.class);
-    // 禁用缓存
+    // disable cache
     httpSecurity.headers().cacheControl();
   }
 }

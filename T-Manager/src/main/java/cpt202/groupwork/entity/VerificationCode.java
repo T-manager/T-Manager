@@ -1,24 +1,24 @@
 package cpt202.groupwork.entity;
 
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import java.io.Serializable;
-import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
- * @className: User
- * @description: connect to the SQL database for User entity
+ * @className: VerificationCode
+ * @description: connect to the SQL database for Verification entity
  * @Author: CPT202 Group 2
  * @version 1.0
  */
@@ -26,51 +26,44 @@ import lombok.Getter;
 @Entity
 @Data
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
-public class User implements Serializable {
+public class VerificationCode implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   /**
-   * primary key, to identify the user
+   * primary key, to identify the verified code id
    */
   @Id
   @JsonIgnore
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer userId;
+  private Integer verifyId;
 
   /**
-   * user name
+   *  username
    */
   @Column(length = 20, unique = true)
   private String userName;
 
   /**
-   * email of user
+   * user e-mail
    */
   @Column(length = 100, unique = true)
   private String userEmail;
 
   /**
-   * password
+   *  verification code
    */
-  @JsonProperty(access= JsonProperty.Access.WRITE_ONLY)
   @Column(length = 75)
-  private String userPassword;
+  private String verifyPassword;
+
 
   /**
-   * role of the user
+   * verification expire time
    */
-  @Column(length = 20)
-  private String userRole;
+  @Column(name = "expire_time")
+  @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+  private Date expireTime;
 
-  /**
-   * avatar of the user
-   */
-  @Column(length = 100)
-  private String userAvatar;
-
-  public User() {
-
-  }
 }

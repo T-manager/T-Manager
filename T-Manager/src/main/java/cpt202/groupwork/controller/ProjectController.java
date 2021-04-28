@@ -26,6 +26,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @className: ProjectController
+ * @description: Controller layer for the project module.
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/project")
@@ -40,6 +47,11 @@ public class ProjectController {
   @Autowired
   UserRepository userRepository;
 
+  /**
+   * add a project
+   * @param projectDTO
+   * @return response
+   */
   @PostMapping("/add")
   @Operation(summary = "add a project")
   public Response<?> createProject(@Valid @RequestBody ProjectDTO projectDTO) {
@@ -56,6 +68,10 @@ public class ProjectController {
     return Response.ok();
   }
 
+  /**
+   * @param projectId
+   * @return response
+   */
   @DeleteMapping("/delete/{projectId}")
   @Operation(summary = "delete a project")
   public Response<?> deleteProject(@PathVariable Integer projectId) {
@@ -69,6 +85,10 @@ public class ProjectController {
     return Response.ok();
   }
 
+  /**
+   * @param projectInfo
+   * @return response
+   */
   @PutMapping("/modify")
   @Operation(summary = "modify the information of a project")
   public Response<?> modifyProject(@Valid @RequestBody Project projectInfo) {
@@ -79,6 +99,10 @@ public class ProjectController {
     return Response.ok(projectRepository.save(project.get()));
   }
 
+  /**
+   * @param projectId
+   * @return response
+   */
   @GetMapping("/get/{projectId}")
   @Operation(summary = "get the infomation of project")
   public Response<?> getProject(@PathVariable Integer projectId) {

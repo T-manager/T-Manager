@@ -11,6 +11,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @className: Project
+ * @description: connect to the SQL database for Project entity
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
+
 @Entity
 @Data
 @Builder

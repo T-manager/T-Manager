@@ -3,15 +3,21 @@ package cpt202.groupwork.dto;
 import javax.validation.constraints.Size;
 import lombok.Data;
 
+/**
+ * @className: TodolistDTO
+ * @description: attributes used when create a todolist
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
+
 @Data
 public class TodolistDTO {
-  //添加一个新的todolist需要用到的属性
 
-  // todolist的名字
-  @Size(min = 1, max = 20, message = "todolist名称必须在1到20个字之间哦")
+  // todolist name
+  @Size(min = 1, max = 20, message = "the name of the todolist must between 1 and 20 words")
   private String todolistName;
 
-  //  // todolist所属的project
+  //project that todolist belongs to
   private Integer projectId;
 
 

@@ -25,6 +25,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @className: RelationController
+ * @description: Controller layer for the relation module.
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/relation")
@@ -42,6 +49,10 @@ public class RelationController {
   @Autowired
   RelationService relationService;
 
+  /**
+   * @param relationDTO
+   * @return response
+   */
   @PostMapping("/add")
   @Operation(summary = "add a relation")
   public Response<?> createRelation(@Valid @RequestBody RelationDTO relationDTO) {
@@ -61,6 +72,10 @@ public class RelationController {
     return Response.ok(projectmember);
   }
 
+  /**
+   * @param projectMemberId
+   * @return response
+   */
   @DeleteMapping("/delete/{projectMemberId}")
   @Operation(summary = "delete a relation")
   public Response<?> deleteRelation(@PathVariable Integer projectMemberId) {
@@ -68,12 +83,20 @@ public class RelationController {
     return Response.ok();
   }
 
+  /**
+   * @param username
+   * @return response
+   */
   @GetMapping("getproject/{username}")
   @Operation(summary = "get all project infomation belong to a user")
   public Response<?> getUserProject(@PathVariable String username) {
     return Response.ok(relationService.getUserProject(username));
   }
 
+  /**
+   * @param projectId
+   * @return response
+   */
   @GetMapping("getuser/{projectId}")
   @Operation(summary = "get all user infomation under a project")
   public Response<?> getProjectUser(@PathVariable Integer projectId) {

@@ -11,17 +11,18 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 /**
- * RSA 私钥与公钥
- *
- * @author Zhonghao
+ * @className: RsaUtils
+ * @description: Public key and Private key for RSA
+ * @Author: CPT202 Group 2
+ * @version 1.0
  */
+
 public class RsaUtils {
 
     /**
-     * PrivateKey * 生成秘钥 > openssl genrsa -out rsa_private_key.pem 2048
-     * 转换成PKCS8格式 > openssl pkcs8 -topk8 -inform * PEM -in rsa_private_key.pem -outform PEM -nocrypt
-     * 在终端输出结果，去掉“-----BEGIN PRIVATE KEY-----” * “-----END PRIVATE KEY-----”
-     *
+     * PrivateKey * generating key > openssl genrsa -out rsa_private_key.pem 2048
+     * convert to PKCS8 format > openssl pkcs8 -topk8 -inform * PEM -in rsa_private_key.pem -outform PEM -nocrypt
+     * output result in terminal，delete“-----BEGIN PRIVATE KEY-----” * “-----END PRIVATE KEY-----”
      * @return PrivateKey
      */
     public static PrivateKey getPrivateKey() {
@@ -62,8 +63,7 @@ public class RsaUtils {
     }
 
     /**
-     * PublicKey 根据 秘钥 生成public key > openssl rsa -in rsa_private_key.pem -out rsa_public_key.pem -pubout
-     *
+     * using key generating public key > openssl rsa -in rsa_private_key.pem -out rsa_public_key.pem -pubout
      * @return PublicKey
      */
     public static PublicKey getPublicKey() {

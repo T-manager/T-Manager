@@ -12,73 +12,77 @@ import lombok.Data;
 import org.springframework.web.server.ResponseStatusException;
 
 /**
- * 在 controller 层的消息包装实体, 别的层就不要一层一层的把错误信息传下来了.
+ * @className: Response
+ * @description: pack message entity in the controller layer
+ * @Author: CPT202 Group 2
+ * @version 1.0
  */
+
 @Data
 @Builder
 public class Response<T> {
 
-    // http 状态
+    // http status
     private Integer status;
 
-    // 消息
+    // message
     private String message;
 
-    // 数据
+    // data
     private T data;
 
-    // 正常通过
+    // success case
     public static Response<?> ok() {
         return Response.builder().status(HttpStatus.OK.value()).message("Success")
             .data(new ArrayList<>())
             .build();
     }
 
-    // 正常通过 + 携带相关 data 数据
+    // success + relating data
     public static Response<?> ok(Object data) {
         return Response.builder().status(HttpStatus.OK.value()).message("Success").data(data).build();
     }
 
-    // 正常通过 + 携带相关 data 数据
+    // success + message + relating data
     public static Response<?> ok(String message, Object data) {
         return Response.builder().status(HttpStatus.OK.value()).message(message).data(data).build();
     }
 
-    // 没有授权，请先登录
+    // unauthorized
     public static Response<?> unAuth() {
         throw new UnAuthException();
     }
 
-    // 没有找到该资源
+    // resource not found
     public static Response<?> notFound() {
         throw new NotFoundException();
     }
 
-    // 没有进行这个操作的权限
+    // no permission to do the action
     public static Response<?> permissionDenied(String message) {
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, message);
     }
-    // 未通过
+    // fail
     public static Response<?> fail() {
         return Response.builder().status(HttpStatus.OK.value()).message("Fail").data(new ArrayList<>()).build();
     }
 
-    // 未通过 + 携带相关 data 数据
+    // fail + relating data
     public static Response<?> fail(Object data) {
         return Response.builder().status(HttpStatus.OK.value()).message("Fail").data(data).build();
     }
 
-    // 未通过 + 携带相关 message
+    // fail +  message
     public static Response<?> fail(String message) {
         return Response.builder().status(HttpStatus.BAD_REQUEST.value()).message(message).build();
     }
 
-    // 未通过 + 携带相关 data 数据
+    // fail + message + data
     public static Response<?> fail(String message, Object data) {
         return Response.builder().status(HttpStatus.OK.value()).message(message).data(data).build();
     }
 
-    // 已经存在了, 不能再添加此类信息, 信息冲突
+    // data already exist, do not add again to make conflict
     public static Response<?> conflict(String message) {
         throw new ConflictException(message);
     }

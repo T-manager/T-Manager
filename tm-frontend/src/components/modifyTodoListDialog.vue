@@ -87,13 +87,12 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
           this.loading = false;
           this.showModifyTodolist = false;
           this.$router.go(0);
         })
         .catch(error => {
-          console.log(error);
+          // console.log(error);
           this.$store.commit("response", error);
           this.loading = false;
         });

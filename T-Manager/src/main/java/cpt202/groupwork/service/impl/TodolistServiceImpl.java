@@ -15,6 +15,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @className: TodolistServiceImpl
+ * @description: implements services of todolist
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
+
 @Service
 public class TodolistServiceImpl implements TodolistService {
 
@@ -30,6 +37,11 @@ public class TodolistServiceImpl implements TodolistService {
   @Autowired
   UserRepository userRepository;
 
+  /**
+   * find todolist and following todos by project id in todolist database
+   * @param projectId
+   * @return List<TodolistViewDTO>
+   */
   @Override
   public List<TodolistViewDTO> getTodolist(Integer projectId) {
     List<TodolistViewDTO> todolistViewDTOs = new ArrayList<>();
@@ -39,7 +51,6 @@ public class TodolistServiceImpl implements TodolistService {
       TodolistViewDTO todolistViewDTO = new TodolistViewDTO();
       BeanUtils.copyProperties(todoList, todolistViewDTO);
       todolistViewDTO.setProjectName(projectRepository.findByProjectId(projectId).get().getProjectName());
-//      todolistViewDTO.setAvatar(userRepository.findAvatarByUsername(todolistViewDTO.getUsername()));
       todolistViewDTOs.add(todolistViewDTO);
 
       List<TodoViewDTO> todoViewDTOs = new ArrayList<>();

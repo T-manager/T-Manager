@@ -21,6 +21,12 @@ import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
 
+/**
+ * @className: RelationServiceImpl
+ * @description: implements services of the relation
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
 @Service
 public class RelationServiceImpl implements RelationService{
     @Autowired
@@ -34,7 +40,6 @@ public class RelationServiceImpl implements RelationService{
 
     /**
      * find all project information user owns
-     *
      * @param username
      * @return List<Project>
      */
@@ -56,7 +61,6 @@ public class RelationServiceImpl implements RelationService{
 
     /**
      * find all user information under a project
-     *
      * @param projectId
      * @return List<User>
      */

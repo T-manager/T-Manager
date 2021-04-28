@@ -6,10 +6,15 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import lombok.Data;
 
+/**
+ * @className: ProjectDTO
+ * @description: all attributes needed when create a new project
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
+
 @Data
 public class ProjectDTO {
-  // all attributes needed when create a new project
-
   // name of the project
   @Size(min = 1, max = 20, message = "the length of the project cannot exceed 20")
   @NotNull(message = "The name of the project cannot be null")

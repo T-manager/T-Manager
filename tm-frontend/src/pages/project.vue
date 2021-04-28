@@ -171,7 +171,6 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
           this.loadAddProject = false;
           this.$router.go(0);
         })
@@ -198,14 +197,11 @@ export default {
       }
     })
       .then(res => {
-        console.log(res);
-        // projects
         this.projects = res.data.data;
-        console.log(this.projects);
         this.showProjects = true;
       })
       .catch(error => {
-        console.log(error);
+        // console.log(error);
         this.$store.commit("response", error);
       });
   },

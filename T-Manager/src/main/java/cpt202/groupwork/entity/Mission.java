@@ -13,51 +13,57 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * @className: Mission
+ * @description: connect to the SQL database for Mission entity
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
+
 @Entity
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-
 public class Mission implements Serializable {
 
   private static final long serialVersionUID = 1L;
 
   /**
-   * 主键，唯一标识mission
+   * primary key, to identify the mission
    */
   @Id
   @Column(name = "mission_id")
   private Long missionId;
 
   /**
-   *  project的id
+   *  id of gantt which belongs to
    */
   @Column(name = "gantt_id")
   private Integer ganttId;
 
 
   /**
-   * mission的名字
+   * mission name
    */
   @Column(length = 20, name = "mission_name")
   private String missionName;
 
   /**
-   * mission的开始时间
+   * mission start time
    */
   @Column(name = "mission_start")
   @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
   private Date missionStart;
 
   /**
-   * mission的持续时间
+   * mission duration time
    */
   @Column(name = "mission_duration")
   private Integer missionDuration;
 
   /**
-   * mission的持续时间
+   * mission progress
    */
   @Column(name = "mission_progress")
   private Float missionProgress;

@@ -1,18 +1,20 @@
 package cpt202.groupwork.service.impl;
 
 
-import cpt202.groupwork.controller.UserController;
 import cpt202.groupwork.Response;
-import cpt202.groupwork.repository.UserRepository;
 import cpt202.groupwork.entity.User;
+import cpt202.groupwork.entity.VerificationCode;
+import cpt202.groupwork.repository.UserRepository;
+import cpt202.groupwork.repository.VerifyRepository;
 import cpt202.groupwork.security.TokenUtils;
 import cpt202.groupwork.service.UserService;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import javax.annotation.Resource;
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
-import javax.swing.text.html.Option;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
@@ -24,15 +26,19 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
+ * @className: UserServiceImpl
  * @description: implement User service
- * @author: Zhonghao
- * @create: 2021-04-07 16:48
+ * @Author: CPT202 Group 2
+ * @version 1.0
  */
+
 @Service
 public class UserServiceImpl implements UserService {
 
   @Autowired
   UserRepository userRepository;
+  @Autowired
+  VerifyRepository verifyRepository;
 
   @Resource
   TokenUtils tokenUtils;
@@ -43,9 +49,14 @@ public class UserServiceImpl implements UserService {
   @Value("${spring.mail.username}")
   private String emailUserName;
 
-  //定义发送的标题
-  public static String title="[T-Manager]获取验证码";
+  //set title to be sent
+  public static String title="[T-Manager]get verification code";
 
+  /**
+   * check whether the user exists in user database
+   * @param userId
+   * @return response
+   */
   @Override
   public Response<?> userIdExists(Integer userId) {
     Optional<User> user = userRepository.findById(userId);
@@ -56,6 +67,11 @@ public class UserServiceImpl implements UserService {
     }
   }
 
+  /**
+   * get user info by username in user database
+   * @param username
+   * @return response
+   */
   @Override
   public Response<?> userGetInfoByName(String username) {
     Optional<User> user = userRepository.findByUserName(username);
@@ -67,15 +83,14 @@ public class UserServiceImpl implements UserService {
   }
 
   /**
-   * 普通的用户注册，自动给它role=USER,并将密码加密保存
-   *
+   * normal registration, set role = USER, encrypt the password and store it
    * @param user
-   * @return
+   * @return response
    */
   @Override
   public Response<?> userCreate(User user) {
-    // Springboot Security 提供的密码加密方法，使用SHA-256 + 随机盐 + 密钥对密码进行加密
-    // 密文格式见 https://stackoverflow.com/questions/6832445/how-can-bcrypt-have-built-in-salts
+    // Springboot Security provide encrypt method，using SHA-256 + salt + key top encrypt password
+    // format: https://stackoverflow.com/questions/6832445/how-can-bcrypt-have-built-in-salts
 
     try {
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -88,6 +103,11 @@ public class UserServiceImpl implements UserService {
     }
   }
 
+  /**
+   * delete user by user id
+   * @param userId
+   * @return response
+   */
   @Override
   public Response<?> userDelete(Integer userId) {
     Optional<User> user = userRepository.findById(userId);
@@ -99,6 +119,11 @@ public class UserServiceImpl implements UserService {
     }
   }
 
+  /**
+   * delete user by user name
+   * @param username
+   * @return response
+   */
   @Override
   public Response<?> userDelete(String username) {
     Optional<User> user = userRepository.findByUserName(username);
@@ -110,11 +135,17 @@ public class UserServiceImpl implements UserService {
     }
   }
 
+  /**
+   * modify user information using userid
+   * @param userId
+   * @param userMod
+   * @return response
+   */
   @Override
   public Response<?> userModify(Integer userId, User userMod) {
     Optional<User> user = userRepository.findById(userId);
     if (user.isPresent()) {
-      // 找出值为空的属性
+      // find attribute that have no value
       final BeanWrapper src = new BeanWrapperImpl(userMod);
       java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
 
@@ -126,7 +157,7 @@ public class UserServiceImpl implements UserService {
         }
       }
       String[] result = new String[emptyNames.size()];
-      // 找出为空的属性传入copyProperties
+      // pass copyProperties
       BeanUtils.copyProperties(userMod, user.get(), emptyNames.toArray(result));
       userRepository.save(user.get());
       return Response.ok(user.get());
@@ -135,6 +166,12 @@ public class UserServiceImpl implements UserService {
     }
   }
 
+  /**
+   * modify user information using username
+   * @param username
+   * @param userMod
+   * @return response
+   */
   @Override
   public Response<?> userModify(String username, User userMod) {
     Optional<User> user = userRepository.findByUserName(username);
@@ -143,7 +180,7 @@ public class UserServiceImpl implements UserService {
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         userMod.setUserPassword(encoder.encode(userMod.getUserPassword()));
       }
-      // 找出值为空的属性
+      // find attribute that have no value
       final BeanWrapper src = new BeanWrapperImpl(userMod);
       java.beans.PropertyDescriptor[] pds = src.getPropertyDescriptors();
 
@@ -155,7 +192,7 @@ public class UserServiceImpl implements UserService {
         }
       }
       String[] result = new String[emptyNames.size()];
-      // 找出为空的属性传入copyProperties
+      // pass copyProperties
       BeanUtils.copyProperties(userMod, user.get(), emptyNames.toArray(result));
       userRepository.save(user.get());
       return Response.ok(user.get());
@@ -164,12 +201,17 @@ public class UserServiceImpl implements UserService {
     }
   }
 
+  /**
+   * login service of user
+   * @param postUser
+   * @return response
+   */
   @Override
   public Response<?> userLogin(User postUser) {
     Optional<User> user = userRepository.findByUserName(postUser.getUserName());
     if (user.isPresent()) {
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-      // matches参数: 第一个参数为未加密密码，第二个为数据库中存储的加密后的密码，返回值为其是否匹配
+      // matches parameters: first parameter is unencrypted password, second is encrypted password, check whether they are matched
       if (encoder.matches(postUser.getUserPassword(), user.get().getUserPassword())) {
         System.out.println(tokenUtils.createToken(user.get()));
         return Response.ok(tokenUtils.createToken(user.get()));
@@ -181,6 +223,11 @@ public class UserServiceImpl implements UserService {
     }
   }
 
+  /**
+   * check user info
+   * @param postUser
+   * @return response
+   */
   @Override
   public Response<?> userInfoCheck(User postUser) {
     Optional<User> user = userRepository.findByUserName(postUser.getUserName());
@@ -193,11 +240,46 @@ public class UserServiceImpl implements UserService {
     }
   }
 
+  /**
+   * verify the sent email
+   * @param user
+   * @return response
+   */
   @Override
   public Response<?> verificationEmailSend(User user) {
-    try {
-      String emailAddr = user.getUserEmail();
-      String body = setEmailBody(emailAddr);
+    String emailCode = randomNumBuilder();
+    Date current=new Date();
+    long time = 30*60*1000;//30minutes
+    if(user.getUserEmail()==null){
+      return Response.fail("Need email");
+    }
+    Optional<VerificationCode> verification=verifyRepository.findByUserEmail(user.getUserEmail());
+    verification.ifPresent(verificationCode -> verifyRepository.delete(verificationCode));
+
+    Date afterDate = new Date(current.getTime() + 300000);
+    VerificationCode verificationEmail=new VerificationCode();
+    verificationEmail.setUserEmail(user.getUserEmail());
+    verificationEmail.setVerifyPassword(emailCode);
+    verificationEmail.setExpireTime(afterDate);
+    verifyRepository.save(verificationEmail);
+
+    if(generateCodeandSend(emailCode, user.getUserEmail())){
+      return Response.ok(3000); // ok
+    }
+    else {
+      return Response.fail(3001); // fail to send email
+    }
+  }
+
+  /**
+   * generate code and send to user email
+   * @param emailCode
+   * @param emailAddr
+   * @return boolean
+   */
+  public boolean generateCodeandSend(String emailCode, String emailAddr){
+    try{
+      String body = setEmailBody(emailCode);
       MimeMessage mimeMessage = this.mailSender.createMimeMessage();
       MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
       message.setFrom(emailUserName);//set Sender
@@ -205,31 +287,68 @@ public class UserServiceImpl implements UserService {
       message.setSubject(title);  //Set title
       message.setText(body);
       this.mailSender.send(mimeMessage);
-    } catch (Exception e) {
-      return Response.fail();
+    } catch(Exception e){
+      return false;
     }
-    return Response.ok(2000);
+    return true;
   }
-  private String setEmailBody(String email){
-    //generate random verification code
-    String emailCode = randomNumBuilder();
 
+  /**
+   * verify the verification code
+   * @param verificationCode
+   * @return response
+   */
+  @Override
+  public Response<?> verifyCode(VerificationCode verificationCode) {
+    Optional<VerificationCode> verification;
+    try{
+      verification=verifyRepository.findByUserEmail(verificationCode.getUserEmail());
+    }catch (Exception e) {
+      return Response.fail("No verification code");
+    }
+    if(!verification.isPresent()){
+      return Response.fail("No verification code");
+    }
+    Date current=new Date();
+    if(current.after(verification.get().getExpireTime())){
+      verifyRepository.delete(verification.get());
+      return Response.fail("Verification code expire");
+    }
+    if(!verificationCode.getVerifyPassword().equals(verification.get().getVerifyPassword())){
+      return Response.fail("Wrong Verification code");
+    }
+    return Response.ok("Verify successful");
+  }
+
+  /**
+   * set the body of the e-mail
+   * @param emailCode
+   * @return response
+   */
+  private String setEmailBody(String emailCode){
     StringBuffer body = new StringBuffer();
     body.append("Dear user:\n\n").append("    Your verification code is:  ").append(emailCode+"\n\n");
-    body.append("    Reminder: The verificationcode will be expired after 20 minutes\n\n");
+    body.append("    Reminder: The verificationcode will be expired after 30 minutes\n\n");
     return body.toString();
   }
-  public static String randomNumBuilder(){
 
+  /**
+   * generate 6 digit for verification coder
+   * @return string
+   */
+  public static String randomNumBuilder(){
     String result = "";
     for(int i=0;i<6;i++){
       result += Math.round(Math.random() * 9);
     }
-
     return result;
-
   }
 
+  /**
+   * check whether the username exist in user database using username
+   * @param username
+   * @return response
+   */
   @Override
   public Response<?> userNameExists(String username){
     Optional<User> user = userRepository.findByUserName(username);

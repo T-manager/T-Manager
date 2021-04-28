@@ -15,7 +15,13 @@
         @click="toUserPage"
         style="background-color:#aaaaaa"
       >
-        <v-img src="https://picsum.photos/200"></v-img>
+        <v-img
+          :src="
+            $store.state.host + 'auth/images/' + $store.getters.getUserphoto
+          "
+          height="35"
+          width="35"
+        ></v-img>
       </v-avatar>
     </template>
 
@@ -33,7 +39,7 @@
           Profile
         </v-list-item>
         <v-list-item class="list_item_center">
-          个人日历
+          Calender
         </v-list-item>
         <v-list-item
           @click="logout"
@@ -74,6 +80,7 @@ export default {
       })
         .then(res => {
           this.user = res.data.data;
+          // console.log("Userinfo", this.user);
           this.showContent = true;
         })
         .catch(error => {
@@ -86,8 +93,6 @@ export default {
       });
     },
     toUserPage() {
-      console.log("user");
-      console.log(this.user);
       if (this.user.username != null) {
         var path = "/profile";
         this.$router.push({ path: path });

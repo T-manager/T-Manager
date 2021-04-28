@@ -5,9 +5,15 @@ import lombok.Data;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+/**
+ * @className: ProjectDetailDTO
+ * @description: all attributes needed when create a new project
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
+
 @Data
 public class ProjectDetailDTO {
-    // all attributes needed when create a new project
     private Integer projectId;
 
     private Integer projectMemberId;

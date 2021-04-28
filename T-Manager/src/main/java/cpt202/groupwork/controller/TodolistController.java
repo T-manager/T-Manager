@@ -8,7 +8,6 @@ import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.TodolistRepository;
 import cpt202.groupwork.repository.TodoRepository;
 import cpt202.groupwork.repository.UserRepository;
-//import cpt202.groupwork.security.SecurityUtils;
 import cpt202.groupwork.service.TodolistService;
 import io.swagger.v3.oas.annotations.Operation;
 import java.util.ArrayList;
@@ -27,6 +26,13 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * @className: TodolistController
+ * @description: Controller layer for the todolist module.
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -48,8 +54,13 @@ public class TodolistController {
   @Autowired
   TodolistService todolistService;
 
+  /**
+   * add todolist by projectId and todolistcreateDTO
+   * @param todolistDTO
+   * @return response
+   */
   @PostMapping("/add")
-  @Operation(summary = "通过 projectId 和 todolistCreateDTO 添加 todoList")
+  @Operation(summary = "add todolist by projectId and todolistcreateDTO")
   public Response<?> createTodolist(@Valid @RequestBody TodolistDTO todolistDTO) {
 
     Todolist todolist = new Todolist();
@@ -58,27 +69,24 @@ public class TodolistController {
     return Response.ok(todolist);
   }
 
+  /**
+   * @param todolistId
+   * @return response
+   */
   @DeleteMapping("/delete/{todolistId}")
-  @Operation(summary = "删除todolist")
+  @Operation(summary = "delete todolist")
   public Response<?> deleteTodolist(@PathVariable Integer todolistId) {
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
-//    if (username.isEmpty()) {
-//      return Response.unAuth();
-//    }
-
     Optional<Todolist> todolist = todoListRepository.findById(todolistId);
-//    if (todoList.isEmpty()) {
-//      return Response.notFound();
-//    }
-//    if (!username.get().equals(todolist.get().getUsername())) {
-//      return Response.permissionDenied("只有自己才能删除哦！");
-//    }
     todoListRepository.deleteById(todolistId);
     return Response.ok();
   }
 
+  /**
+   * @param todolist
+   * @return response
+   */
   @PutMapping("/modify")
-  @Operation(summary = "修改todolist信息")
+  @Operation(summary = "modify information todo")
   public Response<?> modifyTodolist(@Valid @RequestBody Todolist todolist) {
     Optional<Todolist> todolistOld = todoListRepository.findById(todolist.getTodolistId());
 
@@ -87,11 +95,14 @@ public class TodolistController {
     return Response.ok("modify success");
   }
 
+  /**
+   * @param projectId
+   * @return response
+   */
   @GetMapping("/get/{projectId}")
-  @Operation(summary = "通过 projectid 查看所有的 todolist, 包括所属的todo")
+  @Operation(summary = "get all todolists and following todos by projectId")
   public Response<?> getTodolist(@PathVariable Integer projectId) {
     List<TodolistViewDTO> todolistViewDTOs = new ArrayList<>();
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
     todolistViewDTOs = todolistService.getTodolist(projectId);
     return Response.ok(todolistViewDTOs);
   }

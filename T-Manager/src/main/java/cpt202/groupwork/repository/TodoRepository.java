@@ -11,10 +11,10 @@ import org.springframework.stereotype.Repository;
 public interface TodoRepository extends JpaRepository<Todo, Integer> {
 //  List<TodoRepository> findByUsername(String username);
   /**
-   * 通过 projectId 找到 List<TodoList>
+   * Using tofolistId, find List<Todo> in todo database
    *
    * @param todolistId
-   * @return List<TodoList>
+   * @return List<Todo>
    */
   List<Todo> findByTodolistId(Integer todolistId);
 

@@ -117,7 +117,6 @@ export default {
     },
     async modifyProject() {
       this.loading = true;
-      console.log(this.project.projectId);
       await this.$axios({
         method: "put",
         url: this.$store.state.host + "project/modify",
@@ -127,20 +126,17 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
           this.loading = false;
           this.showModifyDialog = false;
           this.$router.go(0);
         })
         .catch(error => {
-          console.log(error);
+          // console.log(error);
           this.$store.commit("response", error);
           this.loading = false;
         });
     },
     deleteRelation(memberId) {
-      console.log("!!");
-      console.log(memberId);
       this.$axios({
         method: "delete",
         url: this.$store.state.host + "relation/delete/" + memberId,
@@ -167,8 +163,6 @@ export default {
       }
     })
       .then(res => {
-        console.log("member");
-        console.log(res.data.data);
         this.members = res.data.data;
       })
       .catch(error => {

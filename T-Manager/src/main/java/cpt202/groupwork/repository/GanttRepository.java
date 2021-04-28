@@ -9,10 +9,9 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface GanttRepository extends JpaRepository<Gantt, Integer> {
 
-//  List<Gantt> findByUsername(String username);
 
   /**
-   * 通过 projectId 找到 List<Gantt>
+   * find List<Gantt> by projectId in gantt database
    *
    * @param projectId
    * @return List<Gantt>

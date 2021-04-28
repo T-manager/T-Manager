@@ -294,7 +294,6 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
           this.todo.loading = false;
           // 调用父组件方法改变完成任务数量
           this.$emit("changeCompleteNum");
@@ -342,7 +341,6 @@ export default {
         return;
       }
       this.todo.todoMember = 0;
-      console.log(this.todo);
       this.$axios({
         method: "put",
         url: this.$store.state.host + "todo/edit",

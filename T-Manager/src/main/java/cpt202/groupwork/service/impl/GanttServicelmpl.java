@@ -21,6 +21,13 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ * @className: GanttServicelmpl
+ * @description: implement service of gantt chart
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
+
 @Service
 public class GanttServicelmpl  implements GanttService {
   @Autowired
@@ -32,6 +39,11 @@ public class GanttServicelmpl  implements GanttService {
   @Autowired
   UserRepository userRepository;
 
+  /**
+   * get gantt chart by projectId in gantt database
+   * @param projectId
+   * @return List<GanttViewDTO>
+   */
   @Override
   public List<GanttViewDTO> getGantt(Integer projectId) {
     List<GanttViewDTO> ganttViewDTOs= new ArrayList<>();
@@ -40,7 +52,6 @@ public class GanttServicelmpl  implements GanttService {
     for (Gantt gantt : gantts) {
       GanttViewDTO ganttViewDTO = new GanttViewDTO();
       BeanUtils.copyProperties(gantt, ganttViewDTO);
-//      ganttViewDTO.setAvatar(userRepository.findAvatarByUsername(ganttViewDTO.getUsername()));
       ganttViewDTOs.add(ganttViewDTO);
 
       List<MissionViewDTO> missionViewDTOS = new ArrayList<>();

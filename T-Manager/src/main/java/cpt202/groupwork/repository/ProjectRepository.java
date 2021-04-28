@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ProjectRepository extends JpaRepository<Project, Integer> {
     /**
-     * find the project by projectId
+     * find the project by projectId in project database
      *
      * @param projectId
      * @return Optional<Project>

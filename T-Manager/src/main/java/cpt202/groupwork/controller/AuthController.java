@@ -1,5 +1,6 @@
 package cpt202.groupwork.controller;
 
+import cpt202.groupwork.entity.VerificationCode;
 import cpt202.groupwork.service.UserService;
 import cpt202.groupwork.entity.User;
 import cpt202.groupwork.Response;
@@ -15,13 +16,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * @description: User Register and Login
- * @author: nxh
- * @create: 2021-04-07 16:54
- **/
+ * @className: AuthController
+ * @description: Controller layer for the auth module.
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
 
 @CrossOrigin(origins = "*", maxAge = 3600)
-// @CrossOrigin(allowCredentials = "true", allowedHeaders = "*")
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -29,30 +30,76 @@ public class AuthController {
   @Resource
   private UserService userService;
 
+  /**
+   * register a user
+   * @param user
+   * @return response
+   */
   @PostMapping("/register")
   public Response<?> createUser(@RequestBody User user) {
-    // @RequestBody注解用来绑定通过http请求中application/json类型上传的数据
     return userService.userCreate(user);
   }
 
+  /**
+   * User login
+   * @param user
+   * @return response
+   */
   @PostMapping("/login")
   public Response<?> postUserLogin(@RequestBody User user) {
     return userService.userLogin(user);
   }
 
+  /**
+   * check whether the user name exists
+   * @param username
+   * @return response
+   */
   @GetMapping("/check")
   public Response<?> checkUserExists(@RequestParam("username") String username) {
     return userService.userNameExists(username);
   }
 
+  /**
+   * check whether the user infomation is matched
+   * @param user
+   * @return response
+   */
   @PostMapping("/check")
   public Response<?> checkUserInfo(@RequestBody User user) {
     return userService.userInfoCheck(user);
   }
 
-  // 临时允许没有token就可以改密码
+  /**
+   * allow modify password when no token temporarily, will change in the following sprint
+   * @param username
+   * @param user
+   * @return response
+   */
   @PutMapping("/edit/{username}")
   public Response<?> modifyUser(@PathVariable String username, @RequestBody User user) {
     return userService.userModify(username, user);
   }
+
+  /**
+   * send verification code to specific e-mail address
+   * @param user(必须有email)
+   * @return response
+   */
+  @PostMapping("/codesending")
+  public Response<?> getEmail(@RequestBody User user) {
+    return userService.verificationEmailSend(user);
+  }
+
+  /**
+   * verify email code when reset password or registration
+    * @param verificationCode
+   * @return response
+   */
+  @PostMapping("/codeVerification")
+  public Response<?> verifyCode(@RequestBody VerificationCode verificationCode) {
+    return userService.verifyCode(verificationCode);
+  }
+
+
 }

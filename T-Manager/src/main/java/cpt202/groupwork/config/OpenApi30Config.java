@@ -9,8 +9,21 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+
+/**
+ * @className: OpenApi30Config
+ * @description: TODO
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
+
 @Configuration
 public class OpenApi30Config {
+  /**
+   *
+   * @param appVersion
+   * @return null
+   */
   @Bean
   public OpenAPI customOpenAPI(@Value("${springdoc.version}") String appVersion) {
     final String securitySchemeName = "bearerAuth";

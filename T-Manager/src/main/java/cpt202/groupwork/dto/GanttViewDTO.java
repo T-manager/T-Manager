@@ -7,22 +7,28 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Data;
 
+/**
+ * @className: GanttViewDTO
+ * @description: data needed when view a gantt
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
 @Data
 public class GanttViewDTO {
 
-  // 唯一标识todolist
+  // primary key ganttId
   private Integer ganttId;
 
-  //对应项目id
+  // corresponding projectId
   private Integer projectId;
 
-  //todolist的名字
+  //todolist name
   private String ganttName;
 
-  //包含todo的总数
+  // total number of the mission
   private Integer ganttTotalNum;
 
-  //包含的todo对象
+  //mission of the gantt
   private List<MissionViewDTO> missionViewDTO;
 
 }

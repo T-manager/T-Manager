@@ -12,7 +12,7 @@
       >
         {{ !submit ? "Personal Profile" : "Edit Profile" }}
       </div>
-      <!-- 编辑信息 -->
+      <!-- edit user information -->
       <div v-if="submit" style="width:100%;">
         <v-text-field
           outlined
@@ -33,7 +33,7 @@
           style="margin-top:20px"
         ></v-text-field>
       </div>
-      <!-- 查看信息 -->
+      <!-- show user information -->
       <div
         v-if="!submit"
         style="width:100%; display:flex;flex-direction:column; font-size:16px; margin-top:30px; margin-bottom:30px;"
@@ -137,7 +137,6 @@ export default {
         data: this.userEdit
       })
         .then(res => {
-          console.log(res);
           this.$store.commit("set_username", this.userEdit.userName);
           this.loading = false;
           this.submit = false;
@@ -146,8 +145,8 @@ export default {
           alert("success!");
         })
         .catch(error => {
-          console.log(error);
-          //   this.$store.commit("response", error);
+          // console.log(error);
+          // this.$store.commit("response", error);
           this.loading = false;
         });
     },
@@ -176,11 +175,9 @@ export default {
       .then(response => {
         this.userInfo = response.data.data;
         this.userEdit = response.data.data;
-        console.log(this.userInfo);
-        console.log(this.$store.getters.getToken);
       })
       .catch(error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 };

@@ -1,12 +1,14 @@
 <template>
   <v-app style="background-color:#f1f2f8; width:100%; height:100%;">
-    <!-- 导航栏 -->
+    <!-- navigation bar -->
     <div
       style="position:fixed; width:100%; display:flex; justify-content:center; z-index:2"
     >
       <navBar></navBar>
     </div>
+    <!-- page background -->
     <div class="thisPage"></div>
+    <!-- page detail -->
     <v-main style="padding-top:85px;">
       <router-view></router-view>
     </v-main>
@@ -18,9 +20,6 @@ import Vue from "vue";
 import navBar from "@/components/navBar";
 export default Vue.extend({
   name: "App",
-  provide() {
-    return {};
-  },
   components: {
     navBar
   }
@@ -39,6 +38,7 @@ export default Vue.extend({
   position: fixed;
   width: 100%;
   height: 100%;
+  /* background picture */
   background-image: url("assets/TmanagerLogo_l4.5.svg");
   background-size: 750px;
   background-repeat: no-repeat;

@@ -8,6 +8,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.validation.constraints.Size;
 
+/**
+ * @className: MemberDTO
+ * @description: data needed when viewing a member
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
 @Data
 public class MemberDTO {
 

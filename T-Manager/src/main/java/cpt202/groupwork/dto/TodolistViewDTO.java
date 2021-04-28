@@ -7,28 +7,34 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import lombok.Data;
 
+/**
+ * @className: TodolistViewDTO
+ * @description: Attributes needed when viewing a todolist
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
 @Data
 public class TodolistViewDTO {
 
-  // 唯一标识todolist
+  // identify the todolist
   private Integer todolistId;
 
-  //对应项目id
+  // corresponding project id
   private Integer projectId;
 
-  //对应项目名
+  // corresponding project name
   private String projectName;
 
-  //todolist的名字
+  //todolist name
   private String todolistName;
 
-  //包含todo的总数
+  // todolist number
   private Integer todolistTotalNum;
 
-  // 完成的todo的数量
+  // complete number of the todolist
   private Integer todolistCompleteNum;
 
-  //包含的todo对象
+  // contained todoview object
   private List<TodoViewDTO> todoViewDTO;
 
 }

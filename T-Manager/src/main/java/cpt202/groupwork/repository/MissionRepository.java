@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MissionRepository extends JpaRepository<Mission, Long> {
-//  List<TodoRepository> findByUsername(String username);
+
   /**
-   * 通过 projectId 找到 List<Mission>
+   * Using projectId, find List<Mission> in mission database
    *
    * @param GanttId
    * @return List<Gantt>

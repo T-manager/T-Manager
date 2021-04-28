@@ -34,6 +34,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * @className: GanttController
+ * @description: Controller layer for the gantt module.
+ * @Author: CPT202 Group 2
+ * @version 1.0
+ */
+
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/gantt")
@@ -54,39 +61,38 @@ public class GanttController {
   @Autowired
   GanttService ganttService;
 
+  /**
+   * @param ganttDTO
+   * @return response
+   */
   @PostMapping("/add")
-  @Operation(summary = "通过 projectId 和 ganttDTO 添加 gantt")
+  @Operation(summary = "use projectId and granttDTO to add gantt")
   public Response<?> createGantt(@Valid @RequestBody GanttDTO ganttDTO) {
-    //ganttId会自动按顺序生成
-
+    //ganttId will generate by increment
     Gantt gantt = new Gantt();
     BeanUtils.copyProperties(ganttDTO, gantt);
     ganttRepository.save(gantt);
     return Response.ok(gantt);
   }
 
+  /**
+   * @param ganttId
+   * @return response
+   */
   @DeleteMapping("/delete/{ganttId}")
-  @Operation(summary = "删除gantt")
+  @Operation(summary = "delete gantt chart")
   public Response<?> deleteDiscussion(@PathVariable Integer ganttId) {
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
-//    if (username.isEmpty()) {
-//      return Response.unAuth();
-//    }
-
     Optional<Gantt> gantt = ganttRepository.findById(ganttId);
-//    if (gantt.isEmpty()) {
-//      return Response.notFound();
-//    }
-
-//    if (!username.get().equals(gantt.get().getUsername())) {
-//      return Response.permissionDenied("只有自己才能删除哦！");
-//    }
     ganttRepository.deleteById(ganttId);
     return Response.ok();
   }
 
+  /**
+   * @param gantt
+   * @return response
+   */
   @PutMapping("/modify")
-  @Operation(summary = "修改gantt信息")
+  @Operation(summary = "modify information for gantt")
   public Response<?> modifyProject(@Valid @RequestBody Gantt gantt) {
     Optional<Gantt> ganttOld = ganttRepository.findById(gantt.getGanttId());
 
@@ -95,12 +101,14 @@ public class GanttController {
     return Response.ok("modify success");
   }
 
-
+  /**
+   * @param projectId
+   * @return response
+   */
   @GetMapping("/get/{projectId}")
-  @Operation(summary = "通过 projectid 查看所有的 gantt, 包括所属的mission")
+  @Operation(summary = "get all gantt and following mission by projectid")
   public Response<?> getDiscussion(@PathVariable Integer projectId) {
     List<GanttViewDTO> ganttViewDTOs = new ArrayList<>();
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
     ganttViewDTOs = ganttService.getGantt(projectId);
     if(ganttViewDTOs.size() == 0) {
       GanttViewDTO ganttViewDTO = new GanttViewDTO();
