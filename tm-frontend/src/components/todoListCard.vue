@@ -28,7 +28,7 @@
       <v-list flat>
         <!-- <v-subheader>All</v-subheader> -->
         <v-list-item-group multiple>
-          <!-- 每个TODO -->
+          <!-- each todo -->
           <div style="max-height:490px; overflow-y:auto">
             <div v-for="(todo, index) in todolist.todoViewDTO" :key="index">
               <todoDetailDialog
@@ -39,7 +39,7 @@
               ></todoDetailDialog>
             </div>
           </div>
-          <!-- add new todo -->
+          <!-- add new todo popup -->
           <addTodoDialog :todolist="todolist"></addTodoDialog>
         </v-list-item-group>
       </v-list>
@@ -69,14 +69,17 @@ export default {
     };
   },
   methods: {
+    /** show/hide popup method, provide for child component */
     showPopupMethod() {
       this.showPopup = !this.showPopup;
     },
+    /** change complete todo number, provide for child component */
     changeCompleteNum(index) {
       if (this.todolist.todoViewDTO[index].todoCheck == false)
         this.todolist.todolistCompleteNum--;
       else this.todolist.todolistCompleteNum++;
     },
+    /** delete todo list method */
     deleteTodolist() {
       this.loadAddTodoList = true;
       this.$axios({

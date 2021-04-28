@@ -1,6 +1,6 @@
 <template>
   <div>
-    <!-- 每一行TODO概述 -->
+    <!-- todo information (each line in todo list) -->
     <v-list-item @click="showTodoDetail = true">
       <template>
         <v-list-item-content
@@ -27,12 +27,9 @@
             <div class="todo_detail">
               {{ todo.todoDetail }}
             </div>
-            <!-- <div class="todo_ddl">
-              {{ todo.todoDdl }}
-            </div> -->
           </div>
         </v-list-item-content>
-        <!-- TODO check 按键 -->
+        <!-- todo checkbox -->
         <v-list-item-action style="margin-right:8px">
           <v-checkbox
             v-model="todo.todoCheck"
@@ -43,7 +40,7 @@
       </template>
     </v-list-item>
 
-    <!-- TODO 详情弹窗 -->
+    <!-- todo detail popup -->
     <v-dialog v-model="showTodoDetail" max-width="550px">
       <v-card
         v-if="showModifyTodo == false"
@@ -58,7 +55,8 @@
         <div
           style="font-size:30px; margin-left:10px; width:100%; text-align:left; display:flex; align-items:center"
         >
-          Modify Todo
+          Todo Detail
+          <!-- modify todo popup -->
           <v-btn
             color="primary"
             @click="showModifyTodo = true"
@@ -67,10 +65,12 @@
           >
             <v-icon>mdi-pencil-outline</v-icon>
           </v-btn>
+          <!-- delete todo -->
           <v-btn @click="showPopupMethod" icon
             ><v-icon>mdi-delete-outline</v-icon></v-btn
           >
         </div>
+        <!-- todo detail -->
         <v-card-text
           style="display:flex; flex-direction:column; margin-top:15px; padding:10px; color:#434343"
         >
@@ -90,13 +90,11 @@
             <div style="width:150px">Todo Deadline:</div>
             <div style="width:350px; color:#838383">{{ todo.todoDdl }}</div>
           </div>
-
-          <!-- 选择负责人 -->
         </v-card-text>
       </v-card>
     </v-dialog>
 
-    <!-- 编辑 TODO -->
+    <!-- modify todo popup -->
     <v-dialog v-model="showModifyTodo" persistent max-width="600px">
       <v-card style="padding: 30px 35px 50px 35px;" class="card-background">
         <div
@@ -135,9 +133,9 @@
             prepend-icon="mdi-menu"
             v-model="todo.todoDetail"
           ></v-textarea>
-          <!-- 选择时间日期 -->
+          <!-- change todo deadline -->
           <div style="display:flex">
-            <!-- 选择ddl日期 -->
+            <!-- change deadline date -->
             <v-menu
               ref="datePicker"
               v-model="datePicker"
@@ -178,11 +176,11 @@
                   color="primary"
                   class="white--text"
                   @click="$refs.datePicker.save(todoChange.date)"
-                  >Submit</v-btn
+                  >Confirm</v-btn
                 >
               </v-date-picker>
             </v-menu>
-            <!-- 选择ddl时间 -->
+            <!-- change deadline time -->
             <v-menu
               ref="timePicker"
               v-model="timePicker"
@@ -215,10 +213,9 @@
               ></v-time-picker>
             </v-menu>
           </div>
-
-          <!-- 选择负责人 -->
         </v-card-text>
         <div style="display:flex; justify-content:center; margin-top:10px">
+          <!-- close modify popup -->
           <v-btn
             depressed
             style="border:#cccccc solid 1px; color:#777777; width:120px; margin-right:50px"
@@ -226,6 +223,7 @@
           >
             <v-icon class="pr-2">mdi-cancel</v-icon>Cancel
           </v-btn>
+          <!-- submit modification -->
           <v-btn
             depressed
             color="primary"
@@ -234,11 +232,12 @@
             :loading="loading"
             :disabled="loading"
           >
-            <v-icon class="pr-2">mdi-upload-outline</v-icon>Submit
+            <v-icon class="pr-2">mdi-upload-outline</v-icon>Confirm
           </v-btn>
         </div>
       </v-card>
     </v-dialog>
+    <!-- delete confirmation popup -->
     <popup
       message="Are you sure you want to delete this todo list?"
       :showPopup="showPopup"
@@ -262,6 +261,7 @@ export default {
       dateFormat: new Date().toISOString().substr(0, 10),
       datePicker: false,
       timePicker: false,
+      // inline check rules
       rules: {
         nameRules: [
           v =>
@@ -280,9 +280,11 @@ export default {
   components: { popup },
   props: ["todolistName", "todo", "projectName"],
   methods: {
+    /** show popup method */
     showPopupMethod() {
       this.showPopup = !this.showPopup;
     },
+    /** check/uncheck todo method */
     checkTodo() {
       var todoId = this.todo.todoId;
       this.todo.loading = true;
@@ -295,8 +297,7 @@ export default {
       })
         .then(res => {
           this.todo.loading = false;
-          // 调用父组件方法改变完成任务数量
-          this.$emit("changeCompleteNum");
+          this.$emit("changeCompleteNum"); // call the parent component method to change the number of tasks completed
         })
         .catch(error => {
           this.$store.commit("response", error);
@@ -313,6 +314,7 @@ export default {
     checkDateTimeRules(v) {
       return typeof v != "undefined";
     },
+    /** check all rules again beform submit */
     checkRules() {
       if (!this.checkNameRules(this.todo.todoName)) {
         alert("check the name");
@@ -332,6 +334,7 @@ export default {
       }
       return true;
     },
+    /** modifuy todo method */
     async modifyTodo() {
       this.loading = true;
       this.todo.todoDdl =
@@ -359,6 +362,7 @@ export default {
           this.loading = false;
         });
     },
+    /** delete todo method */
     deleteTodo() {
       this.$axios({
         method: "delete",
@@ -376,6 +380,7 @@ export default {
     }
   },
   created() {
+    // split datetime into date and time before show page
     var dateTime = this.todo.todoDdl;
     this.todoChange.date = dateTime.split(" ")[0];
     this.todoChange.time = dateTime.split(" ")[1].split(":00 ")[0];

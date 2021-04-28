@@ -1,10 +1,12 @@
 <template>
   <div>
+    <!-- add todo button -->
     <v-list-item style="margin-top:10px" @click="showAddTodo = true">
       <v-list-item-content style="display:flex; justify-content:center;"
         ><v-icon>mdi-plus</v-icon>
       </v-list-item-content>
     </v-list-item>
+    <!-- add todo popup -->
     <v-dialog v-model="showAddTodo" persistent max-width="600px">
       <v-card class="card-background" style="padding: 30px 35px 50px 35px;">
         <div
@@ -26,6 +28,7 @@
             <div style="color:#bdbdbd; font-size:22px">/</div>
             <div style="margin-left:10px">{{ todolist.todolistName }}</div>
           </div>
+          <!-- choose todo name -->
           <v-text-field
             label="todo name"
             color="primary"
@@ -34,6 +37,7 @@
             prepend-icon="mdi-alphabetical"
             v-model="todoForm.todoName"
           ></v-text-field>
+          <!-- choose todo detail -->
           <v-textarea
             label="todo detail"
             required
@@ -45,9 +49,9 @@
             prepend-icon="mdi-menu"
             v-model="todoForm.todoDetail"
           ></v-textarea>
-          <!-- 选择时间日期 -->
+          <!-- choose todo deadline -->
           <div style="display:flex">
-            <!-- 选择ddl日期 -->
+            <!-- deadline date -->
             <v-menu
               ref="datePicker"
               v-model="datePicker"
@@ -92,7 +96,7 @@
                 >
               </v-date-picker>
             </v-menu>
-            <!-- 选择ddl时间 -->
+            <!-- deadline time -->
             <v-menu
               ref="timePicker"
               v-model="timePicker"
@@ -125,8 +129,8 @@
               ></v-time-picker>
             </v-menu>
           </div>
-
-          <!-- 选择负责人 -->
+          <!-- choose todo executer -->
+          <!-- haven't done yet -->
         </v-card-text>
         <div class="card_action">
           <v-btn
@@ -166,6 +170,7 @@ export default {
       dateFormat: new Date().toISOString().substr(0, 10),
       datePicker: false,
       timePicker: false,
+      // inline check rules
       rules: {
         nameRules: [
           v =>
@@ -194,6 +199,7 @@ export default {
     checkDateTimeRules(v) {
       return typeof v != "undefined";
     },
+    /** check all rules */
     checkRules() {
       if (!this.checkNameRules(this.todoForm.todoName)) {
         alert("check the name");
@@ -213,10 +219,12 @@ export default {
       }
       return true;
     },
+    /** create todo method */
     async createTodo() {
       this.loading = true;
       this.todoForm.todoDdl = this.todo.date + " " + this.todo.time + ":00";
       if (!this.checkRules()) {
+        // have problem, reject submit
         this.loading = false;
         return;
       }
@@ -246,7 +254,6 @@ export default {
 <style scoped>
 .card-background {
   background-image: url("../assets/TmanagerLogo_l5.svg");
-  /* background-image: url("../assets/TManagerLogo.png"); */
   background-size: 520px;
   background-repeat: no-repeat;
   background-position: 140px -65px;

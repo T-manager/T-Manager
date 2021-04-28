@@ -1,8 +1,10 @@
 <template>
   <div>
+    <!-- modify todo button -->
     <v-btn icon @click="showModifyTodolist = true" color="primary">
       <v-icon>mdi-pencil-outline</v-icon></v-btn
     >
+    <!-- modify todo popup -->
     <v-dialog v-model="showModifyTodolist" persistent max-width="550px">
       <v-card style="padding: 30px 35px 50px 35px;" class="card-background">
         <div
@@ -21,6 +23,7 @@
           ></v-text-field>
         </v-card-text>
         <div class="card_action">
+          <!-- close popup -->
           <v-btn
             depressed
             style="border:#cccccc solid 1px; color:#777777; width:120px; margin-right:50px; "
@@ -28,6 +31,7 @@
           >
             <v-icon class="pr-2">mdi-cancel</v-icon>Cancel
           </v-btn>
+          <!-- submit modify -->
           <v-btn
             depressed
             color="primary"
@@ -50,6 +54,7 @@ export default {
     return {
       loading: false,
       showModifyTodolist: false,
+      // inline check rules
       rules: {
         nameRules: [
           v =>
@@ -65,6 +70,7 @@ export default {
       if (typeof v == "undefined") return false;
       return v.length <= 20 && v.length >= 1;
     },
+    /** check all rules */
     checkRules() {
       if (!this.checkNameRules(this.todolist.todolistName)) {
         alert("check the name");
@@ -72,9 +78,11 @@ export default {
       }
       return true;
     },
+    /** modify todo list method */
     async modifyTodolist() {
       this.loading = true;
       if (!this.checkRules()) {
+        // if not satisfy rules, reject
         this.loading = false;
         return;
       }
@@ -92,7 +100,6 @@ export default {
           this.$router.go(0);
         })
         .catch(error => {
-          // console.log(error);
           this.$store.commit("response", error);
           this.loading = false;
         });
@@ -104,7 +111,6 @@ export default {
 <style scoped>
 .card-background {
   background-image: url("../assets/TmanagerLogo_l5.svg");
-  /* background-image: url("../assets/TManagerLogo.png"); */
   background-size: 520px;
   background-repeat: no-repeat;
   background-position: 140px -65px;
