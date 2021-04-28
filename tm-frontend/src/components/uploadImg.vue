@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- The user's avatar on the Profile page -->
     <v-avatar
       style=" cursor:pointer;"
       size="150"
@@ -18,6 +19,8 @@
         </v-overlay>
       </v-fade-transition>
     </v-avatar>
+
+    <!-- The dialog for the avatar upload -->
     <v-dialog v-model="showUploadImg" persistent max-width="450px">
       <v-card
         style="height:500px;background-color:#FFFFFF;display:flex;flex-direction:column;align-items:center;
@@ -83,6 +86,7 @@ export default {
   },
   props: ["userName"],
   methods: {
+    /** Upload a image*/
     async uploadImg() {
       if (this.imgFile == "") {
         alert("Need to select a picture!");
@@ -116,9 +120,11 @@ export default {
           // console.log(error);
         });
     },
+    /**preview the image while uploading a image file*/
     Preview_image() {
       this.fileUrl = URL.createObjectURL(this.imgFile);
     },
+    /**delete the image*/
     deleteImg() {
       this.$axios({
         method: "delete",

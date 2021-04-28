@@ -1,9 +1,10 @@
 <template>
   <div style="display:flex; padding: 0px 58px 5px 58px; overflow-x:auto;">
     <div v-for="(todolist, index) in todolists" :key="index">
+      <!-- A todolist card -->
       <todolistCard :todolist="todolist"></todolistCard>
     </div>
-    <!-- <todolistCard :todolist="todolist"></todolistCard> -->
+    <!-- A button to add todolist -->
     <v-card class="plusTodoList">
       <v-icon
         @click="showAddTodolist = true"
@@ -28,6 +29,7 @@
         :disabled="loadAddTodoList"
         >New</v-btn
       >
+      <!-- Close the dialog -->
       <v-btn
         v-if="showAddTodolist == true"
         color="primary"
@@ -56,12 +58,15 @@ export default {
     };
   },
   methods: {
+    /**Controls whether to display the dialog that added Todolist */
     showAddNewTodolist() {
       if (this.showAddTodolist == false) this.showAddTodolist = true;
     },
+    /**Hide todolist*/
     hideAddNewTodolist() {
       this.showAddTodolist = false;
     },
+    /**create a todolist*/
     addTodolist() {
       this.loadAddTodoList = true;
       this.$axios({
@@ -87,12 +92,14 @@ export default {
     }
   },
   created() {
+    /**check if the user has logged in*/
     if (this.$store.getters.getToken == null) {
       alert("You are not signned in yet!");
       var path = "/login";
       this.$router.push({ path: path });
     }
     this.projectId = this.$route.path.split("projectid=")[1];
+    /**get all todolist belongs to the project*/
     this.$axios({
       method: "get",
       url: this.$store.state.host + "todolist/get/" + this.projectId,

@@ -1,11 +1,13 @@
 <template>
   <div>
+    <!-- Button used to signup -->
     <v-btn
       @click="showRegisterDialog = true"
       depressed
       style="border: #cccccc solid 1px; color: #777777; width: 100px"
       >Sign Up
     </v-btn>
+    <!-- Dialog for signup -->
     <v-dialog v-model="showRegisterDialog" persistent max-width="450px">
       <v-form v-model="valid">
         <v-card class="userRegistCard" ref="form">
@@ -76,6 +78,7 @@
         </v-card>
       </v-form>
     </v-dialog>
+    <!-- Dialog for E-mail validation -->
     <v-dialog v-model="showVerifyCode" persistent max-width="500px">
       <v-row no-gutters>
         <v-col cols="12">
@@ -167,6 +170,7 @@ export default {
     }
   },
   methods: {
+    /** User name verification*/
     checkName: function(val) {
       this.$axios({
         method: "get",
@@ -180,6 +184,7 @@ export default {
           // console.log(error);
         });
     },
+    /**Create a new user*/
     addNewUser: function() {
       this.$axios({
         method: "post",
@@ -202,12 +207,14 @@ export default {
           // console.log(error);
         });
     },
+    /**Reset all input*/
     resetForm() {
       this.errorMessages = [];
       Object.keys(this.form).forEach(f => {
         this.$refs[f].reset();
       });
     },
+    /**Get Verifycode and send it to email*/
     getVerifyCode: async function() {
       this.loading = true;
       this.$axios({
