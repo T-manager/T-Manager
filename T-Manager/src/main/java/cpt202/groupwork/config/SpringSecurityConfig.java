@@ -45,7 +45,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
   private TokenFilter tokenFilter;
 
   /**
-   *
+   * set encryption method:BCrypt
    * @param authenticationManagerBuilder
    * @throws Exception
    */
@@ -56,7 +56,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   /**
-   *
+   * set Password Encoder:BCryptPasswordEncoder
    * @return
    */
   @Bean
@@ -66,7 +66,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   /**
-   *
+   * override authentication Manager
    * @return
    * @throws Exception
    */
@@ -77,7 +77,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   /**
-   *
+   * disable the security for some URI
    * @param webSecurity
    */
   @Override
@@ -92,7 +92,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
   }
 
   /**
-   *
+   * security setting
    * @param httpSecurity
    * @throws Exception
    */

@@ -241,7 +241,7 @@ public class UserServiceImpl implements UserService {
   }
 
   /**
-   * verify the sent email
+   * send verification email
    * @param user
    * @return response
    */
