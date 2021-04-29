@@ -6,6 +6,7 @@
     >
       Forget password?
     </div>
+    <!-- Dialog for checking username exists -->
     <v-dialog v-model="showBeginReset" persistent max-width="500px">
       <v-row no-gutters>
         <v-col cols="12">
@@ -39,6 +40,7 @@
         </v-col>
       </v-row>
     </v-dialog>
+    <!-- Dialog for checking whether email matches username -->
     <v-dialog v-model="showVerifyInfo" persistent max-width="500px">
       <v-row no-gutters>
         <v-col cols="12">
@@ -73,6 +75,7 @@
         </v-col>
       </v-row>
     </v-dialog>
+    <!-- Dialog for verification code -->
     <v-dialog v-model="showVerifyCode" persistent max-width="500px">
       <v-row no-gutters>
         <v-col cols="12">
@@ -119,6 +122,7 @@
         </v-col>
       </v-row>
     </v-dialog>
+    <!-- Dialog for modifying password -->
     <v-dialog v-model="showModifyPwd" persistent max-width="600px">
       <div
         style="
@@ -255,14 +259,17 @@ export default {
       this.showModifyPwd = false;
     },
     next1: function() {
+      // show dialog for checking email
       this.showBeginReset = false;
       this.showVerifyInfo = true;
     },
     next2: function() {
+      // show dialog for verfication code
       this.showVerifyInfo = false;
       this.showVerifyCode = true;
     },
     next3: function() {
+      // show dialog for changing password
       this.showVerifyCode = false;
       this.showModifyPwd = true;
     },
@@ -368,7 +375,7 @@ export default {
           method: "put",
           url:
             this.$store.state.host +
-            "auth/edit/" + // ！！修改密码未完善，此处无需token认证即可修改密码
+            "auth/edit/" + // No authorization required now
             this.userName,
           data: {
             userName: this.userName,
