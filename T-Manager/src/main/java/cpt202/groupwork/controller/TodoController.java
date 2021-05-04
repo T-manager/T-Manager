@@ -2,7 +2,7 @@ package cpt202.groupwork.controller;
 
 import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.TodoDTO;
-
+import cpt202.groupwork.dto.TodoViewDTO;
 import cpt202.groupwork.entity.Todo;
 import cpt202.groupwork.entity.Todolist;
 import cpt202.groupwork.entity.User;
@@ -98,9 +98,9 @@ public class TodoController {
     return Response.ok();
   }
 
-  @PutMapping("/edit/{todoMember}")
+  @PutMapping("/edit")
   @Operation(summary = "修改todo信息")
-  public Response<?> modifyTodo(@Valid @RequestBody Todo todoInfo, @PathVariable String todoMember) {
+  public Response<?> modifyTodo(@Valid @RequestBody TodoViewDTO todoInfo) {
     // Optional<String> username = SecurityUtils.getCurrentUsername();
     // 没有登陆
     // if (username.isEmpty()) {
@@ -108,7 +108,7 @@ public class TodoController {
     // }
     Integer todoId = todoInfo.getTodoId();
     Optional<Todo> todo = todoRepository.findById(todoId);
-    Optional<User> user = userRepository.findByUserName(todoMember);
+    Optional<User> user = userRepository.findByUserName(todoInfo.getTodoMember());
     if (user.isEmpty()) {
       return Response.notFound();
     }
