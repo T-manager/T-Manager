@@ -45,8 +45,7 @@ public class ProjectController {
   public Response<?> createProject(@Valid @RequestBody ProjectDTO projectDTO) {
     Project project = new Project();
     BeanUtils.copyProperties(projectDTO, project);
-    project.setProjectOwnerId(
-        userRepository.findByUserName(projectDTO.getProjectOwner()).get().getUserId());
+    project.setProjectOwnerId(userRepository.findByUserName(projectDTO.getProjectOwner()).get().getUserId());
     projectRepository.save(project);
     ProjectMember pm = new ProjectMember();
     pm.setProjectId(project.getProjectId());
@@ -81,10 +80,21 @@ public class ProjectController {
 
   @GetMapping("/get/{projectId}")
   @Operation(summary = "get the infomation of project")
-  public Response<?> getProject(@PathVariable Integer projectId) {
+  public Response<?> getProjectV2(@PathVariable Integer projectId) {
     Optional<Project> project = projectRepository.findById(projectId);
     ProjectDTO projectDTO = new ProjectDTO();
     BeanUtils.copyProperties(project.get(), projectDTO);
     return Response.ok(project);
   }
+
+  @GetMapping("/getV2/{projectId}")
+  @Operation(summary = "get the infomation of project")
+  public Response<?> getProject(@PathVariable Integer projectId) {
+    Optional<Project> project = projectRepository.findById(projectId);
+    ProjectDTO projectDTO = new ProjectDTO();
+    BeanUtils.copyProperties(project.get(), projectDTO);
+    projectDTO.setProjectOwner(userRepository.findById(project.get().getProjectOwnerId()).get().getUserName());
+    return Response.ok(projectDTO);
+  }
+
 }

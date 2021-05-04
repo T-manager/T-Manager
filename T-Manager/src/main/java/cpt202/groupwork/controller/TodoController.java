@@ -109,9 +109,9 @@ public class TodoController {
     Integer todoId = todoInfo.getTodoId();
     Optional<Todo> todo = todoRepository.findById(todoId);
     Optional<User> user = userRepository.findByUserName(todoInfo.getTodoMember());
-    if (user.isEmpty()) {
-      return Response.notFound();
-    }
+    // if (user.isEmpty()) {
+    //   return Response.notFound();
+    // }
     BeanUtils.copyProperties(todoInfo, todo.get());
     todo.get().setTodoMember(user.get().getUserId());
     todoRepository.save(todo.get());
