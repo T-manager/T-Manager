@@ -1,7 +1,10 @@
 <template>
   <div>
     <!-- todo information (each line in todo list) -->
-    <v-list-item @click="showTodoDetail = true">
+    <v-list-item
+      @click="showTodoDetail = true"
+      style="border-bottom:1px solid #dfdfdf"
+    >
       <template>
         <v-list-item-content
           style="display:flex; justify-content:flex-start; margin-left:10px;"
@@ -15,22 +18,70 @@
             "
           >
             {{ todo.todoName }}
+            <v-chip
+              v-if="
+                !todo.todoCheck &&
+                  todo.todoDdl.split(' ')[0] <
+                    new Date().getFullYear() +
+                      '-' +
+                      (new Date().getMonth() > 8
+                        ? new Date().getMonth()
+                        : '0' + (new Date().getMonth() + 1)) +
+                      '-' +
+                      (new Date().getDate() > 9
+                        ? new Date().getDate()
+                        : '0' + new Date().getDate())
+              "
+              color="red"
+              outlined
+              small
+              style="margin-left:10px"
+              >Overdue</v-chip
+            >
           </div>
           <div
-            style="display:flex; margin-top:5px"
-            :style="
-              todo.todoCheck
-                ? 'color:#c3c3c3; text-decoration:line-through'
-                : 'color:#838383'
-            "
+            style="display:flex; margin-top:5px; color:#838383; align-items:center"
           >
-            <div class="todo_detail">
-              {{ todo.todoDetail }}
+            <v-avatar
+              v-if="projectType == 'team'"
+              size="30"
+              :style="
+                todo.todoCheck
+                  ? 'margin-right:10px; border:solid 2px #333333'
+                  : 'margin-right:10px; border:solid 2px #d0021b'
+              "
+            >
+              <v-img
+                :src="
+                  $store.state.host + 'auth/images/' + todo.todoMemberAvatar
+                "
+                height="35"
+                width="35"
+                :gradient="
+                  todo.todoCheck
+                    ? 'to top right, rgba(150,150,150,.33), rgba(25,25,25,.7)'
+                    : ''
+                "
+              ></v-img>
+            </v-avatar>
+            <div class="todo_detail" style="display:flex; align-items:center">
+              <div style="margin-right:10px; " v-if="projectType == 'team'">
+                {{ todo.todoMember }}
+              </div>
+              <div style="font-size:12px; margin-top:3px">
+                {{ todo.todoDdl.split(" ")[0] }}
+              </div>
             </div>
           </div>
         </v-list-item-content>
         <!-- todo checkbox -->
-        <v-list-item-action style="margin-right:8px">
+        <v-list-item-action
+          style="margin-right:8px"
+          v-if="
+            $store.getters.getUsername == todo.todoMember ||
+              $store.getters.getUsername == projectOwner
+          "
+        >
           <v-checkbox
             v-model="todo.todoCheck"
             color="primary"
@@ -58,6 +109,10 @@
           Todo Detail
           <!-- modify todo popup -->
           <v-btn
+            v-if="
+              $store.getters.getUsername == todo.todoMember ||
+                $store.getters.getUsername == projectOwner
+            "
             color="primary"
             @click="showModifyTodo = true"
             style="margin-left:10px"
@@ -66,7 +121,13 @@
             <v-icon>mdi-pencil-outline</v-icon>
           </v-btn>
           <!-- delete todo -->
-          <v-btn @click="showPopupMethod" icon
+          <v-btn
+            v-if="
+              $store.getters.getUsername == todo.todoMember ||
+                $store.getters.getUsername == projectOwner
+            "
+            @click="showPopupMethod"
+            icon
             ><v-icon>mdi-delete-outline</v-icon></v-btn
           >
         </div>
@@ -89,6 +150,10 @@
           <div class="todo_detail_info">
             <div style="width:150px">Todo Deadline:</div>
             <div style="width:350px; color:#838383">{{ todo.todoDdl }}</div>
+          </div>
+          <div class="todo_detail_info" v-if="projectType == 'team'">
+            <div style="width:150px">Executer:</div>
+            <div style="width:350px; color:#838383">{{ todo.todoMember }}</div>
           </div>
         </v-card-text>
       </v-card>
@@ -213,6 +278,18 @@
               ></v-time-picker>
             </v-menu>
           </div>
+          <!-- choose todo executer -->
+          <v-autocomplete
+            v-if="projectType == 'team'"
+            v-model="todo.todoMember"
+            :items="projectMembers"
+            :loading="loadingMember"
+            :disabled="loadingMember"
+            label="todo executer"
+            color="primary"
+            prepend-icon="mdi-badge-account-outline"
+          >
+          </v-autocomplete>
         </v-card-text>
         <div style="display:flex; justify-content:center; margin-top:10px">
           <!-- close modify popup -->
@@ -253,10 +330,14 @@ export default {
   data() {
     return {
       loading: false,
+      loadingMember: true,
       showTodoDetail: false,
       showModifyTodo: false,
       showPopup: false,
       todoChange: {},
+      projectMembers: [],
+      projectOwner: "",
+      projectType: "",
 
       dateFormat: new Date().toISOString().substr(0, 10),
       datePicker: false,
@@ -278,7 +359,7 @@ export default {
     };
   },
   components: { popup },
-  props: ["todolistName", "todo", "projectName"],
+  props: ["todolistName", "todo", "projectName", "projectId"],
   methods: {
     /** show popup method */
     showPopupMethod() {
@@ -343,7 +424,7 @@ export default {
         this.loading = false;
         return;
       }
-      this.todo.todoMember = 0;
+      console.log(this.todo);
       this.$axios({
         method: "put",
         url: this.$store.state.host + "todo/edit",
@@ -384,6 +465,46 @@ export default {
     var dateTime = this.todo.todoDdl;
     this.todoChange.date = dateTime.split(" ")[0];
     this.todoChange.time = dateTime.split(" ")[1].split(":00 ")[0];
+    // get projectType
+    this.loadingMember = true;
+    this.$axios({
+      method: "get",
+      url: this.$store.state.host + "project/getV2/" + this.projectId,
+      headers: {
+        Authorization: "Bearer " + this.$store.getters.getToken
+      }
+    })
+      .then(res => {
+        this.projectOwner = res.data.data.projectOwner;
+        console.log(this.projectOwner);
+        this.projectType = res.data.data.projectType;
+        if (this.projectType == "team") {
+          // get project member if is team project
+          this.$axios({
+            method: "get",
+            url: this.$store.state.host + "relation/getuser/" + this.projectId,
+            headers: {
+              Authorization: "Bearer " + this.$store.getters.getToken
+            }
+          })
+            .then(res => {
+              console.log("members:");
+              console.log(res.data.data);
+              for (var i in res.data.data)
+                this.projectMembers.push(res.data.data[i].memberName);
+              console.log(this.projectMembers);
+              this.loadingMember = false;
+            })
+            .catch(error => {
+              this.$store.commit("response", error);
+            });
+        } else {
+          this.loadingMember = false;
+        }
+      })
+      .catch(error => {
+        this.$store.commit("response", error);
+      });
   }
 };
 </script>

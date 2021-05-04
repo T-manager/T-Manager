@@ -26,13 +26,38 @@
       </div>
 
       <v-list flat>
-        <!-- <v-subheader>All</v-subheader> -->
+        <div style="display:flex">
+          <v-select
+            v-model="showTodoType"
+            dense
+            style="width:65px; margin-left:240px; font-size:12px; color:#aaaaaa"
+            :items="['All', 'Todo', 'Done']"
+          ></v-select>
+          <v-btn
+            icon
+            @click="orderTodo"
+            style="margin-right:10px; margin-left:10px"
+          >
+            <v-icon v-if="timeOrder">mdi-sort-clock-ascending-outline</v-icon>
+            <v-icon v-else>mdi-sort-clock-descending-outline</v-icon>
+          </v-btn>
+        </div>
+
         <v-list-item-group multiple>
           <!-- each todo -->
           <div style="max-height:490px; overflow-y:auto">
-            <div v-for="(todo, index) in todolist.todoViewDTO" :key="index">
+            <div
+              v-for="(todo, index) in todolist.todoViewDTO"
+              :key="index"
+              v-if="
+                showTodoType == 'All' ||
+                  (showTodoType == 'Done' && todo.todoCheck == true) ||
+                  (showTodoType == 'Todo' && todo.todoCheck == false)
+              "
+            >
               <todoDetailDialog
                 @changeCompleteNum="changeCompleteNum(index)"
+                :projectId="projectId"
                 :todolistName="todolist.todolistName"
                 :todo="todo"
                 :projectName="todolist.projectName"
@@ -40,7 +65,10 @@
             </div>
           </div>
           <!-- add new todo popup -->
-          <addTodoDialog :todolist="todolist"></addTodoDialog>
+          <addTodoDialog
+            :projectId="projectId"
+            :todolist="todolist"
+          ></addTodoDialog>
         </v-list-item-group>
       </v-list>
     </v-card>
@@ -62,6 +90,8 @@ export default {
   data: function() {
     return {
       show: true,
+      showTodoType: "All",
+      timeOrder: true,
       showPopup: false,
       loading: {
         delete: false
@@ -72,6 +102,11 @@ export default {
     /** show/hide popup method, provide for child component */
     showPopupMethod() {
       this.showPopup = !this.showPopup;
+    },
+    /** order todo by time in ascending or decending */
+    orderTodo() {
+      this.timeOrder = !this.timeOrder;
+      this.todolist.todoViewDTO = this.todolist.todoViewDTO.reverse();
     },
     /** change complete todo number, provide for child component */
     changeCompleteNum(index) {
@@ -101,7 +136,7 @@ export default {
         });
     }
   },
-  props: ["todolist"],
+  props: ["projectId", "todolist"],
   components: {
     addTodoDialog,
     modifyTodoListDialog,

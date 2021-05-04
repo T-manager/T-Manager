@@ -2,7 +2,7 @@
   <div style="display:flex; padding: 0px 58px 5px 58px; overflow-x:auto;">
     <div v-for="(todolist, index) in todolists" :key="index">
       <!-- A todolist card -->
-      <todolistCard :todolist="todolist"></todolistCard>
+      <todolistCard :projectId="projectId" :todolist="todolist"></todolistCard>
     </div>
     <!-- A button to add todolist -->
     <v-card class="plusTodoList">
@@ -109,6 +109,7 @@ export default {
     })
       .then(res => {
         // this.todolists = res.data.data.reverse();
+        console.log(res.data.data);
         this.todolists = res.data.data;
         for (var i in this.todolist.todoViewDTO) {
           this.todolist.todiViewDTO[i].loading = false;
