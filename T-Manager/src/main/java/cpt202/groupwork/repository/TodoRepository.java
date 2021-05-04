@@ -9,13 +9,13 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface TodoRepository extends JpaRepository<Todo, Integer> {
-//  List<TodoRepository> findByUsername(String username);
+
   /**
-   * 通过 projectId 找到 List<TodoList>
+   * 通过 todolistId 找到 List<Todo>,按照ddl降序排列
    *
    * @param todolistId
    * @return List<TodoList>
    */
-  List<Todo> findByTodolistId(Integer todolistId);
+  List<Todo> findByTodolistIdOrderByTodoDdlAsc(Integer todolistId);
 
 }

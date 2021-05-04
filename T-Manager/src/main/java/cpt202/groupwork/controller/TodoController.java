@@ -10,7 +10,6 @@ import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.TodolistRepository;
 import cpt202.groupwork.repository.TodoRepository;
 import cpt202.groupwork.repository.UserRepository;
-import cpt202.groupwork.security.SecurityUtils;
 //import cpt202.groupwork.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -56,10 +55,10 @@ public class TodoController {
   @PostMapping("/add")
   @Operation(summary = "Add todo with todoListId and todoCreateDTO")
   public Response<?> createTodo(@Valid @RequestBody TodoDTO todoDTO) {
-    Optional<String> username = SecurityUtils.getCurrentUsername();
-    if (username.isEmpty()) {
-      return Response.unAuth();
-    }
+    // Optional<String> username = SecurityUtils.getCurrentUsername();
+    // if (username.isEmpty()) {
+    // return Response.unAuth();
+    // }
     Integer todolistId = todoDTO.getTodolistId();
     Optional<Todolist> todolist = todolistRepository.findById(todolistId);
     Optional<User> user = userRepository.findByUserName(todoDTO.getTodoMember());

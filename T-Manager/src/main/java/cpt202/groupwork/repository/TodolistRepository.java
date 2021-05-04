@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface TodolistRepository extends JpaRepository<Todolist, Integer> {
 
-//  List<TodoList> findByUsername(String username);
+  // List<TodoList> findByUsername(String username);
 
   /**
    * 通过 projectId 找到 List<TodoList>
@@ -18,4 +18,11 @@ public interface TodolistRepository extends JpaRepository<Todolist, Integer> {
    */
   List<Todolist> findByProjectId(Integer projectId);
 
+  /**
+   * 通过 projectId 找到 List<TodoList>
+   *
+   * @param projectId
+   * @return List<TodoList>
+   */
+  List<Todolist> findByProjectIdOrderByTodolistIdAsc(Integer projectId);
 }

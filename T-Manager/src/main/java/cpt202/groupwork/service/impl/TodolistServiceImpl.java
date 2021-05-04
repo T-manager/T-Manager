@@ -33,24 +33,24 @@ public class TodolistServiceImpl implements TodolistService {
   @Override
   public List<TodolistViewDTO> getTodolist(Integer projectId) {
     List<TodolistViewDTO> todolistViewDTOs = new ArrayList<>();
-    List<Todolist> todolists = todoListRepository.findByProjectId(projectId);
-
+    List<Todolist> todolists = todoListRepository.findByProjectIdOrderByTodolistIdAsc(projectId);
     for (Todolist todoList : todolists) {
       TodolistViewDTO todolistViewDTO = new TodolistViewDTO();
       BeanUtils.copyProperties(todoList, todolistViewDTO);
       todolistViewDTO.setProjectName(projectRepository.findByProjectId(projectId).get().getProjectName());
-//      todolistViewDTO.setAvatar(userRepository.findAvatarByUsername(todolistViewDTO.getUsername()));
+      // todolistViewDTO.setAvatar(userRepository.findAvatarByUsername(todolistViewDTO.getUsername()));
       todolistViewDTOs.add(todolistViewDTO);
 
       List<TodoViewDTO> todoViewDTOs = new ArrayList<>();
-      List<Todo> todos = todoRepository.findByTodolistId(todoList.getTodolistId());
+      List<Todo> todos = todoRepository.findByTodolistIdOrderByTodoDdlAsc(todoList.getTodolistId());
 
       for (Todo todo : todos) {
         TodoViewDTO todoViewDTO = new TodoViewDTO();
         BeanUtils.copyProperties(todo, todoViewDTO);
+        todoViewDTO.setTodoMember(userRepository.findByUserId(todo.getTodoMember()).get().getUserName());
+        todoViewDTO.setTodoMemberAvatar(userRepository.findByUserId(todo.getTodoMember()).get().getUserAvatar());
         todoViewDTOs.add(todoViewDTO);
       }
-
       todolistViewDTO.setTodoViewDTO(todoViewDTOs);
     }
 
