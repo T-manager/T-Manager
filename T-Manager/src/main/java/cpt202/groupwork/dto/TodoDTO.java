@@ -27,6 +27,6 @@ public class TodoDTO {
   private Date todoDdl;
 
   // todo的执行人
-  private Integer todoMember;
+  private String todoMember;
 
 }
