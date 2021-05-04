@@ -98,9 +98,9 @@ public class TodoController {
     return Response.ok();
   }
 
-  @PutMapping("/edit")
+  @PutMapping("/edit/{todoMember}")
   @Operation(summary = "修改todo信息")
-  public Response<?> modifyTodo(@Valid @RequestBody Todo todoInfo) {
+  public Response<?> modifyTodo(@Valid @RequestBody Todo todoInfo, @PathVariable String todoMember) {
     // Optional<String> username = SecurityUtils.getCurrentUsername();
     // 没有登陆
     // if (username.isEmpty()) {
@@ -108,11 +108,12 @@ public class TodoController {
     // }
     Integer todoId = todoInfo.getTodoId();
     Optional<Todo> todo = todoRepository.findById(todoId);
-
-    // if (todo.isEmpty()) {
-    // return Response.notFound("没有找到todo哦！");
-    // }
+    Optional<User> user = userRepository.findByUserName(todoMember);
+    if (user.isEmpty()) {
+      return Response.notFound();
+    }
     BeanUtils.copyProperties(todoInfo, todo.get());
+    todo.get().setTodoMember(user.get().getUserId());
     todoRepository.save(todo.get());
     return Response.ok();
   }
@@ -150,11 +151,4 @@ public class TodoController {
     return Response.ok(todo);
   }
 
-  // @GetMapping("/getbyddl/{todolistId}")
-  // @Operation(summary = "通过todolistId请求按todo截止日期排序的todo")
-  // public Response<?> getTodoByDdl(@PathVariable Integer todolistId) {
-  // List<Todo> todo =
-  // todoRepository.findAllByIsEnabledTrueOrderByTodoDdlDesc(todolistId);
-  // return Response.ok(todo);
-  // }
 }
