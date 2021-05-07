@@ -1,15 +1,70 @@
 <template>
-  <div style="display:flex;flex-direction:column;align-items:center ">
+  <div style="display: flex; flex-direction: column; align-items: center">
     <div
-      style="display:flex; padding:35px; width:1350px; justify-content:flex-start;"
+      style="
+        display: flex;
+        flex-direction: column;
+        padding: 35px;
+        width: 1350px;
+        justify-content: flex-start;
+      "
     >
-      <v-row>
+      <v-row style="margin-top: 20px">
+        <v-text-field
+          solo
+          prepend-inner-icon="mdi-magnify"
+          style="
+            border-top-left-radius: 30px;
+            border-bottom-left-radius: 30px;
+            height: 50px;
+            margin-left: 830px;
+          "
+          color="primary"
+          label="Search Project"
+          v-model="search"
+        >
+        </v-text-field>
+        <v-menu offset-x>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              v-bind="attrs"
+              v-on="on"
+              color="white"
+              style="
+                min-width: 20px;
+                height: 48px;
+                margin-left: 3px;
+                margin-right: 30px;
+                border-top-right-radius: 30px;
+                border-bottom-right-radius: 30px;
+              "
+            >
+              <v-icon color="primary">mdi-filter-outline</v-icon>
+            </v-btn>
+          </template>
+          <v-list style="padding: 0px">
+            <v-list-item @click="showProjectType = 'All'">
+              <v-list-item-title>All</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="showProjectType = 'team'">
+              <v-list-item-title>Team</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="showProjectType = 'personal'">
+              <v-list-item-title>Personal</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-row>
+      <v-row style="margin-top: 40px">
         <!-- Card for all the projects that have been created -->
         <projectCard
-          style="margin:15px"
+          style="margin: 15px"
           v-for="(project, index) in projects"
           :key="index"
-          v-if="showProjects"
+          v-if="
+            showProjects &&
+            (showProjectType == project.projectType || showProjectType == 'All')
+          "
           :project="project"
         ></projectCard>
         <!--Dialog for creating a new project-->
@@ -23,14 +78,19 @@
               </v-btn>
             </v-card>
           </template>
-          <v-card style="padding: 30px 35px 50px 35px;" class="card-background">
+          <v-card style="padding: 30px 35px 50px 35px" class="card-background">
             <div
-              style="font-size:30px; margin-left:10px; width:100%; text-align:left"
+              style="
+                font-size: 30px;
+                margin-left: 10px;
+                width: 100%;
+                text-align: left;
+              "
             >
               <v-img></v-img>
               Create Project
             </div>
-            <v-card-text style="margin-top:30px; padding:10px">
+            <v-card-text style="margin-top: 30px; padding: 10px">
               <v-text-field
                 outlined
                 label="project name"
@@ -53,6 +113,7 @@
               ></v-textarea>
               <v-autocomplete
                 outlined
+                color="primary"
                 :items="['personal', 'team']"
                 label="project type"
                 v-model="newProject.projectType"
@@ -60,11 +121,13 @@
               ></v-autocomplete>
             </v-card-text>
 
-            <div style="display:flex; justify-content:center; margin-top:10px">
+            <div
+              style="display: flex; justify-content: center; margin-top: 10px"
+            >
               <!-- Close the dialog -->
               <v-btn
                 depressed
-                style="border:#cccccc solid 1px; color:#777777; width:100px"
+                style="border: #cccccc solid 1px; color: #777777; width: 100px"
                 @click="dialog = false"
                 :loading="loadAddProject"
                 :disabled="loadAddProject"
@@ -75,7 +138,7 @@
               <v-btn
                 depressed
                 color="primary"
-                style="color:#fff; width:100px; margin-left:50px"
+                style="color: #fff; width: 100px; margin-left: 50px"
                 @click="addProject()"
                 :loading="loadAddProject"
                 :disabled="loadAddProject"
@@ -93,21 +156,22 @@
 <script>
 import projectCard from "@/components/projectCard";
 export default {
-  data: function() {
+  data: function () {
     return {
       dialog: false,
+      showProjectType: "All",
       rules: {
         nameRules: [
-          v =>
+          (v) =>
             (typeof v != "undefined" && v.length <= 20 && v.length >= 1) ||
-            "the length of name should be 1-20"
+            "the length of name should be 1-20",
         ],
         detailRules: [
-          v =>
+          (v) =>
             (typeof v != "undefined" && v.length <= 100) ||
-            "the length of detail should less than 100"
+            "the length of detail should less than 100",
         ],
-        selectRules: [v => !!v || "please choose a type"]
+        selectRules: [(v) => !!v || "please choose a type"],
       },
       showProjects: false,
       loadAddProject: false,
@@ -117,17 +181,26 @@ export default {
         projectName: "",
         projectDetail: "",
         projectOwner: this.$store.getters.getUsername,
-        projectType: ""
+        projectType: "",
       },
       memberItem: 1,
       items: [
         { text: "ProjectOwmer", icon: "mdi-account" },
         { text: "member1", icon: "mdi-account" },
-        { text: "member2", icon: "mdi-account" }
-      ]
+        { text: "member2", icon: "mdi-account" },
+      ],
     };
   },
   methods: {
+    showAll() {
+      showProjectType = "All";
+    },
+    showPersonal() {
+      showProjectType = "Personal";
+    },
+    showTeam() {
+      showProjectType = "Team";
+    },
     checkNameRules(v) {
       if (typeof v == "undefined") return false;
       return v.length <= 20 && v.length >= 1;
@@ -169,18 +242,18 @@ export default {
         url: this.$store.state.host + "project/add",
         data: this.newProject,
         headers: {
-          Authorization: "Bearer " + this.$store.getters.getToken
-        }
+          Authorization: "Bearer " + this.$store.getters.getToken,
+        },
       })
-        .then(res => {
+        .then((res) => {
           this.loadAddProject = false;
           this.$router.go(0);
         })
-        .catch(error => {
+        .catch((error) => {
           this.$store.commit("response", error);
           this.loadAddProject = false;
         });
-    }
+    },
   },
   created() {
     /**check if the user has logged in*/
@@ -197,21 +270,21 @@ export default {
         "relation/getproject/" +
         this.$store.getters.getUsername,
       headers: {
-        Authorization: "Bearer " + this.$store.getters.getToken
-      }
+        Authorization: "Bearer " + this.$store.getters.getToken,
+      },
     })
-      .then(res => {
+      .then((res) => {
         this.projects = res.data.data;
         this.showProjects = true;
       })
-      .catch(error => {
+      .catch((error) => {
         // console.log(error);
         this.$store.commit("response", error);
       });
   },
   components: {
-    projectCard
-  }
+    projectCard,
+  },
 };
 </script>
 <style scoped>
