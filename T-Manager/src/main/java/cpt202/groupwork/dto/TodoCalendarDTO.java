@@ -12,7 +12,8 @@ import javax.validation.constraints.Size;
 @Data
 public class TodoCalendarDTO {
     // 在个人日历页查看todo的信息
-
+    
+    private Integer todoId;
     // todo的名字
     @Size(min = 1, max = 20, message = "todo名称必须在1到20个字之间哦")
     private String todoName;

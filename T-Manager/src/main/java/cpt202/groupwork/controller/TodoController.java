@@ -4,6 +4,7 @@ import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.TodoCalendarDTO;
 import cpt202.groupwork.dto.TodoDTO;
 import cpt202.groupwork.dto.TodoViewDTO;
+import cpt202.groupwork.dto.TodolistViewDTO;
 import cpt202.groupwork.entity.Project;
 import cpt202.groupwork.entity.Todo;
 import cpt202.groupwork.entity.Todolist;
@@ -12,6 +13,7 @@ import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.TodolistRepository;
 import cpt202.groupwork.repository.TodoRepository;
 import cpt202.groupwork.repository.UserRepository;
+import cpt202.groupwork.service.TodolistService;
 //import cpt202.groupwork.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -48,6 +50,9 @@ public class TodoController {
 
   @Autowired
   UserRepository userRepository;
+
+  @Autowired
+  TodolistService todolistService;
 
   /**
    * Upload a todo
@@ -173,6 +178,14 @@ public class TodoController {
       todoCalendarDTOs.add(todoCalendarDTO);
     }
     return Response.ok(todoCalendarDTOs);
+  }
+
+  @GetMapping("/get/{projectId}/search/{todoName}")
+  @Operation(summary = "在Dashboard搜索")
+  public Response<?> searchTodo(@PathVariable Integer projectId, @PathVariable String todoName) {
+    List<TodolistViewDTO> todolistViewDTOs = new ArrayList<>();
+    todolistViewDTOs = todolistService.searchTodos(projectId, todoName);
+    return Response.ok(todolistViewDTOs);
   }
 
 }
