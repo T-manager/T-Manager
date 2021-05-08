@@ -2,7 +2,7 @@
   <v-app style="background-color:#f1f2f8; width:100%; height:100%;">
     <!-- navigation bar -->
     <div
-      style="position:fixed; width:100%; display:flex; justify-content:center; z-index:2"
+      style="position:fixed; width:100%; display:flex; justify-content:center; z-index:5"
     >
       <navBar></navBar>
     </div>
