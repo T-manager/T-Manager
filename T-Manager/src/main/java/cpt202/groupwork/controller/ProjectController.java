@@ -2,18 +2,26 @@ package cpt202.groupwork.controller;
 
 import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.ProjectDTO;
+import cpt202.groupwork.dto.ProjectDetailDTO;
 import cpt202.groupwork.entity.Project;
 import cpt202.groupwork.entity.relation.ProjectMember;
 import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.RelationRepository;
 import cpt202.groupwork.repository.UserRepository;
+import cpt202.groupwork.service.ProjectService;
+import cpt202.groupwork.service.RelationService;
 //import cpt202.groupwork.security.SecurityUtils;
+import cpt202.groupwork.service.impl.RelationServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.*;
 import javax.validation.Valid;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -39,6 +47,9 @@ public class ProjectController {
 
   @Autowired
   UserRepository userRepository;
+
+  @Autowired
+  ProjectService projectService;
 
   @PostMapping("/add")
   @Operation(summary = "add a project")
@@ -95,6 +106,12 @@ public class ProjectController {
     BeanUtils.copyProperties(project.get(), projectDTO);
     projectDTO.setProjectOwner(userRepository.findById(project.get().getProjectOwnerId()).get().getUserName());
     return Response.ok(projectDTO);
+  }
+
+  @GetMapping("/search/{username}")
+  @Operation(summary = "search the project of a user by certain rule")
+  public Response<?> searchProject(@PathVariable String username, @Valid @RequestBody String json) throws JSONException {
+    return Response.ok(projectService.searchUserProject(username,json));
   }
 
 }

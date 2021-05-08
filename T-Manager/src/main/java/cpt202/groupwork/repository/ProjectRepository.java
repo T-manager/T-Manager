@@ -14,4 +14,5 @@ public interface ProjectRepository extends JpaRepository<Project, Integer> {
      * @return Optional<Project>
      */
     Optional<Project> findByProjectId(Integer projectId);
+
 }
