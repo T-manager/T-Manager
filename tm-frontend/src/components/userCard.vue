@@ -13,7 +13,7 @@
         v-on="on"
         @mouseover="showCard = true"
         @mouseleave="showCard = false"
-        @click="toUserPage"
+        @click="gotoCalender"
         style="background-color:#aaaaaa"
       >
         <v-img
@@ -40,7 +40,7 @@
         <v-list-item link to="/profile" class="list_item_center">
           Profile
         </v-list-item>
-        <v-list-item class="list_item_center">
+        <v-list-item link to="/calender" class="list_item_center">
           Calender
         </v-list-item>
         <v-list-item
@@ -102,6 +102,11 @@ export default {
       } else {
         this.$store.state.show.showLogin = true;
       }
+    },
+    gotoCalender() {
+      this.$router.replace({
+        path: "/calender"
+      });
     },
     /**user logout*/
     logout() {
