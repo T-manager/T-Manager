@@ -18,4 +18,12 @@ public interface TodoRepository extends JpaRepository<Todo, Integer> {
    */
   List<Todo> findByTodolistIdOrderByTodoDdlAsc(Integer todolistId);
 
+  /**
+   * 通过 todomember 找到 List<Todo>,按照ddl降序排列
+   *
+   * @param todoMember
+   * @return List<TodoList>
+   */
+  List<Todo> findByTodoMemberOrderByTodoDdlAsc(Integer todoMember);
+
 }
