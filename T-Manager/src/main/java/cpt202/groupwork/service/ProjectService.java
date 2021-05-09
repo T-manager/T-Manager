@@ -6,5 +6,5 @@ import org.json.JSONException;
 import java.util.List;
 
 public interface ProjectService {
-    List<ProjectDetailDTO> searchUserProject(String username, String json) throws JSONException;
+    List<ProjectDetailDTO> searchUserProject(String username, String namePattern);
 }

@@ -4,6 +4,7 @@ import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.ProjectDTO;
 import cpt202.groupwork.dto.ProjectDetailDTO;
 import cpt202.groupwork.entity.Project;
+import cpt202.groupwork.entity.User;
 import cpt202.groupwork.entity.relation.ProjectMember;
 import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.RelationRepository;
@@ -24,15 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
@@ -108,10 +101,10 @@ public class ProjectController {
     return Response.ok(projectDTO);
   }
 
-  @GetMapping("/search/{username}")
+  @GetMapping("/search/{userName}/{namePattern}")
   @Operation(summary = "search the project of a user by certain rule")
-  public Response<?> searchProject(@PathVariable String username, @Valid @RequestBody String json) throws JSONException {
-    return Response.ok(projectService.searchUserProject(username,json));
+  public Response<?> searchProject(@PathVariable String userName, @PathVariable String namePattern) {
+    return Response.ok(projectService.searchUserProject(userName,namePattern));
   }
 
 }

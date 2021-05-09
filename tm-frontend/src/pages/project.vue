@@ -9,21 +9,37 @@
         justify-content: flex-start;
       "
     >
-      <v-row style="margin-top: 20px">
-        <v-text-field
-          solo
-          prepend-inner-icon="mdi-magnify"
-          style="
-            border-top-left-radius: 30px;
-            border-bottom-left-radius: 30px;
-            height: 50px;
-            margin-left: 830px;
-          "
-          color="primary"
-          label="Search Project"
-          v-model="search"
-        >
-        </v-text-field>
+      <v-row style="margin-top: 20px" v-on:keyup.enter="inputHandle(text)">
+        <v-menu offset-y>
+          <template v-slot:activator="{ on }">
+            <v-text-field
+              solo
+              placeholder="Search Project"
+              prepend-inner-icon="mdi-magnify"
+              style="
+                border-top-left-radius: 30px;
+                border-bottom-left-radius: 30px;
+                height: 50px;
+                margin-left: 830px;
+              "
+              color="primary"
+              label="Search Project"
+              v-model="text"
+              v-on="on"
+            >
+            </v-text-field>
+          </template>
+          <v-list v-if="projects.length > 0" dense>
+            <v-list-item
+              v-for="(project, index) in projects"
+              :key="index"
+              @click="projects = { project }"
+            >
+              <v-list-item-title>{{ project.projectName }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
         <v-menu offset-x>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -160,6 +176,8 @@ export default {
     return {
       dialog: false,
       showProjectType: "All",
+      text: "",
+
       rules: {
         nameRules: [
           (v) =>
@@ -191,15 +209,54 @@ export default {
       ],
     };
   },
+  watch: {
+    text: "inputHandle",
+  },
   methods: {
-    showAll() {
-      showProjectType = "All";
+    inputHandle(text) {
+      if (text.trim() !== "") {
+        this.getProjects();
+      } else {
+        this.$axios({
+          method: "get",
+          url:
+            this.$store.state.host +
+            "relation/getproject/" +
+            this.$store.getters.getUsername,
+          headers: {
+            Authorization: "Bearer " + this.$store.getters.getToken,
+          },
+        })
+          .then((res) => {
+            this.projects = res.data.data;
+          })
+          .catch((error) => {
+            this.$store.commit("response", error);
+          });
+      }
     },
-    showPersonal() {
-      showProjectType = "Personal";
-    },
-    showTeam() {
-      showProjectType = "Team";
+    getProjects() {
+     
+        this.$axios({
+          method: "get",
+          url:
+            this.$store.state.host +
+            "project/search/" +
+            this.$store.getters.getUsername +
+            "/" +
+            this.text,
+          headers: {
+            Authorization: "Bearer " + this.$store.getters.getToken,
+          },
+        })
+          .then((res) => {
+            console.log(res.data.data);
+            this.projects = res.data.data;
+          })
+          .catch((error) => {
+            this.$store.commit("response", error);
+          });
+      
     },
     checkNameRules(v) {
       if (typeof v == "undefined") return false;

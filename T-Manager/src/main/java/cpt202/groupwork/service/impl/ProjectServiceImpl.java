@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.regex.Pattern;
 
 /**
@@ -23,13 +24,12 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     RelationService relationService;
 
-    public List<ProjectDetailDTO> searchUserProject(String username, String json) throws JSONException {
-        JSONObject jsonObj = new JSONObject(json);
-        String namePattern = String.valueOf(jsonObj.get("namePattern"));
+    public List<ProjectDetailDTO> searchUserProject(String username, String namePattern) {
         List<ProjectDetailDTO> pdDTO = relationService.getUserProject(username);
         List<ProjectDetailDTO> pdDTOMatch = new ArrayList<>();
+        namePattern = namePattern.toLowerCase();
         for (ProjectDetailDTO tmp : pdDTO){
-            if(Pattern.matches(namePattern,tmp.getProjectName())) {
+            if(tmp.getProjectName().toLowerCase().contains(namePattern)) {
                 pdDTOMatch.add(tmp);
             }
         }
