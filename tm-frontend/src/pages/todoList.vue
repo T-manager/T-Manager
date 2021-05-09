@@ -1,5 +1,6 @@
 <template>
   <div style="display:flex; padding: 0px 58px 5px 58px; overflow-x:auto;">
+  
     <div v-for="(todolist, index) in todolists" :key="index">
       <!-- A todolist card -->
       <todolistCard :projectId="projectId" :todolist="todolist"></todolistCard>
@@ -46,6 +47,7 @@
 
 <script>
 import todolistCard from "@/components/todolistCard";
+
 export default {
   data: function() {
     return {
@@ -54,7 +56,8 @@ export default {
       newTodolistName: "",
       projectId: 0,
       todolists: "",
-      todolist: {}
+      todolist: {},
+      curStartTime: '2021-05-31 08:00:00',
     };
   },
   methods: {
@@ -120,7 +123,8 @@ export default {
       });
   },
   components: {
-    todolistCard
+    todolistCard,
+  
   }
 };
 </script>

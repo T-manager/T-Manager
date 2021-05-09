@@ -3,7 +3,7 @@
     <v-timeline :dense="$vuetify.breakpoint.smAndDown">
       <v-timeline-item
         :color="
-          todo.todoDdl == 'Today'
+          todo.todoDdlShort == 'Today'
             ? 'indigo'
             : todo.todoCheck
             ? 'green lighten-3'
@@ -14,42 +14,24 @@
         :left="todo.todoCheck"
         :right="!todo.todoCheck"
         :small="todo.todoCheck"
-        :large="todo.todoDdl == 'Today'"
-        :icon="todo.todoDdl == 'Today' ? 'mdi-star' : ''"
+        :large="todo.todoDdlShort == 'Today'"
+        :icon="todo.todoDdlShort == 'Today' ? 'mdi-star' : ''"
       >
         <template v-slot:opposite>
-          <v-btn
-            text
-            style="font-weight:600; font-size:24px;"
-            :color="
-              todo.todoDdl == 'Today'
-                ? 'indigo'
-                : todo.todoCheck
-                ? 'green lighten-2'
-                : 'red lighten-2'
-            "
-          >
-            <div
-              style="width:280px; margin-right:20px"
-              v-if="todo.todoDdl == 'Today'"
-            >
-              <v-divider></v-divider>
-            </div>
-            {{ todo.todoDdl }}</v-btn
-          >
+          <countDown :curStartTime="todo.todoDdl" :todo="todo"> </countDown>
         </template>
         <v-btn
           text
           color="indigo"
           style="width:400px; margin-top:10px"
-          v-if="todo.todoDdl == 'Today'"
+          v-if="todo.todoDdlShort == 'Today'"
         >
           <v-divider></v-divider>
         </v-btn>
         <v-card
-          v-if="todo.todoDdl != 'Today'"
+          v-if="todo.todoDdlShort != 'Today'"
           class="elevation-2"
-          style="width:600px; border-radius:10px"
+          style="width:400px;max-width:400px; min-width:400px;border-radius:10px"
         >
           <v-card-title
             :class="todo.todoCheck ? 'green lighten-3' : 'red lighten-2'"
@@ -65,6 +47,7 @@
               @click="checkTodo(index)"
             ></v-checkbox>
           </v-card-title>
+
           <v-card-text
             class="text--primary white"
             style="padding:15px; text-align:start;"
@@ -78,7 +61,7 @@
             <v-chip
               v-if="
                 !todo.todoCheck &&
-                  todo.todoDdl.split(' ')[0] <
+                  todo.todoDdlShort.split(' ')[0] <
                     new Date().getFullYear() +
                       '-' +
                       (new Date().getMonth() > 8
@@ -108,6 +91,7 @@
 </template>
 
 <script>
+import countDown from "@/components/countDown";
 export default {
   data: function() {
     return {
@@ -149,6 +133,7 @@ export default {
       }
     })
       .then(res => {
+        console.log("123", res.data.data);
         var findToday = false;
         for (var i in res.data.data) {
           if (!findToday) {
@@ -172,13 +157,14 @@ export default {
                 todolistId: 0,
                 todolistName: "",
                 todoCheck: false,
-                todoDdl: "Today",
+                todoDdlShort: "Today",
                 todoDetail: ""
               });
               findToday = true;
             }
           }
-          res.data.data[i].todoDdl =
+          var todo = res.data.data[i];
+          todo.todoDdlShort =
             res.data.data[i].todoDdl.split(" ")[0].split("-")[1] +
             "-" +
             res.data.data[i].todoDdl.split(" ")[0].split("-")[2] +
@@ -186,7 +172,7 @@ export default {
             res.data.data[i].todoDdl.split(" ")[1].split(":")[0] +
             ":" +
             res.data.data[i].todoDdl.split(" ")[1].split(":")[1];
-          this.todos.push(res.data.data[i]);
+          this.todos.push(todo);
         }
         if (!findToday) {
           this.todos.push({
@@ -197,7 +183,7 @@ export default {
             todolistId: 0,
             todolistName: "",
             todoCheck: false,
-            todoDdl: "Today",
+            todoDdlShort: "Today",
             todoDetail: ""
           });
           console.log(this.todos);
@@ -206,6 +192,7 @@ export default {
       .catch(error => {
         this.$store.commit("response", error);
       });
-  }
+  },
+  components: { countDown }
 };
 </script>
