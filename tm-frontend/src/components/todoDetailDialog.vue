@@ -3,11 +3,11 @@
     <!-- todo information (each line in todo list) -->
     <v-list-item
       @click="showTodoDetail = true"
-      style="border-bottom:1px solid #dfdfdf"
+      style="border-bottom:1px solid #dfdfdf;"
     >
       <template>
         <v-list-item-content
-          style="display:flex; justify-content:flex-start; margin-left:10px;"
+          style="display:flex; justify-content:flex-start; margin-left:10px; padding:7px 0px 7px 0px"
         >
           <div
             class="todo_name"
@@ -18,6 +18,7 @@
             "
           >
             {{ todo.todoName }}
+            <!-- show if overdue -->
             <v-chip
               v-if="
                 !todo.todoCheck &&
@@ -44,7 +45,7 @@
           >
             <v-avatar
               v-if="projectType == 'team'"
-              size="30"
+              size="25"
               :style="
                 todo.todoCheck
                   ? 'margin-right:10px; border:solid 2px #333333'
@@ -424,7 +425,6 @@ export default {
         this.loading = false;
         return;
       }
-      console.log(this.todo);
       this.$axios({
         method: "put",
         url: this.$store.state.host + "todo/edit",
@@ -476,7 +476,6 @@ export default {
     })
       .then(res => {
         this.projectOwner = res.data.data.projectOwner;
-        console.log(this.projectOwner);
         this.projectType = res.data.data.projectType;
         if (this.projectType == "team") {
           // get project member if is team project
@@ -488,11 +487,8 @@ export default {
             }
           })
             .then(res => {
-              console.log("members:");
-              console.log(res.data.data);
               for (var i in res.data.data)
                 this.projectMembers.push(res.data.data[i].memberName);
-              console.log(this.projectMembers);
               this.loadingMember = false;
             })
             .catch(error => {

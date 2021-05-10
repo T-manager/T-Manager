@@ -2,7 +2,7 @@
   <div v-if="show" style="margin:15px">
     <!-- todolist card -->
     <v-card class="todolist" style="border-radius:10px">
-      <div style="display:flex; padding: 0px 25px 0px 25px;">
+      <div style="display:flex; padding: 0px 22px 0px 22px;">
         <div class="todolist_info">
           <div style="font-size:24px;">{{ todolist.todolistName }}</div>
           <div>
@@ -45,7 +45,7 @@
 
         <v-list-item-group multiple>
           <!-- each todo -->
-          <div style="max-height:490px; overflow-y:auto">
+          <div style="max-height:323px; overflow-y:auto">
             <div
               v-for="(todo, index) in todolist.todoViewDTO"
               :key="index"
