@@ -32,14 +32,16 @@ public class ResourceController {
   /**
    * Displays a single image
    *
-   * @param filename, the full name of image file, including the name and file type
+   * @param filename, the full name of image file, including the name and file
+   *                  type
    * @return path and filename
    */
   @GetMapping("/show/{filename}")
   public String showPhotos(@PathVariable String filename) {
     try {
       String path = "///home/ubuntu/images/";
-      // Since you are reading files from the native, file must be added, and path is the path in the application configuration file
+      // Since you are reading files from the native, file must be added, and path is
+      // the path in the application configuration file
       return "file:" + path + filename;
     } catch (Exception e) {
       return "fail";
