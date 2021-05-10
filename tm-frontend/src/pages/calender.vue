@@ -61,7 +61,7 @@
             <v-chip
               v-if="
                 !todo.todoCheck &&
-                  todo.todoDdlShort.split(' ')[0] <
+                  todo.todoDdl.split(' ')[0] <
                     new Date().getFullYear() +
                       '-' +
                       (new Date().getMonth() > 8
