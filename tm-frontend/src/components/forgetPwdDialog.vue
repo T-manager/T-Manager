@@ -124,9 +124,9 @@
                   color: #6271c2;
                   cursor: pointer;
                 "
-                @click="getVerifyCode"
+                @click="resendCode"
               >
-                Resend code
+                {{ resendMessage }}
               </div>
             </div>
           </v-card-text>
@@ -222,6 +222,8 @@ export default {
   data() {
     return {
       valid: false,
+      resending: false,
+      resendMessage: "Resend code",
       showBeginReset: false,
       showVerifyInfo: false,
       showVerifyCode: false,
@@ -309,6 +311,26 @@ export default {
             // console.log(error);
           });
     },
+    /**Wait before resend the verification code*/
+    resendCode() {
+      if (this.resending == false) {
+        this.resending = true;
+        this.getVerifyCode();
+        let time = 60;
+        let timer = setInterval(() => {
+          if (time == 0) {
+            clearInterval(timer);
+            this.resending = false;
+            this.resendMessage = "Resend code";
+          } else {
+            this.resendMessage = "Resend after " + time + " seconds";
+            this.disabled = true;
+            time--;
+          }
+        }, 1000);
+      }
+    },
+    /**Get Verifycode and send it to email*/
     getVerifyCode: async function () {
       this.$axios({
         method: "post",
