@@ -86,12 +86,22 @@ export default {
   },
   props: ["userName"],
   methods: {
+    /**CheckImgSize*/
+    checkImgSizeRules(v) {
+      if (v.size > 1024 * 1024 * 5) {
+        alert("Uploaded avatar should not be larger than 5M!");
+        return false;
+      }
+      return true;
+    },
     /** Upload a image*/
     async uploadImg() {
       if (this.imgFile == "") {
         alert("Need to select a picture!");
       }
-
+      if (!this.checkImgSizeRules(this.imgFile)) {
+        return;
+      }
       this.loading = true;
       var originalFile = new FormData();
       originalFile.append("file", this.imgFile);
