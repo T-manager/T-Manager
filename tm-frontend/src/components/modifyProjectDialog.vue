@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- modify project button -->
     <v-btn
       text
       @click="showModifyProject = true"
@@ -15,6 +16,7 @@
       <v-spacer></v-spacer>
       <v-icon>mdi-pencil-outline</v-icon></v-btn
     >
+    <!-- modify project popup -->
     <v-dialog v-model="showModifyProject" persistent max-width="600px">
       <v-card style="padding: 30px 35px 50px 35px;" class="card-background">
         <div
@@ -41,11 +43,10 @@
             :rules="rules.detailRules"
             hint="less than 100"
           ></v-textarea>
-          <!-- <small>*indicates required field</small> -->
         </v-card-text>
 
         <div style="display:flex; justify-content:center; margin-top:10px">
-          <!-- 关闭dialog -->
+          <!-- close popup -->
           <v-btn
             depressed
             style="border:#cccccc solid 1px; color:#777777; width:100px"
@@ -55,7 +56,7 @@
           >
             Cancel
           </v-btn>
-          <!-- 保存dialog数据 -->
+          <!-- submit modify -->
           <v-btn
             depressed
             color="primary"
@@ -78,6 +79,7 @@ export default {
     return {
       showModifyProject: false,
       loading: false,
+      // inline check rules
       rules: {
         nameRules: [
           v =>
@@ -101,6 +103,7 @@ export default {
       if (typeof v == "undefined") return false;
       return v.length <= 100;
     },
+    /** check all rules beform submit again */
     checkRules() {
       if (!this.checkNameRules(this.project.projectName)) {
         alert("check the name");
@@ -112,6 +115,7 @@ export default {
       }
       return true;
     },
+    /** modify project submission */
     async modifyProject() {
       this.loading = true;
       if (!this.checkRules()) {
@@ -127,17 +131,11 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
           this.loading = false;
           this.showModifyDialog = false;
-          console.log("project");
-          console.log(this.project);
           this.$router.go(0);
         })
         .catch(error => {
-          console.log("project");
-          console.log(this.project);
-          console.log(error);
           this.$store.commit("response", error);
           this.loading = false;
         });
@@ -150,7 +148,6 @@ export default {
 <style scoped>
 .card-background {
   background-image: url("../assets/TmanagerLogo_l5.svg");
-  /* background-image: url("../assets/TManagerLogo.png"); */
   background-size: 520px;
   background-repeat: no-repeat;
   background-position: 140px -65px;

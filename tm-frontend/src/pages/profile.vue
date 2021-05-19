@@ -1,16 +1,19 @@
 <template>
   <div style="display:flex;justify-content:center;padding-top:20px">
-    <UploadImg :userName="this.$store.getters.getUsername"></UploadImg>
-    <div
-      style=" margin-left:50px;display:flex;flex-direction:column;align-items:center;padding:25px;height:420px;width:900px;background-color:#ffffff;border-radius:20px"
+    <uploadImg :userName="this.$store.getters.getUsername"></uploadImg>
+    <v-card
+      style="margin-left:30px; margin-top:60px; display:flex;flex-direction:column;align-items:center; padding: 30px 50px 50px 50px; 
+      height:420px; width:700px; border-radius:20px; border:1px solid #ddd"
+      color="rgba(255, 255, 255, 0.8)"
+      flat
     >
       <div
-        style="margin-left:75px;margin-top:10px;font-size:26px;color:#101010;font-weight:bold;width:900px;text-align:start"
+        style="margin-top:10px;font-size:26px;color:#101010;font-weight:bold;width:100%; text-align:start"
       >
         {{ !submit ? "Personal Profile" : "Edit Profile" }}
       </div>
-      <!-- 编辑信息 -->
-      <div v-if="submit" style="width:700px;">
+      <!-- edit user information -->
+      <div v-if="submit" style="width:100%;">
         <v-text-field
           outlined
           ref="username"
@@ -30,10 +33,10 @@
           style="margin-top:20px"
         ></v-text-field>
       </div>
-      <!-- 查看信息 -->
+      <!-- show user information -->
       <div
         v-if="!submit"
-        style="width:700px;display:flex;flex-direction:column;font-size:20px;margin-bottom:30px;"
+        style="width:100%; display:flex;flex-direction:column; font-size:16px; margin-top:30px; margin-bottom:30px;"
       >
         <div class="line">
           <div style="width:200px">User Name:</div>
@@ -45,32 +48,36 @@
         </div>
         <div class="line">
           <div style="width:200px">Password:</div>
-          <div style="margin-left:30px;  line-height: 40px;">********</div>
+          <div style="margin-left:30px; margin-top:5px">********</div>
           <div style="margin-left:100px;display:flex; ">
-            <ModifyPassword :userEdit="userEdit"></ModifyPassword>
+            <modifyPassword :userEdit="userEdit"></modifyPassword>
           </div>
         </div>
-      </div>
-      <v-btn
-        v-if="!submit"
-        style="width:600px;margin-top:20px"
-        color="primary"
-        outlined
-        text
-        @click="submit = true"
-      >
-        Edit
-      </v-btn>
-      <div style="display:flex;width:500px;margin-top:25px">
-        <v-btn v-if="submit" text @click="submit = false"> Cancel </v-btn>
-        <v-spacer></v-spacer>
-
         <v-btn
-          v-if="submit"
-          style=""
+          class="line"
+          v-if="!submit"
+          depressed
+          style="border:#cccccc solid 1px; color:#777777; width:100%; margin-top:20px"
+          @click="submit = true"
+        >
+          Edit
+        </v-btn>
+      </div>
+      <div
+        style="display:flex; justify-content:center; margin-top:10px"
+        v-if="submit"
+      >
+        <v-btn
+          @click="submit = false"
+          depressed
+          style="border:#cccccc solid 1px; color:#777777; width:100px"
+        >
+          Cancel
+        </v-btn>
+        <v-btn
+          depressed
           color="primary"
-          outlined
-          text
+          style="color:#fff; width:100px; margin-left:50px"
           :loading="loading"
           :disabled="loading"
           @click="editProfile()"
@@ -78,13 +85,13 @@
           Submit
         </v-btn>
       </div>
-    </div>
+    </v-card>
   </div>
 </template>
 
 <script>
-import ModifyPassword from "@/components/ModifyPassword";
-import UploadImg from "@/components/UploadImg";
+import modifyPassword from "@/components/modifyPassword";
+import uploadImg from "@/components/uploadImg";
 
 export default {
   data() {
@@ -111,11 +118,12 @@ export default {
     };
   },
   components: {
-    ModifyPassword,
-    UploadImg
+    modifyPassword,
+    uploadImg
   },
 
   methods: {
+    /** Modify personal information*/
     async editProfile() {
       this.loading = true;
       await this.$axios({
@@ -130,7 +138,6 @@ export default {
         data: this.userEdit
       })
         .then(res => {
-          console.log(res);
           this.$store.commit("set_username", this.userEdit.userName);
           this.loading = false;
           this.submit = false;
@@ -139,8 +146,8 @@ export default {
           alert("success!");
         })
         .catch(error => {
-          console.log(error);
-          //   this.$store.commit("response", error);
+          // console.log(error);
+          // this.$store.commit("response", error);
           this.loading = false;
         });
     },
@@ -158,6 +165,7 @@ export default {
       var path = "/login";
       this.$router.push({ path: path });
     }
+    /** get personal information for a specific user*/
     this.$axios({
       method: "get",
       url:
@@ -169,11 +177,9 @@ export default {
       .then(response => {
         this.userInfo = response.data.data;
         this.userEdit = response.data.data;
-        console.log(this.userInfo);
-        console.log(this.$store.getters.getToken);
       })
       .catch(error => {
-        console.log(error);
+        // console.log(error);
       });
   }
 };
@@ -182,44 +188,8 @@ export default {
 .line {
   display: flex;
   text-align: start;
-  margin-top: 30px;
-  margin-left: 30px;
-  height: 40px;
+  line-height: 60px;
 
-  font-size: 20px;
   color: #101010;
-}
-
-@-moz-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@-webkit-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@-o-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }
 </style>

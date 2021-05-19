@@ -32,7 +32,6 @@ public class ErrorAuthenticationEntryPoint implements AuthenticationEntryPoint, 
         PrintWriter writer = response.getWriter();
         ObjectMapper mapper = new ObjectMapper();
         Response<?> myResponse = Response.fail();
-        // 将对象输出为 JSON 格式。可以通过重写 MyResponse 的 toString() ，直接通过 myResponse.toString() 即可
         writer.write(mapper.writeValueAsString(myResponse));
     }
 }

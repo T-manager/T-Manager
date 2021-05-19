@@ -1,20 +1,91 @@
 <template>
-  <div style="display:flex;flex-direction:column;align-items:center ">
+  <div style="display: flex; flex-direction: column; align-items: center">
     <div
-      style="display:flex; padding:35px; width:1350px; justify-content:flex-start;"
+      style="
+        display: flex;
+        flex-direction: column;
+        padding: 35px;
+        width: 1350px;
+        justify-content: flex-start;
+      "
     >
-      <v-row>
-        <!-- 已经创建的的所有项目CARD -->
+      <v-row style="margin-top: 20px" v-on:keyup.enter="inputHandle(text)">
+        <v-menu offset-y>
+          <template v-slot:activator="{ on }">
+            <v-text-field
+              solo
+              placeholder="Search Project"
+              prepend-inner-icon="mdi-magnify"
+              style="
+                border-top-left-radius: 30px;
+                border-bottom-left-radius: 30px;
+                height: 50px;
+                margin-left: 830px;
+              "
+              color="primary"
+              label="Search Project"
+              v-model="text"
+              v-on="on"
+            >
+            </v-text-field>
+          </template>
+          <v-list v-if="projects.length > 0" dense>
+            <v-list-item
+              v-for="(project, index) in projects"
+              :key="index"
+              @click="projects = { project }"
+            >
+              <v-list-item-title>{{ project.projectName }}</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+
+        <v-menu offset-x>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              v-bind="attrs"
+              v-on="on"
+              color="white"
+              style="
+                min-width: 20px;
+                height: 48px;
+                margin-left: 3px;
+                margin-right: 30px;
+                border-top-right-radius: 30px;
+                border-bottom-right-radius: 30px;
+              "
+            >
+              <v-icon color="primary">mdi-filter-outline</v-icon>
+            </v-btn>
+          </template>
+          <v-list style="padding: 0px">
+            <v-list-item @click="showProjectType = 'All'">
+              <v-list-item-title>All</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="showProjectType = 'team'">
+              <v-list-item-title>Team</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="showProjectType = 'personal'">
+              <v-list-item-title>Personal</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-row>
+      <v-row style="margin-top: 40px">
+        <!-- Card for all the projects that have been created -->
         <projectCard
-          style="margin:15px"
+          style="margin: 15px"
           v-for="(project, index) in projects"
           :key="index"
-          v-if="showProjects"
+          v-if="
+            showProjects &&
+            (showProjectType == project.projectType || showProjectType == 'All')
+          "
           :project="project"
         ></projectCard>
-        <!--新建项目dialog-->
+        <!--Dialog for creating a new project-->
         <v-dialog v-model="dialog" persistent max-width="550px">
-          <!-- 点击加号新建项目 -->
+          <!-- Plus icon to create a new project -->
           <template v-slot:activator="{ on, attrs }">
             <v-card class="plusProject">
               <v-card-title>Click to create new project</v-card-title>
@@ -23,14 +94,19 @@
               </v-btn>
             </v-card>
           </template>
-          <v-card style="padding: 30px 35px 50px 35px;" class="card-background">
+          <v-card style="padding: 30px 35px 50px 35px" class="card-background">
             <div
-              style="font-size:30px; margin-left:10px; width:100%; text-align:left"
+              style="
+                font-size: 30px;
+                margin-left: 10px;
+                width: 100%;
+                text-align: left;
+              "
             >
               <v-img></v-img>
               Create Project
             </div>
-            <v-card-text style="margin-top:30px; padding:10px">
+            <v-card-text style="margin-top: 30px; padding: 10px">
               <v-text-field
                 outlined
                 label="project name"
@@ -53,6 +129,7 @@
               ></v-textarea>
               <v-autocomplete
                 outlined
+                color="primary"
                 :items="['personal', 'team']"
                 label="project type"
                 v-model="newProject.projectType"
@@ -60,22 +137,24 @@
               ></v-autocomplete>
             </v-card-text>
 
-            <div style="display:flex; justify-content:center; margin-top:10px">
-              <!-- 关闭dialog -->
+            <div
+              style="display: flex; justify-content: center; margin-top: 10px"
+            >
+              <!-- Close the dialog -->
               <v-btn
                 depressed
-                style="border:#cccccc solid 1px; color:#777777; width:100px"
+                style="border: #cccccc solid 1px; color: #777777; width: 100px"
                 @click="dialog = false"
                 :loading="loadAddProject"
                 :disabled="loadAddProject"
               >
                 Cancel
               </v-btn>
-              <!-- 保存dialog数据 -->
+              <!-- Button to save dialog data -->
               <v-btn
                 depressed
                 color="primary"
-                style="color:#fff; width:100px; margin-left:50px"
+                style="color: #fff; width: 100px; margin-left: 50px"
                 @click="addProject()"
                 :loading="loadAddProject"
                 :disabled="loadAddProject"
@@ -93,21 +172,24 @@
 <script>
 import projectCard from "@/components/projectCard";
 export default {
-  data: function() {
+  data: function () {
     return {
       dialog: false,
+      showProjectType: "All",
+      text: "",
+
       rules: {
         nameRules: [
-          v =>
+          (v) =>
             (typeof v != "undefined" && v.length <= 20 && v.length >= 1) ||
-            "the length of name should be 1-20"
+            "the length of name should be 1-20",
         ],
         detailRules: [
-          v =>
+          (v) =>
             (typeof v != "undefined" && v.length <= 100) ||
-            "the length of detail should less than 100"
+            "the length of detail should less than 100",
         ],
-        selectRules: [v => !!v || "please choose a type"]
+        selectRules: [(v) => !!v || "please choose a type"],
       },
       showProjects: false,
       loadAddProject: false,
@@ -117,17 +199,65 @@ export default {
         projectName: "",
         projectDetail: "",
         projectOwner: this.$store.getters.getUsername,
-        projectType: ""
+        projectType: "",
       },
       memberItem: 1,
       items: [
         { text: "ProjectOwmer", icon: "mdi-account" },
         { text: "member1", icon: "mdi-account" },
-        { text: "member2", icon: "mdi-account" }
-      ]
+        { text: "member2", icon: "mdi-account" },
+      ],
     };
   },
+  watch: {
+    text: "inputHandle",
+  },
   methods: {
+    inputHandle(text) {
+      if (text.trim() !== "") {
+        this.getProjects();
+      } else {
+        this.$axios({
+          method: "get",
+          url:
+            this.$store.state.host +
+            "relation/getproject/" +
+            this.$store.getters.getUsername,
+          headers: {
+            Authorization: "Bearer " + this.$store.getters.getToken,
+          },
+        })
+          .then((res) => {
+            this.projects = res.data.data;
+          })
+          .catch((error) => {
+            this.$store.commit("response", error);
+          });
+      }
+    },
+    getProjects() {
+     
+        this.$axios({
+          method: "get",
+          url:
+            this.$store.state.host +
+            "project/search/" +
+            this.$store.getters.getUsername +
+            "/" +
+            this.text,
+          headers: {
+            Authorization: "Bearer " + this.$store.getters.getToken,
+          },
+        })
+          .then((res) => {
+            console.log(res.data.data);
+            this.projects = res.data.data;
+          })
+          .catch((error) => {
+            this.$store.commit("response", error);
+          });
+      
+    },
     checkNameRules(v) {
       if (typeof v == "undefined") return false;
       return v.length <= 20 && v.length >= 1;
@@ -140,6 +270,7 @@ export default {
       if (typeof v == "undefined" || v == "") return false;
       return true;
     },
+    /**Form validation*/
     checkRules() {
       if (!this.checkNameRules(this.newProject.projectName)) {
         alert("check the name");
@@ -156,6 +287,7 @@ export default {
 
       return true;
     },
+    /**create a project*/
     addProject() {
       this.loadAddProject = true;
       if (!this.checkRules()) {
@@ -167,26 +299,27 @@ export default {
         url: this.$store.state.host + "project/add",
         data: this.newProject,
         headers: {
-          Authorization: "Bearer " + this.$store.getters.getToken
-        }
+          Authorization: "Bearer " + this.$store.getters.getToken,
+        },
       })
-        .then(res => {
-          console.log(res);
+        .then((res) => {
           this.loadAddProject = false;
           this.$router.go(0);
         })
-        .catch(error => {
+        .catch((error) => {
           this.$store.commit("response", error);
           this.loadAddProject = false;
         });
-    }
+    },
   },
   created() {
+    /**check if the user has logged in*/
     if (this.$store.getters.getToken == null) {
       alert("You are not signned in yet!");
       var path = "/login";
       this.$router.push({ path: path });
     }
+    /**get all projects belongs to the user*/
     this.$axios({
       method: "get",
       url:
@@ -194,25 +327,21 @@ export default {
         "relation/getproject/" +
         this.$store.getters.getUsername,
       headers: {
-        Authorization: "Bearer " + this.$store.getters.getToken
-      }
+        Authorization: "Bearer " + this.$store.getters.getToken,
+      },
     })
-      .then(res => {
-        console.log(res);
-        // projects
+      .then((res) => {
         this.projects = res.data.data;
-        console.log(this.projects);
         this.showProjects = true;
       })
-      .catch(error => {
-        console.log(error);
+      .catch((error) => {
+        // console.log(error);
         this.$store.commit("response", error);
       });
   },
-  //props: ["project"],
   components: {
-    projectCard
-  }
+    projectCard,
+  },
 };
 </script>
 <style scoped>

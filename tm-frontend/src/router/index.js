@@ -1,11 +1,11 @@
 import Vue from "vue";
 import Router from "vue-router";
 import todolist from "@/pages/todolist";
-import test from "@/pages/test";
 import login from "@/pages/login";
 import gantt from "@/pages/gantt";
 import project from "@/pages/project";
 import profile from "@/pages/profile";
+import calender from "@/pages/calender";
 
 Vue.use(Router);
 
@@ -14,8 +14,8 @@ export default new Router({
   routes: [
     {
       path: "/",
-      name: "todolist",
-      component: todolist
+      name: "login",
+      component: login
     },
     {
       path: "/projectdetail/todolist/*",
@@ -39,14 +39,14 @@ export default new Router({
       component: profile
     },
     {
-      path: "/test",
-      name: "test",
-      component: test
-    },
-    {
       path: "/project",
       name: "project",
       component: project
+    },
+    {
+      path: "/calender",
+      name: "calender",
+      component: calender
     }
   ]
 });

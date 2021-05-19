@@ -5,14 +5,14 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     token: null,
-    host: "http://localhost:6767/api/",
+    // host: "http://localhost:6767/api/",
+    host: "http://34.96.252.120/api/",
     show: {
       showModifyTodo: false
     }
   },
   getters: {
     getToken() {
-      console.log(localStorage.getItem("token"));
       return localStorage.getItem("token");
     },
     getUsername() {
@@ -43,8 +43,6 @@ export default new Vuex.Store({
       localStorage.removeItem("userphoto");
     },
     response(state, token) {
-      console.log("token");
-      console.log(typeof token);
       if (token.response) {
         alert(token.response.data.message);
         // console.log(typeof token.response.data.status);

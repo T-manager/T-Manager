@@ -1,10 +1,12 @@
 <template>
   <div>
+    <!-- add todo button -->
     <v-list-item style="margin-top:10px" @click="showAddTodo = true">
       <v-list-item-content style="display:flex; justify-content:center;"
         ><v-icon>mdi-plus</v-icon>
       </v-list-item-content>
     </v-list-item>
+    <!-- add todo popup -->
     <v-dialog v-model="showAddTodo" persistent max-width="600px">
       <v-card class="card-background" style="padding: 30px 35px 50px 35px;">
         <div
@@ -16,6 +18,7 @@
           </v-btn>
         </div>
         <v-card-text style="margin-top:30px; padding:10px">
+          <!-- choose todo name -->
           <div
             style="display:flex; flex-direction:row; font-size:16px; color:#101010; margin-bottom:20px"
           >
@@ -34,6 +37,7 @@
             prepend-icon="mdi-alphabetical"
             v-model="todoForm.todoName"
           ></v-text-field>
+          <!-- choose todo detail -->
           <v-textarea
             label="todo detail"
             required
@@ -45,9 +49,9 @@
             prepend-icon="mdi-menu"
             v-model="todoForm.todoDetail"
           ></v-textarea>
-          <!-- 选择时间日期 -->
+          <!-- choose todo deadline -->
           <div style="display:flex">
-            <!-- 选择ddl日期 -->
+            <!-- deadline date -->
             <v-menu
               ref="datePicker"
               v-model="datePicker"
@@ -92,7 +96,7 @@
                 >
               </v-date-picker>
             </v-menu>
-            <!-- 选择ddl时间 -->
+            <!-- deadline time -->
             <v-menu
               ref="timePicker"
               v-model="timePicker"
@@ -125,8 +129,18 @@
               ></v-time-picker>
             </v-menu>
           </div>
-
-          <!-- 选择负责人 -->
+          <!-- choose todo executer -->
+          <v-autocomplete
+            v-if="projectType == 'team'"
+            v-model="todoForm.todoMember"
+            :items="projectMembers"
+            :loading="loadingMember"
+            :disabled="loadingMember"
+            label="todo executer"
+            color="primary"
+            prepend-icon="mdi-badge-account-outline"
+          >
+          </v-autocomplete>
         </v-card-text>
         <div class="card_action">
           <v-btn
@@ -157,15 +171,18 @@ export default {
   data() {
     return {
       loading: false,
+      loadingMember: true,
       showAddTodo: false,
       todoForm: {
-        todoCheck: true
+        todoMember: this.$store.getters.getUsername // set the creater as the executer as default
       },
       todo: {},
-
+      projectMembers: [],
+      projectType: "",
       dateFormat: new Date().toISOString().substr(0, 10),
       datePicker: false,
       timePicker: false,
+      // inline check rules
       rules: {
         nameRules: [
           v =>
@@ -181,7 +198,7 @@ export default {
       }
     };
   },
-  props: ["todolist"],
+  props: ["projectId", "todolist"],
   methods: {
     checkNameRules(v) {
       if (typeof v == "undefined") return false;
@@ -194,6 +211,7 @@ export default {
     checkDateTimeRules(v) {
       return typeof v != "undefined";
     },
+    /** check all rules */
     checkRules() {
       if (!this.checkNameRules(this.todoForm.todoName)) {
         alert("check the name");
@@ -213,10 +231,12 @@ export default {
       }
       return true;
     },
+    /** create todo method */
     async createTodo() {
       this.loading = true;
       this.todoForm.todoDdl = this.todo.date + " " + this.todo.time + ":00";
       if (!this.checkRules()) {
+        // have problem, reject submit
         this.loading = false;
         return;
       }
@@ -239,6 +259,43 @@ export default {
           this.loading = false;
         });
     }
+  },
+  created() {
+    // get projectType
+    this.loadingMember = true;
+    this.$axios({
+      method: "get",
+      url: this.$store.state.host + "project/get/" + this.projectId,
+      headers: {
+        Authorization: "Bearer " + this.$store.getters.getToken
+      }
+    })
+      .then(res => {
+        this.projectType = res.data.data.projectType;
+        if (this.projectType == "team") {
+          // get project member if is team project
+          this.$axios({
+            method: "get",
+            url: this.$store.state.host + "relation/getuser/" + this.projectId,
+            headers: {
+              Authorization: "Bearer " + this.$store.getters.getToken
+            }
+          })
+            .then(res => {
+              for (var i in res.data.data)
+                this.projectMembers.push(res.data.data[i].memberName);
+              this.loadingMember = false;
+            })
+            .catch(error => {
+              this.$store.commit("response", error);
+            });
+        } else {
+          this.loadingMember = false;
+        }
+      })
+      .catch(error => {
+        this.$store.commit("response", error);
+      });
   }
 };
 </script>
@@ -246,7 +303,6 @@ export default {
 <style scoped>
 .card-background {
   background-image: url("../assets/TmanagerLogo_l5.svg");
-  /* background-image: url("../assets/TManagerLogo.png"); */
   background-size: 520px;
   background-repeat: no-repeat;
   background-position: 140px -65px;

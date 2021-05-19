@@ -1,21 +1,27 @@
 package cpt202.groupwork.service.impl;
 
 
-import cpt202.groupwork.controller.UserController;
 import cpt202.groupwork.Response;
-import cpt202.groupwork.repository.UserRepository;
 import cpt202.groupwork.entity.User;
+import cpt202.groupwork.entity.VerificationCode;
+import cpt202.groupwork.repository.UserRepository;
+import cpt202.groupwork.repository.VerifyRepository;
 import cpt202.groupwork.security.TokenUtils;
 import cpt202.groupwork.service.UserService;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import javax.annotation.Resource;
-import javax.swing.text.html.Option;
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeanWrapperImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,9 +33,22 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-  @Autowired UserRepository userRepository;
+  @Autowired
+  UserRepository userRepository;
+  @Autowired
+  VerifyRepository verifyRepository;
 
-  @Resource TokenUtils tokenUtils;
+  @Resource
+  TokenUtils tokenUtils;
+
+  @Autowired
+  private JavaMailSender mailSender;
+
+  @Value("${spring.mail.username}")
+  private String emailUserName;
+
+  //定义发送的标题
+  public static String title="[T-Manager]获取验证码";
 
   @Override
   public Response<?> userIdExists(Integer userId) {
@@ -66,6 +85,7 @@ public class UserServiceImpl implements UserService {
       BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
       user.setUserPassword(encoder.encode(user.getUserPassword()));
       user.setUserRole("USER");
+      user.setUserAvatar("default.jpg");
       userRepository.save(user);
       return Response.ok(1000); // User created successfully
     } catch (Exception e) {
@@ -176,6 +196,83 @@ public class UserServiceImpl implements UserService {
     } else {
       return Response.fail(2002); // Not found
     }
+  }
+
+  @Override
+  public Response<?> verificationEmailSend(User user) {
+    String emailCode = randomNumBuilder();
+    Date current=new Date();
+    long time = 30*60*1000;//30minutes
+    if(user.getUserEmail()==null){
+      return Response.fail("Need email");
+    }
+    Optional<VerificationCode> verification=verifyRepository.findByUserEmail(user.getUserEmail());
+    verification.ifPresent(verificationCode -> verifyRepository.delete(verificationCode));
+
+    Date afterDate = new Date(current.getTime() + 300000);
+    VerificationCode verificationEmail=new VerificationCode();
+    verificationEmail.setUserEmail(user.getUserEmail());
+    verificationEmail.setVerifyPassword(emailCode);
+    verificationEmail.setExpireTime(afterDate);
+    verifyRepository.save(verificationEmail);
+
+    if(generateCodeandSend(emailCode, user.getUserEmail())){
+      return Response.ok(3000); // ok
+    }
+    else {
+      return Response.fail(3001); // fail to send email
+    }
+  }
+  public boolean generateCodeandSend(String emailCode, String emailAddr){
+    try{
+      String body = setEmailBody(emailCode);
+      MimeMessage mimeMessage = this.mailSender.createMimeMessage();
+      MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
+      message.setFrom(emailUserName);//set Sender
+      message.setTo(emailAddr);//Set receiver
+      message.setSubject(title);  //Set title
+      message.setText(body);
+      this.mailSender.send(mimeMessage);
+    } catch(Exception e){
+      return false;
+    }
+    return true;
+  }
+
+  @Override
+  public Response<?> verifyCode(VerificationCode verificationCode) {
+    Optional<VerificationCode> verification;
+    try{
+      verification=verifyRepository.findByUserEmail(verificationCode.getUserEmail());
+    }catch (Exception e) {
+      return Response.fail("No verification code");
+    }
+    if(!verification.isPresent()){
+      return Response.fail("No verification code");
+    }
+    Date current=new Date();
+    if(current.after(verification.get().getExpireTime())){
+      verifyRepository.delete(verification.get());
+      return Response.fail("Verification code expire");
+    }
+    if(!verificationCode.getVerifyPassword().equals(verification.get().getVerifyPassword())){
+      return Response.fail("Wrong Verification code");
+    }
+    return Response.ok("Verify successful");
+  }
+
+  private String setEmailBody(String emailCode){
+    StringBuffer body = new StringBuffer();
+    body.append("Dear user:\n\n").append("    Your verification code is:  ").append(emailCode+"\n\n");
+    body.append("    Reminder: The verificationcode will be expired after 30 minutes\n\n");
+    return body.toString();
+  }
+  public static String randomNumBuilder(){
+    String result = "";
+    for(int i=0;i<6;i++){
+      result += Math.round(Math.random() * 9);
+    }
+    return result;
   }
 
   @Override

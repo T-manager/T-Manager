@@ -50,7 +50,7 @@ public class TodolistController {
 
   @PostMapping("/add")
   @Operation(summary = "通过 projectId 和 todolistCreateDTO 添加 todoList")
-  public Response<?> postTodolist(@Valid @RequestBody TodolistDTO todolistDTO) {
+  public Response<?> createTodolist(@Valid @RequestBody TodolistDTO todolistDTO) {
 
     Todolist todolist = new Todolist();
     BeanUtils.copyProperties(todolistDTO, todolist);
@@ -59,8 +59,8 @@ public class TodolistController {
   }
 
   @DeleteMapping("/delete/{todolistId}")
-  @Operation(summary = "删除讨论")
-  public Response<?> deleteDiscussion(@PathVariable Integer todolistId) {
+  @Operation(summary = "删除todolist")
+  public Response<?> deleteTodolist(@PathVariable Integer todolistId) {
 //    Optional<String> username = SecurityUtils.getCurrentUsername();
 //    if (username.isEmpty()) {
 //      return Response.unAuth();
@@ -70,7 +70,6 @@ public class TodolistController {
 //    if (todoList.isEmpty()) {
 //      return Response.notFound();
 //    }
-
 //    if (!username.get().equals(todolist.get().getUsername())) {
 //      return Response.permissionDenied("只有自己才能删除哦！");
 //    }
@@ -80,7 +79,7 @@ public class TodolistController {
 
   @PutMapping("/modify")
   @Operation(summary = "修改todolist信息")
-  public Response<?> putProject(@Valid @RequestBody Todolist todolist) {
+  public Response<?> modifyTodolist(@Valid @RequestBody Todolist todolist) {
     Optional<Todolist> todolistOld = todoListRepository.findById(todolist.getTodolistId());
 
     BeanUtils.copyProperties(todolist, todolistOld.get());
@@ -88,10 +87,9 @@ public class TodolistController {
     return Response.ok("modify success");
   }
 
-
   @GetMapping("/get/{projectId}")
   @Operation(summary = "通过 projectid 查看所有的 todolist, 包括所属的todo")
-  public Response<?> getDiscussion(@PathVariable Integer projectId) {
+  public Response<?> getTodolist(@PathVariable Integer projectId) {
     List<TodolistViewDTO> todolistViewDTOs = new ArrayList<>();
 //    Optional<String> username = SecurityUtils.getCurrentUsername();
     todolistViewDTOs = todolistService.getTodolist(projectId);

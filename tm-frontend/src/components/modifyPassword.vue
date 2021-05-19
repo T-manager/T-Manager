@@ -1,66 +1,63 @@
 <template>
   <div>
-    <v-btn icon @click="showModifyPwd = true" color="primary">
-      <v-icon>mdi-key</v-icon></v-btn
-    >
+    <v-tooltip right>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn icon @click="showModifyPwd = true" color="primary" v-on="on">
+          <v-icon>mdi-key-outline</v-icon></v-btn
+        >
+      </template>
+      <span>Modify Password</span>
+    </v-tooltip>
+    <!-- modify password popup -->
     <v-dialog v-model="showModifyPwd" persistent max-width="600px">
-      <div
-        style="height:400px;background-color:#FFFFFF;display:flex;flex-direction:column;align-items:center;"
-      >
+      <v-card style="padding:30px 35px 50px 35px; border-radius:10px">
         <div
           @click="showModifyPwd = false"
-          style="display:flex;justify-content:flex-end;margin-top:5px;height:30px;width:570px"
+          style="display:flex;justify-content:flex-end; width:100%"
         >
           <v-icon style="font-size:26px;cursor:pointer;"> mdi-close</v-icon>
         </div>
         <div
-          style="font-size:24px;color:#101010;margin-top:-10px;width:520px;text-align:start;"
+          style="font-size:30px;color:#101010;margin-top:-10px;width:520px;text-align:start;"
         >
           Edit Password
         </div>
-        <div
-          style="display:flex;flex-direction:column;justify-content:center;align-items:center;width:100%;margin-top:20px"
-        >
+        <v-card-text style="margin-top:30px; padding:10px">
           <v-text-field
-            style="margin-top:20px;width:375px;"
             outlined
             label="New password"
             v-model="newPassword"
-            :rules="rules.required"
+            :rules="[rules.required, rules.validChar, rules.length]"
             type="password"
           ></v-text-field>
           <v-text-field
             outlined
             label="Confirmation"
-            style="width:375px"
             v-model="confirmPassword"
             :rules="rules.required"
             type="password"
           ></v-text-field>
-        </div>
-        <div
-          class="d-flex justify-center"
-          style="font-color:#101010;font-size:16px;margin-top:39px"
-        >
+        </v-card-text>
+        <div style="display:flex; justify-content:center; margin-top:10px">
+          <!-- close popup -->
           <v-btn
-            style="margin-left:194pxl;margin-right:194px;width:94px;height:39px;border: 1px solid rgba(187,187,187,100);border-radius:10px;"
             depressed
-            outlined
+            style="border:#cccccc solid 1px; color:#777777; width:100px"
             @click="showModifyPwd = false"
             >CANCLE</v-btn
           >
-          <v-spacer></v-spacer>
+          <!-- submit modification -->
           <v-btn
-            style="width:94px;height:39px;border-radius:10px"
             depressed
             color="primary"
+            style="color:#fff; width:100px; margin-left:50px"
             :loading="loading"
             :disabled="loading"
             @click="submit"
             >SUBMIT</v-btn
           >
         </div>
-      </div>
+      </v-card>
     </v-dialog>
   </div>
 </template>
@@ -73,25 +70,45 @@ export default {
       newPassword: "",
       confirmPassword: "",
       loading: false,
+      // inline check rules
       rules: {
-        required: [v => v.length > 0 || "This item is required!"]
+        required: [v => v.length > 0 || "This item is required!"],
+        length: value =>
+          value.length <= 20 || "Must be less than 20 characters",
+        validChar: value => {
+          const pattern = /^[a-zA-Z0-9&@.$%\-_,():;` ]+$/;
+          return pattern.test(value) || "Contains illegal characters";
+        }
       }
     };
   },
   props: ["userEdit"],
   methods: {
+    /** logout method */
+    logout() {
+      // delete token, name, photo stored in local storage
+      this.$store.commit("del_token");
+      this.$store.commit("del_username");
+      this.$store.commit("del_userphoto");
+      alert("Log out successfully！");
+      var path = "/login";
+      this.$router.push({ path: path });
+      this.$router.go(0);
+    },
     checkPwdRules(v) {
       if (typeof v == "undefined") return false;
       return v.length > 0;
     },
+    /** apply for modify password */
     async submit() {
       this.loading = true;
       if (!this.checkPwdRules(this.confirmPassword)) {
+        // reject if not satisfy all rules
         this.loading = false;
         return;
       }
-
       if (this.newPassword != this.confirmPassword) {
+        // reject if confirm is not correct
         this.loading = false;
         alert("The two passwords are inconsistent");
       } else {
@@ -108,15 +125,11 @@ export default {
           data: this.userEdit
         })
           .then(res => {
-            alert("Reset password successfully!");
-            this.$store.commit("set_username", null);
-            this.$store.commit("set_token", null);
-            this.showModifyPwd = false;
-            this.$router.push("/login");
+            this.logout();
           })
           .catch(error => {
             console.log(error);
-            //   this.$store.commit("response", error);
+            // this.$store.commit("response", error);
             this.loading = false;
           });
       }
@@ -124,38 +137,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-@-moz-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@-webkit-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@-o-keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-@keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-</style>

@@ -2,6 +2,7 @@ package cpt202.groupwork.service;
 
 import cpt202.groupwork.Response;
 import cpt202.groupwork.entity.User;
+import cpt202.groupwork.entity.VerificationCode;
 
 public interface UserService {
 
@@ -24,4 +25,8 @@ public interface UserService {
   Response<?> userNameExists(final String username);
 
   Response<?> userInfoCheck(final User postUser);
+
+  Response<?> verificationEmailSend(final User user);
+
+  Response<?> verifyCode(final VerificationCode verificationCode);
 }

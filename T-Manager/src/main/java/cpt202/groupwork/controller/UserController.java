@@ -1,17 +1,15 @@
 package cpt202.groupwork.controller;
 
 import cpt202.groupwork.service.UserService;
-import java.util.Optional;
 
 import cpt202.groupwork.entity.User;
-import cpt202.groupwork.repository.UserRepository;
 import cpt202.groupwork.Response;
 import javax.annotation.Resource;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
 
-  //    @Autowired
-//    UserRepository userRepository;
   @Resource
   private UserService userService;
 
@@ -45,7 +41,7 @@ public class UserController {
   @DeleteMapping("/delete/{username}")
 //    @PreAuthorize("hasRole('ADMIN')")
   public Response<?> deleteUser(@PathVariable String username) {
-
     return userService.userDelete(username);
   }
+
 }

@@ -2,12 +2,9 @@
   <div
     style="display:flex; justify-content:center; margin-bottom:30px; width:100%; padding: 0px 70px 0px 70px"
   >
-    <!-- 顶栏 -->
-    <!-- width:1392px;  -->
     <v-card
       style="width:100%; height:51px; box-shadow: 0px 1px 6px 0px rgba(0, 0, 0, 0.26); border-radius:20px; display:flex; align-items:center; margin-top:16px"
     >
-      <!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon> -->
       <div
         style="margin-left:18px; cursor:pointer; font-size:20px; color:#535353; display:flex; align-items:center"
         @click="gotoProjectPage"
@@ -54,12 +51,12 @@
       </div>
       <v-spacer></v-spacer>
       <div style="font-size:20px">{{ $store.getters.getUsername }}</div>
-      <!-- <SearchingBarthird></SearchingBarthird> -->
+      <!-- user avatar and a list of router -->
       <div
         style="margin-left:25px; margin-right:15px; cursor:pointer;"
         v-if="$store.getters.getUsername != null"
       >
-        <UserCard size="37"></UserCard>
+        <userCard size="37"></userCard>
       </div>
       <router-link
         to="/login"
@@ -73,12 +70,10 @@
 </template>
 
 <script>
-// import SearchingBarthird from "@/components/SearchingBarthird.vue";
-import UserCard from "@/components/UserCard.vue";
+import userCard from "@/components/userCard.vue";
 export default {
   components: {
-    //   SearchingBarthird,
-    UserCard
+    userCard
   },
   data() {
     return {
@@ -86,6 +81,7 @@ export default {
     };
   },
   methods: {
+    // navigate methods
     gotoProjectPage() {
       if (this.$store.getters.getUsername != null)
         this.$router.replace({ path: "/project" });
@@ -106,18 +102,13 @@ export default {
       });
       this.$router.go(0);
     },
-    showUser() {
-      if (this.user.avatar == null) this.$store.state.show.showLogin = true;
-    },
     gotoLogin() {
       this.$router.replace({ path: "/login" });
-    }
-  },
-  watch: {
-    $route(to, from) {
-      // 从URL解析出当前是哪个页面
-      var urls = this.$route.path.split("/");
-      this.currentPath = urls[urls.length - 1];
+    },
+
+    /** show/hide user card method */
+    showUser() {
+      if (this.user.avatar == null) this.$store.state.show.showLogin = true;
     }
   }
 };

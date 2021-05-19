@@ -1,17 +1,24 @@
 package cpt202.groupwork.controller;
 
-
 import cpt202.groupwork.Response;
+import cpt202.groupwork.dto.TodoCalendarDTO;
 import cpt202.groupwork.dto.TodoDTO;
-
+import cpt202.groupwork.dto.TodoViewDTO;
+import cpt202.groupwork.dto.TodolistViewDTO;
+import cpt202.groupwork.entity.Project;
 import cpt202.groupwork.entity.Todo;
 import cpt202.groupwork.entity.Todolist;
+import cpt202.groupwork.entity.User;
 import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.TodolistRepository;
 import cpt202.groupwork.repository.TodoRepository;
 import cpt202.groupwork.repository.UserRepository;
+import cpt202.groupwork.service.TodolistService;
 //import cpt202.groupwork.security.SecurityUtils;
 import io.swagger.v3.oas.annotations.Operation;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import javax.validation.Valid;
 
@@ -44,17 +51,28 @@ public class TodoController {
   @Autowired
   UserRepository userRepository;
 
+  @Autowired
+  TodolistService todolistService;
+
+  /**
+   * Upload a todo
+   *
+   * @param todoDTO, the name of user who is current uploding the file
+   * @return filename, including filetype
+   */
   @PostMapping("/add")
-  @Operation(summary = "通过 todolistId 和 todoCreateDTO 添加 todo")
-  public Response<?> postTodo(@Valid @RequestBody TodoDTO todoDTO) {
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
-//    if (username.isEmpty()) {
-//      return Response.unAuth();
-//    }
+  @Operation(summary = "Add todo with todoListId and todoCreateDTO")
+  public Response<?> createTodo(@Valid @RequestBody TodoDTO todoDTO) {
+    // Optional<String> username = SecurityUtils.getCurrentUsername();
+    // if (username.isEmpty()) {
+    // return Response.unAuth();
+    // }
     Integer todolistId = todoDTO.getTodolistId();
     Optional<Todolist> todolist = todolistRepository.findById(todolistId);
+    Optional<User> user = userRepository.findByUserName(todoDTO.getTodoMember());
     Todo todo = new Todo();
     BeanUtils.copyProperties(todoDTO, todo);
+    todo.setTodoMember(user.get().getUserId());
     todo.setTodoCheck(false);
     todo.setTodolistId(todolistId);
     todolist.get().setTodolistTotalNum(todolist.get().getTodolistTotalNum() + 1);
@@ -66,19 +84,19 @@ public class TodoController {
   @DeleteMapping("/delete/{todoId}")
   @Operation(summary = "删除todo")
   public Response<?> deleteTodo(@PathVariable Integer todoId) {
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
-//    if (username.isEmpty()) {
-//      return Response.unAuth();
-//    }
+    // Optional<String> username = SecurityUtils.getCurrentUsername();
+    // if (username.isEmpty()) {
+    // return Response.unAuth();
+    // }
     Optional<Todo> todo = todoRepository.findById(todoId);
     Todolist todolist = todolistRepository.findById(todo.get().getTodolistId()).get();
-//    if (todo.isEmpty()) {
-//      return Response.ok();
-//    }
-    //只有自己才能删除自己的todo的限制
-//    if (!username.get().equals(subDiscussion.get().getUsername())) {
-//      return TeaInfo.permissionDenied("只有自己才能删除哦！");
-//    }
+    // if (todo.isEmpty()) {
+    // return Response.ok();
+    // }
+    // 只有自己才能删除自己的todo的限制
+    // if (!username.get().equals(subDiscussion.get().getUsername())) {
+    // return TeaInfo.permissionDenied("只有自己才能删除哦！");
+    // }
     todolist.setTodolistTotalNum(todolist.getTodolistTotalNum() - 1);
     if (todo.get().getTodoCheck() == true) {
       todolist.setTodolistCompleteNum(todolist.getTodolistCompleteNum() - 1);
@@ -90,39 +108,39 @@ public class TodoController {
 
   @PutMapping("/edit")
   @Operation(summary = "修改todo信息")
-  public Response<?> putTodo(@Valid @RequestBody Todo todoInfo) {
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
+  public Response<?> modifyTodo(@Valid @RequestBody TodoViewDTO todoInfo) {
+    // Optional<String> username = SecurityUtils.getCurrentUsername();
     // 没有登陆
-//    if (username.isEmpty()) {
-//      return Response.unAuth();
-//    }
+    // if (username.isEmpty()) {
+    // return Response.unAuth();
+    // }
     Integer todoId = todoInfo.getTodoId();
     Optional<Todo> todo = todoRepository.findById(todoId);
-
-//    if (todo.isEmpty()) {
-//      return Response.notFound("没有找到todo哦！");
-//    }
+    Optional<User> user = userRepository.findByUserName(todoInfo.getTodoMember());
+    // if (user.isEmpty()) {
+    // return Response.notFound();
+    // }
     BeanUtils.copyProperties(todoInfo, todo.get());
+    todo.get().setTodoMember(user.get().getUserId());
     todoRepository.save(todo.get());
     return Response.ok();
   }
 
-
   @PutMapping("/check/{todoId}")
   @Operation(summary = "完成Todo")
   public Response<?> checkTodo(@PathVariable Integer todoId) {
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
+    // Optional<String> username = SecurityUtils.getCurrentUsername();
     // 没有登陆
-//    if (username.isEmpty()) {
-//      return Response.unAuth();
-//    }
+    // if (username.isEmpty()) {
+    // return Response.unAuth();
+    // }
     Optional<Todo> todo = todoRepository.findById(todoId);
 
-//    if (todo.isEmpty()) {
-//      return Response.notFound("没有找到todo哦！");
-//    }
+    // if (todo.isEmpty()) {
+    // return Response.notFound("没有找到todo哦！");
+    // }
     Optional<Todolist> todolist = todolistRepository.findById(todo.get().getTodolistId());
-    //如果是没有完成的todo
+    // 如果是没有完成的todo
     if (todo.get().getTodoCheck() == false) {
       todolist.get().setTodolistCompleteNum(todolist.get().getTodolistCompleteNum() + 1);
     } else {
@@ -136,9 +154,38 @@ public class TodoController {
   @Operation(summary = "查看todo详情")
   public Response<?> getTodo(@PathVariable Integer todoId) {
     Optional<Todo> todo = todoRepository.findById(todoId);
-//  UserSelfVO userSelfVO = new UserSelfVO();
-//  BeanUtils.copyProperties(user.get(), userSelfVO);
+    // UserSelfVO userSelfVO = new UserSelfVO();
+    // BeanUtils.copyProperties(user.get(), userSelfVO);
     return Response.ok(todo);
+  }
+
+  @GetMapping("/get/member/{todoMember}")
+  @Operation(summary = "查看某执行人的所有todo")
+  public Response<?> getTodoByUsername(@PathVariable String todoMember) {
+    Optional<User> user = userRepository.findByUserName(todoMember);
+    List<Todo> todos = todoRepository.findByTodoMemberOrderByTodoDdlAsc(user.get().getUserId());
+    List<TodoCalendarDTO> todoCalendarDTOs = new ArrayList<>();
+    for (Todo todo : todos) {
+      TodoCalendarDTO todoCalendarDTO = new TodoCalendarDTO();
+      BeanUtils.copyProperties(todo, todoCalendarDTO);
+      // Get todolistName
+      Optional<Todolist> todolist = todolistRepository.findById(todo.getTodolistId());
+      todoCalendarDTO.setTodolistName(todolist.get().getTodolistName());
+      // Get projectname
+      todoCalendarDTO.setProjectId(todolist.get().getProjectId());
+      Optional<Project> project = projectRepository.findById(todolist.get().getProjectId());
+      todoCalendarDTO.setProjectName(project.get().getProjectName());
+      todoCalendarDTOs.add(todoCalendarDTO);
+    }
+    return Response.ok(todoCalendarDTOs);
+  }
+
+  @GetMapping("/get/{projectId}/search/{todoName}")
+  @Operation(summary = "在Dashboard搜索")
+  public Response<?> searchTodo(@PathVariable Integer projectId, @PathVariable String todoName) {
+    List<TodolistViewDTO> todolistViewDTOs = new ArrayList<>();
+    todolistViewDTOs = todolistService.searchTodos(projectId, todoName);
+    return Response.ok(todolistViewDTOs);
   }
 
 }

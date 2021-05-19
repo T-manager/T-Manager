@@ -19,6 +19,7 @@
           style="font-size:25px; height:200px; display:flex; flex-direction:column; justify-content:space-between;
           align-items:flex-end; padding:10px"
         >
+          <!-- manage project menu -->
           <v-menu offset-x :close-on-content-click="false">
             <template v-slot:activator="{ on, attrs }">
               <v-btn
@@ -33,24 +34,25 @@
               </v-btn>
             </template>
             <v-list style="padding:0px;">
+              <!-- modify project -->
               <v-list-item
                 style="padding:0px 5px 0px 5px"
                 v-if="project.projectOwner == $store.getters.getUsername"
               >
-                <!-- 点击铅笔修改项目 -->
                 <modifyProjectDialog :project="project"></modifyProjectDialog>
               </v-list-item>
+              <!-- show project member -->
               <v-list-item
                 style="padding:0px 5px 0px 5px"
                 v-if="project.projectType == 'team'"
               >
                 <memberDialog :project="project"></memberDialog
               ></v-list-item>
+              <!-- disband project (if user is the owner) -->
               <v-list-item
                 style="padding:0px 5px 0px 5px"
                 v-if="project.projectOwner == $store.getters.getUsername"
               >
-                <!-- 解散project -->
                 <v-btn
                   text
                   color="primary"
@@ -62,12 +64,12 @@
                   <v-icon>mdi-account-multiple-remove-outline</v-icon></v-btn
                 >
               </v-list-item>
-              <!-- 退出project -->
+              <!-- quit project (if user is not the owner) -->
               <v-list-item style="padding:0px 5px 0px 5px" v-else>
                 <v-btn
                   text
                   color="primary"
-                  @click="quitProject()"
+                  @click="showPopupMethod"
                   style="width:120px; display:flex; justify-content:flex-start; padding:0px 10px 0px 10px"
                 >
                   Quit
@@ -81,6 +83,7 @@
         </div>
       </v-img>
     </v-card>
+    <!-- project information -->
     <div
       style="display:flex; align-items:center; justify-content:flex-end; padding-left:20px; padding-right:20px; padding-bottom:10px; padding-top:10px;"
     >
@@ -94,6 +97,7 @@
         {{ project.projectName }}
       </div>
       <v-spacer></v-spacer>
+      <!-- project detail (hide ) -->
       <v-btn style="color:#757575" icon @click="showDetail = !showDetail">
         <v-icon>{{
           showDetail ? "mdi-chevron-up" : "mdi-chevron-down"
@@ -146,11 +150,12 @@ export default {
     };
   },
   methods: {
+    /** show/hide popup, provide for child component */
     showPopupMethod() {
       this.showPopup = !this.showPopup;
     },
+    /** quit project method */
     quitProject() {
-      console.log("quit");
       this.$axios({
         method: "delete",
         url:
@@ -168,11 +173,7 @@ export default {
           this.$store.commit("response", error);
         });
     },
-    gotoProjectDetail() {
-      this.$router.replace({
-        path: "/projectdetail/todolist/projectid=" + this.project.projectId
-      });
-    },
+    /** delete project method */
     deleteProject() {
       this.$axios({
         method: "delete",
@@ -188,6 +189,12 @@ export default {
         .catch(error => {
           this.$store.commit("response", error);
         });
+    },
+    /** navigate method */
+    gotoProjectDetail() {
+      this.$router.replace({
+        path: "/projectdetail/todolist/projectid=" + this.project.projectId
+      });
     }
   },
   components: {

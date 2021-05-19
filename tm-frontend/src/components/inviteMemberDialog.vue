@@ -1,10 +1,11 @@
 <template>
   <div>
+    <!-- invite user button -->
     <v-btn color="primary" text @click="showUserInviteDialog = true">
       Invite
       <v-icon>mdi-account-plus-outline</v-icon>
     </v-btn>
-    <!-- 点击邀请进入成员dialog -->
+    <!-- invite member popup -->
     <v-dialog v-model="showUserInviteDialog" persistent max-width="600px">
       <v-card>
         <v-card-title>
@@ -24,12 +25,11 @@
               </v-col>
             </v-row>
           </v-container>
-          <!-- <small>*indicates required field</small> -->
         </v-card-text>
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <!-- 关闭邀请dialog -->
+          <!-- close popup -->
           <v-btn
             depressed
             color="primary"
@@ -40,7 +40,7 @@
           >
             Close
           </v-btn>
-          <!-- 邀请成员并且退出dialog -->
+          <!-- submit invitation -->
           <v-btn
             depressed
             color="primary"
@@ -63,6 +63,7 @@ export default {
     return { showUserInviteDialog: false, loadAddMember: false };
   },
   methods: {
+    /** add relation method */
     addRelation() {
       if (this.project.projectType == "team")
         this.$axios({
@@ -78,13 +79,11 @@ export default {
         })
           .then(res => {
             this.showMenber = true;
-            console.log(res);
             this.loadAddMember = false;
             this.$router.go(0);
           })
           .catch(error => {
-            console.log("error");
-            console.log(error);
+            // console.log(error);
             this.$store.commit("response", error);
             this.loadAddMember = false;
           });

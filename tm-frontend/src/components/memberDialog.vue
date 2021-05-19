@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- shou member button -->
     <v-btn
       text
       style="width:120px; display:flex; justify-content:flex-start; padding:0px 10px 0px 10px"
@@ -10,6 +11,7 @@
       <v-spacer></v-spacer>
       <v-icon>mdi-account-group</v-icon></v-btn
     >
+    <!-- show member popup -->
     <v-dialog v-model="showMember" persistent max-width="600px">
       <v-card>
         <v-card-title>
@@ -87,7 +89,7 @@
 
         <v-card-actions>
           <v-spacer></v-spacer>
-          <!-- 关闭dialog -->
+          <!-- close popup -->
           <v-btn
             depressed
             color="primary"
@@ -112,12 +114,14 @@ export default {
     return { showMember: false, showPopup: false, loading: false, members: [] };
   },
   methods: {
+    /** show popup method
+     * provide for child component to change the showing state
+     */
     showPopupMethod() {
       this.showPopup = !this.showPopup;
     },
     async modifyProject() {
       this.loading = true;
-      console.log(this.project.projectId);
       await this.$axios({
         method: "put",
         url: this.$store.state.host + "project/modify",
@@ -127,20 +131,17 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
           this.loading = false;
           this.showModifyDialog = false;
           this.$router.go(0);
         })
         .catch(error => {
-          console.log(error);
           this.$store.commit("response", error);
           this.loading = false;
         });
     },
+    /** delete relation method */
     deleteRelation(memberId) {
-      console.log("!!");
-      console.log(memberId);
       this.$axios({
         method: "delete",
         url: this.$store.state.host + "relation/delete/" + memberId,
@@ -158,6 +159,7 @@ export default {
     }
   },
   created() {
+    // get all members of the project
     this.$axios({
       method: "get",
       url:
@@ -167,8 +169,6 @@ export default {
       }
     })
       .then(res => {
-        console.log("member");
-        console.log(res.data.data);
         this.members = res.data.data;
       })
       .catch(error => {

@@ -6,19 +6,27 @@
     nudge-right="-85"
     close-delay="800"
   >
+    <!-- The user avatar on the Navbar -->
     <template v-slot:activator="{ on }">
       <v-avatar
         :size="size"
         v-on="on"
-        @mouseover="(showCard = true), getDetail()"
+        @mouseover="showCard = true"
         @mouseleave="showCard = false"
-        @click="toUserPage"
+        @click="gotoCalender"
         style="background-color:#aaaaaa"
       >
-        <v-img src="https://picsum.photos/200"></v-img>
+        <v-img
+          :src="
+            $store.state.host + 'auth/images/' + $store.getters.getUserphoto
+          "
+          height="35"
+          width="35"
+        ></v-img>
       </v-avatar>
     </template>
 
+    <!-- Menu that appears when you hover over the Avatar -->
     <v-list style="padding:0px; width:120px" flat>
       <v-list-item-group style="padding:0px">
         <v-list-item
@@ -32,8 +40,8 @@
         <v-list-item link to="/profile" class="list_item_center">
           Profile
         </v-list-item>
-        <v-list-item class="list_item_center">
-          个人日历
+        <v-list-item link to="/calender" class="list_item_center">
+          Calender
         </v-list-item>
         <v-list-item
           @click="logout"
@@ -60,17 +68,21 @@ export default {
   },
   props: ["size"],
   methods: {
+    /**get personal information for a specific user*/
     getDetail() {
       this.user.username = this.$store.getters.getUsername;
       if (this.user.username == null) return;
       this.showContent = false;
       this.$axios({
-        // 获取发起人信息
         method: "get",
-        url: this.$store.state.host + "user/" + this.user.username
+        url: this.$store.state.host + "user/" + this.user.username,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
       })
         .then(res => {
           this.user = res.data.data;
+          // console.log("Userinfo", this.user);
           this.showContent = true;
         })
         .catch(error => {
@@ -82,9 +94,8 @@ export default {
         path: "/user"
       });
     },
+    /** go to user profile page*/
     toUserPage() {
-      console.log("user");
-      console.log(this.user);
       if (this.user.username != null) {
         var path = "/profile";
         this.$router.push({ path: path });
@@ -92,6 +103,12 @@ export default {
         this.$store.state.show.showLogin = true;
       }
     },
+    gotoCalender() {
+      this.$router.replace({
+        path: "/calender"
+      });
+    },
+    /**user logout*/
     logout() {
       this.$store.commit("del_token");
       this.$store.commit("del_username");

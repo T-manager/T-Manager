@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- The user's avatar on the Profile page -->
     <v-avatar
       style=" cursor:pointer;"
       size="150"
@@ -7,7 +8,9 @@
       @mouseover="showEditImg = true"
       @mouseleave="showEditImg = false"
     >
-      <v-img src="https://picsum.photos/200"></v-img>
+      <v-img
+        :src="$store.state.host + 'auth/images/' + $store.getters.getUserphoto"
+      ></v-img>
       <v-fade-transition>
         <v-overlay v-if="showEditImg" absolute color="#606060">
           <div style="font-fanily:SourceHanSansSC-regular;font-size:14px">
@@ -16,13 +19,16 @@
         </v-overlay>
       </v-fade-transition>
     </v-avatar>
+
+    <!-- The dialog for the avatar upload -->
     <v-dialog v-model="showUploadImg" persistent max-width="450px">
-      <div
-        style="height:500px;background-color:#FFFFFF;display:flex;flex-direction:column;align-items:center;"
+      <v-card
+        style="height:500px;background-color:#FFFFFF;display:flex;flex-direction:column;align-items:center;
+        border-radius:10px"
       >
         <div
           @click="showUploadImg = false"
-          style="display:flex;justify-content:flex-end;margin-top:5px;height:30px;width:430px"
+          style="display:flex;justify-content:flex-end;margin-top:10px;height:30px;width:430px"
         >
           <v-icon style="font-size:26px;cursor:pointer;"> mdi-close</v-icon>
         </div>
@@ -54,14 +60,15 @@
           <v-spacer></v-spacer>
           <v-btn
             depressed
+            style="border:#cccccc solid 1px; color:#777777; width:100px"
             @click="uploadImg"
             :loading="loading"
-            :disabled="loading"
+            :disabled="loading || imgFile == ''"
           >
             upload</v-btn
           >
         </div>
-      </div>
+      </v-card>
     </v-dialog>
   </div>
 </template>
@@ -79,9 +86,21 @@ export default {
   },
   props: ["userName"],
   methods: {
+    /**CheckImgSize*/
+    checkImgSizeRules(v) {
+      if (v.size > 1024 * 1024 * 5) {
+        alert("Uploaded avatar should not be larger than 5M!");
+        return false;
+      }
+      return true;
+    },
+    /** Upload a image*/
     async uploadImg() {
       if (this.imgFile == "") {
         alert("Need to select a picture!");
+      }
+      if (!this.checkImgSizeRules(this.imgFile)) {
+        return;
       }
       this.loading = true;
       var originalFile = new FormData();
@@ -100,16 +119,33 @@ export default {
         .then(res => {
           alert("Avatar uploaded successfully!");
           this.loading = false;
+          if (this.$store.getters.getUserphoto != null) {
+            this.deleteImg();
+            this.$store.commit("set_userphoto", res.data);
+          }
           this.$router.go(0);
         })
         .catch(error => {
           this.loading = false;
-          console.log(error);
+          // console.log(error);
         });
     },
+    /**preview the image while uploading a image file*/
     Preview_image() {
       this.fileUrl = URL.createObjectURL(this.imgFile);
-      console.log(this.fileUrl);
+    },
+    /**delete the image*/
+    deleteImg() {
+      this.$axios({
+        method: "delete",
+        url:
+          this.$store.state.host +
+          "resource/delete/" +
+          this.$store.getters.getUserphoto,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken
+        }
+      }).then(res => {});
     }
   }
 };

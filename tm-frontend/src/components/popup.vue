@@ -1,4 +1,5 @@
 <template>
+  <!-- delete confirm popup -->
   <v-dialog v-model="showPopup" persistent max-width="400px">
     <v-card
       class="popup-background"
@@ -9,6 +10,7 @@
         {{ message }}
       </div>
       <div style="display:flex; width:250px">
+        <!-- give up the request -->
         <v-btn
           depressed
           style="border:#cccccc solid 1px; color:#777777; width:100px"
@@ -16,6 +18,7 @@
           >Cancel</v-btn
         >
         <v-spacer></v-spacer>
+        <!-- confirm delete request -->
         <v-btn
           @click="confirm"
           depressed
@@ -34,9 +37,11 @@ export default {
     return { loading: false };
   },
   methods: {
+    /** using parent component's method to execute delete action */
     confirm() {
       this.$emit("confirmOperation");
     },
+    /** using parent component's method to close the popup */
     cancel() {
       this.$emit("showPopupMethod");
     }
@@ -48,7 +53,6 @@ export default {
 <style scoped>
 .popup-background {
   background-image: url("../assets/TmanagerLogo_l5.svg");
-  /* background-image: url("../assets/TManagerLogo.png"); */
   background-size: 240px;
   background-repeat: no-repeat;
   background-position: 175px -35px;

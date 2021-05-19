@@ -22,9 +22,3 @@ new Vue({
   components: { App },
   template: "<App/>"
 });
-
-// axios.defaults.baseURL = "http://localhost:6767/";
-// axios.defaults.headers.common["Authorization"] =
-//   "Bearer " + localStorage.getItem("token");
-// axios.defaults.headers.post["Content-Type"] =
-//   "application/x-www=form-urlencoded";

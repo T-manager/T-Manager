@@ -29,53 +29,55 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/relation")
 public class RelationController {
-    @Autowired
-    ProjectRepository projectRepository;
 
-    @Autowired
-    UserRepository userRepository;
+  @Autowired
+  ProjectRepository projectRepository;
 
-    @Autowired
-    RelationRepository relationRepository;
+  @Autowired
+  UserRepository userRepository;
 
-    @Autowired
-    RelationService relationService;
+  @Autowired
+  RelationRepository relationRepository;
 
-    @PostMapping("/add")
-    @Operation(summary = "add a relation")
-    public Response<?> addRelation(@Valid @RequestBody RelationDTO relationDTO) {
-        Optional<User> user = userRepository.findByUserName(relationDTO.getMemberName());
-        List<ProjectMember> pms = relationRepository.findByProjectId(relationDTO.getProjectId());
-        for (ProjectMember pm : pms) {
-            if (pm.getMemberId() == user.get().getUserId())
-                return Response.conflict("aaaaa");
-        }
-        ProjectMember projectmember = new ProjectMember();
-        BeanUtils.copyProperties(relationDTO, projectmember);
-        projectmember.setMemberRole("member");
+  @Autowired
+  RelationService relationService;
 
-        projectmember.setMemberId(user.get().getUserId());
-        relationRepository.save(projectmember);
-        return Response.ok(projectmember);
+  @PostMapping("/add")
+  @Operation(summary = "add a relation")
+  public Response<?> createRelation(@Valid @RequestBody RelationDTO relationDTO) {
+    Optional<User> user = userRepository.findByUserName(relationDTO.getMemberName());
+    List<ProjectMember> pms = relationRepository.findByProjectId(relationDTO.getProjectId());
+    for (ProjectMember pm : pms) {
+      if (pm.getMemberId() == user.get().getUserId()) {
+        return Response.conflict("aaaaa");
+      }
     }
+    ProjectMember projectmember = new ProjectMember();
+    BeanUtils.copyProperties(relationDTO, projectmember);
+    projectmember.setMemberRole("member");
 
-    @DeleteMapping("/delete/{projectMemberId}")
-    @Operation(summary = "delete a relation")
-    public Response<?> deleteRelation(@PathVariable Integer projectMemberId) {
-        relationRepository.deleteById(projectMemberId);
-        return Response.ok();
-    }
+    projectmember.setMemberId(user.get().getUserId());
+    relationRepository.save(projectmember);
+    return Response.ok(projectmember);
+  }
 
-    @GetMapping("getproject/{username}")
-    @Operation(summary = "get all project infomation belong to a user")
-    public Response<?> getUserProject(@PathVariable String username) {
-        return Response.ok(relationService.getUserProject(username));
-    }
+  @DeleteMapping("/delete/{projectMemberId}")
+  @Operation(summary = "delete a relation")
+  public Response<?> deleteRelation(@PathVariable Integer projectMemberId) {
+    relationRepository.deleteById(projectMemberId);
+    return Response.ok();
+  }
 
-    @GetMapping("getuser/{projectId}")
-    @Operation(summary = "get all user infomation under a project")
-    public Response<?> getProjectUser(@PathVariable Integer projectId) {
-        return Response.ok(relationService.getProjectUser(projectId));
-    }
+  @GetMapping("getproject/{username}")
+  @Operation(summary = "get all project infomation belong to a user")
+  public Response<?> getUserProject(@PathVariable String username) {
+    return Response.ok(relationService.getUserProject(username));
+  }
+
+  @GetMapping("getuser/{projectId}")
+  @Operation(summary = "get all user infomation under a project")
+  public Response<?> getProjectUser(@PathVariable Integer projectId) {
+    return Response.ok(relationService.getProjectUser(projectId));
+  }
 }
 

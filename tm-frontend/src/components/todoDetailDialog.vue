@@ -1,10 +1,13 @@
 <template>
   <div>
-    <!-- 每一行TODO概述 -->
-    <v-list-item @click="showTodoDetail = true">
+    <!-- todo information (each line in todo list) -->
+    <v-list-item
+      @click="showTodoDetail = true"
+      style="border-bottom:1px solid #dfdfdf;"
+    >
       <template>
         <v-list-item-content
-          style="display:flex; justify-content:flex-start; margin-left:10px;"
+          style="display:flex; justify-content:flex-start; margin-left:10px; padding:7px 0px 7px 0px"
         >
           <div
             class="todo_name"
@@ -15,25 +18,71 @@
             "
           >
             {{ todo.todoName }}
+            <!-- show if overdue -->
+            <v-chip
+              v-if="
+                !todo.todoCheck &&
+                  todo.todoDdl.split(' ')[0] <
+                    new Date().getFullYear() +
+                      '-' +
+                      (new Date().getMonth() > 8
+                        ? new Date().getMonth()
+                        : '0' + (new Date().getMonth() + 1)) +
+                      '-' +
+                      (new Date().getDate() > 9
+                        ? new Date().getDate()
+                        : '0' + new Date().getDate())
+              "
+              color="red"
+              outlined
+              small
+              style="margin-left:10px"
+              >Overdue</v-chip
+            >
           </div>
           <div
-            style="display:flex; margin-top:5px"
-            :style="
-              todo.todoCheck
-                ? 'color:#c3c3c3; text-decoration:line-through'
-                : 'color:#838383'
-            "
+            style="display:flex; margin-top:5px; color:#838383; align-items:center"
           >
-            <div class="todo_detail">
-              {{ todo.todoDetail }}
+            <v-avatar
+              v-if="projectType == 'team'"
+              size="25"
+              :style="
+                todo.todoCheck
+                  ? 'margin-right:10px; border:solid 2px #333333'
+                  : 'margin-right:10px; border:solid 2px #d0021b'
+              "
+            >
+              <v-img
+                :src="
+                  $store.state.host + 'auth/images/' + todo.todoMemberAvatar
+                "
+                height="35"
+                width="35"
+                :gradient="
+                  todo.todoCheck
+                    ? 'to top right, rgba(150,150,150,.33), rgba(25,25,25,.7)'
+                    : ''
+                "
+              ></v-img>
+            </v-avatar>
+            <div class="todo_detail" style="display:flex; align-items:center">
+              <div style="margin-right:10px; " v-if="projectType == 'team'">
+                {{ todo.todoMember }}
+              </div>
+              <div style="font-size:12px; margin-top:3px">
+                {{ todo.todoDdl.split(" ")[0] }}
+              </div>
             </div>
-            <!-- <div class="todo_ddl">
-              {{ todo.todoDdl }}
-            </div> -->
           </div>
         </v-list-item-content>
-        <!-- TODO check 按键 -->
-        <v-list-item-action style="margin-right:8px">
+        <!-- todo checkbox -->
+        <v-list-item-action
+          style="margin-right:8px"
+          v-if="
+            $store.getters.getUsername == todo.todoMember ||
+              $store.getters.getUsername == projectOwner
+          "
+        >
           <v-checkbox
             v-model="todo.todoCheck"
             color="primary"
@@ -43,7 +92,7 @@
       </template>
     </v-list-item>
 
-    <!-- TODO 详情弹窗 -->
+    <!-- todo detail popup -->
     <v-dialog v-model="showTodoDetail" max-width="550px">
       <v-card
         v-if="showModifyTodo == false"
@@ -58,8 +107,13 @@
         <div
           style="font-size:30px; margin-left:10px; width:100%; text-align:left; display:flex; align-items:center"
         >
-          Modify Todo
+          Todo Detail
+          <!-- modify todo popup -->
           <v-btn
+            v-if="
+              $store.getters.getUsername == todo.todoMember ||
+                $store.getters.getUsername == projectOwner
+            "
             color="primary"
             @click="showModifyTodo = true"
             style="margin-left:10px"
@@ -67,10 +121,18 @@
           >
             <v-icon>mdi-pencil-outline</v-icon>
           </v-btn>
-          <v-btn @click="showPopupMethod" icon
+          <!-- delete todo -->
+          <v-btn
+            v-if="
+              $store.getters.getUsername == todo.todoMember ||
+                $store.getters.getUsername == projectOwner
+            "
+            @click="showPopupMethod"
+            icon
             ><v-icon>mdi-delete-outline</v-icon></v-btn
           >
         </div>
+        <!-- todo detail -->
         <v-card-text
           style="display:flex; flex-direction:column; margin-top:15px; padding:10px; color:#434343"
         >
@@ -90,13 +152,15 @@
             <div style="width:150px">Todo Deadline:</div>
             <div style="width:350px; color:#838383">{{ todo.todoDdl }}</div>
           </div>
-
-          <!-- 选择负责人 -->
+          <div class="todo_detail_info" v-if="projectType == 'team'">
+            <div style="width:150px">Executer:</div>
+            <div style="width:350px; color:#838383">{{ todo.todoMember }}</div>
+          </div>
         </v-card-text>
       </v-card>
     </v-dialog>
 
-    <!-- 编辑 TODO -->
+    <!-- modify todo popup -->
     <v-dialog v-model="showModifyTodo" persistent max-width="600px">
       <v-card style="padding: 30px 35px 50px 35px;" class="card-background">
         <div
@@ -135,9 +199,9 @@
             prepend-icon="mdi-menu"
             v-model="todo.todoDetail"
           ></v-textarea>
-          <!-- 选择时间日期 -->
+          <!-- change todo deadline -->
           <div style="display:flex">
-            <!-- 选择ddl日期 -->
+            <!-- change deadline date -->
             <v-menu
               ref="datePicker"
               v-model="datePicker"
@@ -178,11 +242,11 @@
                   color="primary"
                   class="white--text"
                   @click="$refs.datePicker.save(todoChange.date)"
-                  >Submit</v-btn
+                  >Confirm</v-btn
                 >
               </v-date-picker>
             </v-menu>
-            <!-- 选择ddl时间 -->
+            <!-- change deadline time -->
             <v-menu
               ref="timePicker"
               v-model="timePicker"
@@ -215,10 +279,21 @@
               ></v-time-picker>
             </v-menu>
           </div>
-
-          <!-- 选择负责人 -->
+          <!-- choose todo executer -->
+          <v-autocomplete
+            v-if="projectType == 'team'"
+            v-model="todo.todoMember"
+            :items="projectMembers"
+            :loading="loadingMember"
+            :disabled="loadingMember"
+            label="todo executer"
+            color="primary"
+            prepend-icon="mdi-badge-account-outline"
+          >
+          </v-autocomplete>
         </v-card-text>
         <div style="display:flex; justify-content:center; margin-top:10px">
+          <!-- close modify popup -->
           <v-btn
             depressed
             style="border:#cccccc solid 1px; color:#777777; width:120px; margin-right:50px"
@@ -226,6 +301,7 @@
           >
             <v-icon class="pr-2">mdi-cancel</v-icon>Cancel
           </v-btn>
+          <!-- submit modification -->
           <v-btn
             depressed
             color="primary"
@@ -234,11 +310,12 @@
             :loading="loading"
             :disabled="loading"
           >
-            <v-icon class="pr-2">mdi-upload-outline</v-icon>Submit
+            <v-icon class="pr-2">mdi-upload-outline</v-icon>Confirm
           </v-btn>
         </div>
       </v-card>
     </v-dialog>
+    <!-- delete confirmation popup -->
     <popup
       message="Are you sure you want to delete this todo list?"
       :showPopup="showPopup"
@@ -254,14 +331,19 @@ export default {
   data() {
     return {
       loading: false,
+      loadingMember: true,
       showTodoDetail: false,
       showModifyTodo: false,
       showPopup: false,
       todoChange: {},
+      projectMembers: [],
+      projectOwner: "",
+      projectType: "",
 
       dateFormat: new Date().toISOString().substr(0, 10),
       datePicker: false,
       timePicker: false,
+      // inline check rules
       rules: {
         nameRules: [
           v =>
@@ -278,11 +360,13 @@ export default {
     };
   },
   components: { popup },
-  props: ["todolistName", "todo", "projectName"],
+  props: ["todolistName", "todo", "projectName", "projectId"],
   methods: {
+    /** show popup method */
     showPopupMethod() {
       this.showPopup = !this.showPopup;
     },
+    /** check/uncheck todo method */
     checkTodo() {
       var todoId = this.todo.todoId;
       this.todo.loading = true;
@@ -294,10 +378,8 @@ export default {
         }
       })
         .then(res => {
-          console.log(res);
           this.todo.loading = false;
-          // 调用父组件方法改变完成任务数量
-          this.$emit("changeCompleteNum");
+          this.$emit("changeCompleteNum"); // call the parent component method to change the number of tasks completed
         })
         .catch(error => {
           this.$store.commit("response", error);
@@ -314,6 +396,7 @@ export default {
     checkDateTimeRules(v) {
       return typeof v != "undefined";
     },
+    /** check all rules again beform submit */
     checkRules() {
       if (!this.checkNameRules(this.todo.todoName)) {
         alert("check the name");
@@ -333,6 +416,7 @@ export default {
       }
       return true;
     },
+    /** modifuy todo method */
     async modifyTodo() {
       this.loading = true;
       this.todo.todoDdl =
@@ -341,8 +425,6 @@ export default {
         this.loading = false;
         return;
       }
-      this.todo.todoMember = 0;
-      console.log(this.todo);
       this.$axios({
         method: "put",
         url: this.$store.state.host + "todo/edit",
@@ -361,6 +443,7 @@ export default {
           this.loading = false;
         });
     },
+    /** delete todo method */
     deleteTodo() {
       this.$axios({
         method: "delete",
@@ -378,9 +461,46 @@ export default {
     }
   },
   created() {
+    // split datetime into date and time before show page
     var dateTime = this.todo.todoDdl;
     this.todoChange.date = dateTime.split(" ")[0];
     this.todoChange.time = dateTime.split(" ")[1].split(":00 ")[0];
+    // get projectType
+    this.loadingMember = true;
+    this.$axios({
+      method: "get",
+      url: this.$store.state.host + "project/getV2/" + this.projectId,
+      headers: {
+        Authorization: "Bearer " + this.$store.getters.getToken
+      }
+    })
+      .then(res => {
+        this.projectOwner = res.data.data.projectOwner;
+        this.projectType = res.data.data.projectType;
+        if (this.projectType == "team") {
+          // get project member if is team project
+          this.$axios({
+            method: "get",
+            url: this.$store.state.host + "relation/getuser/" + this.projectId,
+            headers: {
+              Authorization: "Bearer " + this.$store.getters.getToken
+            }
+          })
+            .then(res => {
+              for (var i in res.data.data)
+                this.projectMembers.push(res.data.data[i].memberName);
+              this.loadingMember = false;
+            })
+            .catch(error => {
+              this.$store.commit("response", error);
+            });
+        } else {
+          this.loadingMember = false;
+        }
+      })
+      .catch(error => {
+        this.$store.commit("response", error);
+      });
   }
 };
 </script>
