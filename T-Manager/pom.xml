@@ -110,6 +110,12 @@
       <artifactId>android-json</artifactId>
       <version>0.0.20131108.vaadin1</version>
     </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.13.2</version>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
 
   <build>
