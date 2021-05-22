@@ -315,7 +315,7 @@ export default {
         return false;
       }
       else if (is_new) {
-        var formatFunc = gantt.date.date_to_str("%Y-%m-%d %H:%m:%s");
+        var formatFunc = gantt.date.date_to_str("%Y-%m-%d %H:%m:%s");
         var date = formatFunc(task.start_date); // date format
         that
           .$axios({
@@ -330,9 +330,9 @@ export default {
               missionDuration: task.duration,
               missionParent: task.parent
             },
-            headers: {
-              Authorization: "Bearer " + that.$store.getters.getToken
-            }
+            headers: {
+              Authorization: "Bearer " + that.$store.getters.getToken
+            }
           })
           .then(res => {})
           .catch(error => {
