@@ -45,20 +45,31 @@ public class RelationController {
   @PostMapping("/add")
   @Operation(summary = "add a relation")
   public Response<?> createRelation(@Valid @RequestBody RelationDTO relationDTO) {
-    Optional<User> user = userRepository.findByUserName(relationDTO.getMemberName());
-    List<ProjectMember> pms = relationRepository.findByProjectId(relationDTO.getProjectId());
-    for (ProjectMember pm : pms) {
-      if (pm.getMemberId() == user.get().getUserId()) {
-        return Response.conflict("aaaaa");
-      }
+    if(relationDTO.getMemberName()==""){
+      Response.exceptionHandling(341,"member name don't meet requirement");
     }
-    ProjectMember projectmember = new ProjectMember();
-    BeanUtils.copyProperties(relationDTO, projectmember);
-    projectmember.setMemberRole("member");
+    Optional<User> user = userRepository.findByUserName(relationDTO.getMemberName());
+    if(user.isPresent()){
+      List<ProjectMember> pms = relationRepository.findByProjectId(relationDTO.getProjectId());
+      if(!pms.equals(Optional.empty())){
+        for (ProjectMember pm : pms) {
+          if (pm.getMemberId() == user.get().getUserId()) {
+            return Response.exceptionHandling(321,"user already exist in this project");
+          }
+        }
+        ProjectMember projectmember = new ProjectMember();
+        BeanUtils.copyProperties(relationDTO, projectmember);
+        projectmember.setMemberRole("member");
 
-    projectmember.setMemberId(user.get().getUserId());
-    relationRepository.save(projectmember);
-    return Response.ok(projectmember);
+        projectmember.setMemberId(user.get().getUserId());
+        relationRepository.save(projectmember);
+        return Response.ok(projectmember);
+      }else{
+        return Response.exceptionHandling(302,"project not found");
+      }
+    }else{
+      return Response.exceptionHandling(301,"user not found");
+    }
   }
 
   @DeleteMapping("/delete/{projectMemberId}")
@@ -71,13 +82,19 @@ public class RelationController {
   @GetMapping("getproject/{username}")
   @Operation(summary = "get all project infomation belong to a user")
   public Response<?> getUserProject(@PathVariable String username) {
-    return Response.ok(relationService.getUserProject(username));
+    Optional<User> user = userRepository.findByUserName(username);
+    if(user.isPresent()){
+      Integer userId = user.get().getUserId();
+      return Response.ok(relationService.getUserProject(userId));
+    }else{
+      return Response.exceptionHandling(301,"user not found");
+    }
   }
 
   @GetMapping("getuser/{projectId}")
   @Operation(summary = "get all user infomation under a project")
   public Response<?> getProjectUser(@PathVariable Integer projectId) {
-    return Response.ok(relationService.getProjectUser(projectId));
+    return relationService.getProjectUser(projectId);
   }
 }
 

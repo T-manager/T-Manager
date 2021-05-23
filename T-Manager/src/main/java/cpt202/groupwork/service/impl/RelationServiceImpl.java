@@ -1,5 +1,6 @@
 package cpt202.groupwork.service.impl;
 
+import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.MemberDTO;
 import cpt202.groupwork.dto.ProjectDetailDTO;
 import cpt202.groupwork.dto.TodoViewDTO;
@@ -35,22 +36,21 @@ public class RelationServiceImpl implements RelationService{
     /**
      * find all project information user owns
      *
-     * @param username
+     * @param userId
      * @return List<Project>
      */
-    public List<ProjectDetailDTO> getUserProject(String username){
+    public List<ProjectDetailDTO> getUserProject(Integer userId){
         List<ProjectDetailDTO> userProject = new ArrayList<>();
-        Optional<User> user = userRepository.findByUserName(username);
-        List<ProjectMember> projectMembers = relationRepository.findByMemberId(user.get().getUserId());
-        for (ProjectMember projectMember : projectMembers){
-            Optional<Project> project = projectRepository.findByProjectId(projectMember.getProjectId());
-            ProjectDetailDTO pdDTO = new ProjectDetailDTO();
-            BeanUtils.copyProperties(project.get(), pdDTO);
-            pdDTO.setProjectMemberId(projectMember.getProjectMemberId());
-            Optional<User> po = userRepository.findById(project.get().getProjectOwnerId());
-            pdDTO.setProjectOwner(po.get().getUserName());
-            userProject.add(pdDTO);
-        }
+        List<ProjectMember> projectMembers = relationRepository.findByMemberId(userId);
+            for (ProjectMember projectMember : projectMembers) {
+                Optional<Project> project = projectRepository.findByProjectId(projectMember.getProjectId());
+                ProjectDetailDTO pdDTO = new ProjectDetailDTO();
+                BeanUtils.copyProperties(project.get(), pdDTO);
+                pdDTO.setProjectMemberId(projectMember.getProjectMemberId());
+                Optional<User> po = userRepository.findById(project.get().getProjectOwnerId());
+                pdDTO.setProjectOwner(po.get().getUserName());
+                userProject.add(pdDTO);
+            }
         return userProject;
     }
 
@@ -60,22 +60,30 @@ public class RelationServiceImpl implements RelationService{
      * @param projectId
      * @return List<User>
      */
-    public List<MemberDTO> getProjectUser(Integer projectId){
+    public Response<?> getProjectUser(Integer projectId){
         List<ProjectMember> projectMembers = relationRepository.findByProjectId(projectId);
-        List<MemberDTO> memberDTOs = new ArrayList<>();
-        MemberDTO ownerDTO = new MemberDTO();
-        for (ProjectMember projectMember : projectMembers){
-            MemberDTO memberDTO = new MemberDTO();
-            BeanUtils.copyProperties(projectMember, memberDTO);
-            Optional<User> user = userRepository.findById(projectMember.getMemberId());
-            memberDTO.setMemberName(user.get().getUserName());
-            memberDTO.setMemberAvatar(user.get().getUserAvatar());
-            if (memberDTO.getMemberRole().equals("owner"))
-                ownerDTO = memberDTO;
-            else
-                memberDTOs.add(memberDTO);
+        if(!projectMembers.equals(Optional.empty())){
+            List<MemberDTO> memberDTOs = new ArrayList<>();
+            MemberDTO ownerDTO = new MemberDTO();
+            for (ProjectMember projectMember : projectMembers){
+                MemberDTO memberDTO = new MemberDTO();
+                BeanUtils.copyProperties(projectMember, memberDTO);
+                Optional<User> user = userRepository.findById(projectMember.getMemberId());
+                if(user.isPresent()){
+                    memberDTO.setMemberName(user.get().getUserName());
+                    memberDTO.setMemberAvatar(user.get().getUserAvatar());
+                    if (memberDTO.getMemberRole().equals("owner"))
+                        ownerDTO = memberDTO;
+                    else
+                        memberDTOs.add(memberDTO);
+                }else{
+                    return Response.exceptionHandling(300,"Member not found");
+                }
+            }
+            memberDTOs.add(0, ownerDTO);
+            return Response.ok(memberDTOs);
+        }else{
+            return Response.exceptionHandling(301,"Relation not found");
         }
-        memberDTOs.add(0, ownerDTO);
-        return memberDTOs;
     }
 }
