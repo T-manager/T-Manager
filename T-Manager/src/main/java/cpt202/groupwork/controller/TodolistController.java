@@ -66,7 +66,7 @@ public class TodolistController {
     Todolist todolist = new Todolist();
     BeanUtils.copyProperties(todolistDTO, todolist);
     todoListRepository.save(todolist);
-    return Response.ok(0);
+    return Response.ok();
   }
 
   @DeleteMapping("/delete/{todolistId}")
@@ -78,7 +78,7 @@ public class TodolistController {
       return Response.exceptionHandling(301, "todolist does not exist");
     }
     todoListRepository.deleteById(todolistId);
-    return Response.ok(0);
+    return Response.ok();
   }
 
   @PutMapping("/modify")
