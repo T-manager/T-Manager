@@ -34,12 +34,12 @@ public class Response<T> {
 
     // 正常通过 + 携带相关 data 数据
     public static Response<?> ok(Object data) {
-        return Response.builder().status(HttpStatus.OK.value()).message("Success").data(data).build();
+        return Response.builder().status(0).message("Success").data(data).build();
     }
 
     // 正常通过 + 携带相关 data 数据
     public static Response<?> ok(String message, Object data) {
-        return Response.builder().status(HttpStatus.OK.value()).message(message).data(data).build();
+        return Response.builder().status(0).message(message).data(data).build();
     }
 
     // 没有授权，请先登录
@@ -82,6 +82,13 @@ public class Response<T> {
         throw new ConflictException(message);
     }
 
+
+
+     // 异常处理，需要传入错误状态码和想要抛给前端的message
+     public static Response<?> exceptionHandling(int statusCode, String message,Object data) {
+        return Response.builder().status(statusCode).message(message).data(data).build();
+    }
+    // 异常处理，需要传入错误状态码和想要抛给前端的message
     public static Response<?> exceptionHandling(int statusCode, String message) {
         return Response.builder().status(statusCode).message(message).build();
     }
