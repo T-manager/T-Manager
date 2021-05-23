@@ -210,6 +210,10 @@ public class TodoController {
   @GetMapping("/get/{projectId}/search/{todoName}")
   @Operation(summary = "在Dashboard搜索")
   public Response<?> searchTodo(@PathVariable Integer projectId, @PathVariable String todoName) {
+    Optional<Project> project = projectRepository.findById(projectId);
+    if (project.equals(Optional.empty())) {
+      return Response.exceptionHandling(302, "project does not exist");
+    }
     List<TodolistViewDTO> todolistViewDTOs = new ArrayList<>();
     todolistViewDTOs = todolistService.searchTodos(projectId, todoName);
     return Response.ok(todolistViewDTOs);
