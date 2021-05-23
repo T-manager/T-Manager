@@ -62,7 +62,7 @@ public class RelationServiceImpl implements RelationService{
      */
     public Response<?> getProjectUser(Integer projectId){
         List<ProjectMember> projectMembers = relationRepository.findByProjectId(projectId);
-        if(!projectMembers.equals(Optional.empty())){
+        if(projectMembers.size()==0){
             List<MemberDTO> memberDTOs = new ArrayList<>();
             MemberDTO ownerDTO = new MemberDTO();
             for (ProjectMember projectMember : projectMembers){
@@ -83,7 +83,7 @@ public class RelationServiceImpl implements RelationService{
             memberDTOs.add(0, ownerDTO);
             return Response.ok(memberDTOs);
         }else{
-            return Response.exceptionHandling(301,"Relation not found");
+            return Response.exceptionHandling(301,"Project not found");
         }
     }
 }
