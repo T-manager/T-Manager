@@ -29,9 +29,7 @@ public class Response<T> {
 
     // 正常通过
     public static Response<?> ok() {
-        return Response.builder().status(HttpStatus.OK.value()).message("Success")
-            .data(new ArrayList<>())
-            .build();
+        return Response.builder().status(HttpStatus.OK.value()).message("Success").data(new ArrayList<>()).build();
     }
 
     // 正常通过 + 携带相关 data 数据
@@ -58,6 +56,7 @@ public class Response<T> {
     public static Response<?> permissionDenied(String message) {
         throw new ResponseStatusException(HttpStatus.FORBIDDEN, message);
     }
+
     // 未通过
     public static Response<?> fail() {
         return Response.builder().status(HttpStatus.OK.value()).message("Fail").data(new ArrayList<>()).build();
@@ -81,6 +80,10 @@ public class Response<T> {
     // 已经存在了, 不能再添加此类信息, 信息冲突
     public static Response<?> conflict(String message) {
         throw new ConflictException(message);
+    }
+
+    public static Response<?> exceptionHandling(int statusCode, String message) {
+        return Response.builder().status(statusCode).message(message).build();
     }
 
 }
