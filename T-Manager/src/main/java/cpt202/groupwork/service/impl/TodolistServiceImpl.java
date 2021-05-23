@@ -39,7 +39,7 @@ public class TodolistServiceImpl implements TodolistService {
     List<TodolistViewDTO> todolistViewDTOs = new ArrayList<>();
     Optional<Project> project = projectRepository.findById(projectId);
     if (project.equals(Optional.empty())) {
-      return Response.exceptionHandling(30, "project not exist");
+      return Response.exceptionHandling(301, "project not exist");
     }
     List<Todolist> todolists = todoListRepository.findByProjectIdOrderByTodolistIdAsc(projectId);
     for (Todolist todoList : todolists) {
