@@ -42,6 +42,7 @@
           label="Enter a name"
           color="primary"
           style="margin-top:10px; margin-left:13px"
+          :rules="rules.nameRules"
         ></v-text-field>
         <v-btn
           v-if="showAddTodolist == true"
@@ -81,7 +82,14 @@ export default {
       projectId: 0,
       todolists: "",
       todolist: {},
-      searchText: ""
+      searchText: "",
+      rules: {
+        nameRules: [
+          v =>
+            (typeof v != "undefined" && v.length <= 20 && v.length >= 1) ||
+            "the length of name should be 1-20"
+        ]
+      }
     };
   },
   methods: {
@@ -93,9 +101,17 @@ export default {
     hideAddNewTodolist() {
       this.showAddTodolist = false;
     },
+    checkNameRules(v) {
+      if (typeof v == "undefined") return false;
+      return v.length <= 20 && v.length >= 1;
+    },
     /**create a todolist*/
     addTodolist() {
       this.loadAddTodoList = true;
+      if (!this.checkNameRules(this.newTodolistName)) {
+        this.loadAddTodoList = false;
+        return;
+      }
       this.$axios({
         method: "post",
         url: this.$store.state.host + "todolist/add",
