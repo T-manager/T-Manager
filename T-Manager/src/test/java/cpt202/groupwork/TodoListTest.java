@@ -65,6 +65,17 @@ public class TodoListTest {
                 .andReturn().getResponse().getContentAsString();
     }
 
+    @Test
+    public void testAddTodolistShortName() throws Exception {
+        String requestBody = "{\"todolistName\":\"\", \"projectId\":\"1\"}";
+        mockMvc.perform(MockMvcRequestBuilders
+                .post("/todolist/add").content(requestBody).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(content().string(equalTo(
+                        "{\"status\":341,\"message\":\"The TODOLIST name should be between 1 and 20 characters\",\"data\":null}")))
+                .andReturn().getResponse().getContentAsString();
+    }
+
     // Delete:/todolist/delete/{todolistId}
     @Test
     public void testDeleteTodolistNormal() throws Exception {
@@ -121,7 +132,18 @@ public class TodoListTest {
                 .andReturn().getResponse().getContentAsString();
     }
 
-    // Get todolist/get/{projectId}
+    @Test
+    public void testModiftTodolistShortName() throws Exception {
+        String requestBody = "{\"todolistId\":\"73\", \"projectId\":\"30\", \"todolistName\":\"\", \"todolistTotalNum\":\"0\", \"todolistCompleteNum\":\"0\"}";
+        mockMvc.perform(MockMvcRequestBuilders
+                .put("/todolist/modify").content(requestBody).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(content().string(equalTo(
+                        "{\"status\":341,\"message\":\"The TODOLIST name should be between 1 and 20 characters\",\"data\":null}")))
+                .andReturn().getResponse().getContentAsString();
+    }
+
+    // Get /todolist/get/{projectId}
     @Test
     public void testGetTodolistNormal() throws Exception {
 
