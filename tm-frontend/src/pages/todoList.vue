@@ -167,11 +167,11 @@ export default {
   },
   created() {
     /**check if the user has logged in*/
-    if (this.$store.getters.getToken == null) {
-      alert("You are not signned in yet!");
-      var path = "/login";
-      this.$router.push({ path: path });
-    }
+    // if (this.$store.getters.getToken == null) {
+    //   alert("You are not signned in yet!");
+    //   var path = "/login";
+    //   this.$router.push({ path: path });
+    // }
     this.projectId = this.$route.path.split("projectid=")[1];
     this.getTodolists();
   },
