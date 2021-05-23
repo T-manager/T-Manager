@@ -8,8 +8,8 @@
       >Sign Up
     </v-btn>
     <!-- Dialog for signup -->
-    <v-dialog v-model="showRegisterDialog" persistent max-width="450px">
-      <v-form v-model="valid">
+    <v-dialog v-model="showRegisterDialog" persistent max-width="500px">
+      <v-form v-model="valid" v-on:submit.prevent>
         <v-card class="userRegistCard" ref="form">
           <div style="display: flex">
             <div style="font-size: 30px; margin-left: 10px">Sign Up</div>
@@ -80,13 +80,14 @@
     </v-dialog>
     <!-- Dialog for E-mail validation -->
     <v-dialog v-model="showVerifyCode" persistent max-width="500px">
-      <v-form v-model="valid">
+      <v-form v-model="valid" v-on:submit.prevent>
         <v-card ref="form" class="userRegistCard">
           <div style="display: flex; font-size: 30px; margin-left: 10px">
             Input the verification code
           </div>
           <v-card-text style="margin-top: 30px; padding: 10px">
             <v-text-field
+              v-on:keyup.enter="checkCodeHandler"
               outlined
               ref="userVerifyCode"
               v-model="userVerifyCode"
@@ -135,7 +136,7 @@
               style="color: #fff; width: 100px"
               depressed
             >
-              NEXT
+              Submit
             </v-btn>
           </div>
         </v-card>
@@ -275,6 +276,11 @@ export default {
         .catch((error) => {
           // console.log(error);
         });
+    },
+    checkCodeHandler() {
+      if (this.$refs.userVerifyCode.validate()) {
+        this.checkVerifyCode();
+      }
     },
     checkVerifyCode: async function () {
       this.$axios({

@@ -1,6 +1,6 @@
 <template>
   <v-container style="display: flex; justify-content: center; padding: 35px">
-    <v-form v-model="valid">
+    <v-form v-model="valid" v-on:submit.prevent>
       <v-card class="userLoginCard" ref="form" outlined>
         <div style="display: flex">
           <div style="font-size: 30px; margin-left: 10px; margin-bottom: 30px">
@@ -49,6 +49,7 @@
               style="margin-top: 8px"
             ></v-text-field>
             <v-text-field
+              v-on:keyup.enter="loginHandler"
               outlined
               ref="userPassword"
               v-model="userPassword"
@@ -114,39 +115,44 @@ export default {
       showBeginReset: false,
       showVerifyInfo: false,
       rules: {
-        required: value => !!value || "This field is required.",
-        email: value => {
+        required: (value) => !!value || "This field is required.",
+        email: (value) => {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || "Invalid e-mail.";
         },
-        length: value =>
+        length: (value) =>
           value.length <= 20 || "Must be less than 20 characters",
-        validChar: value => {
+        validChar: (value) => {
           const pattern = /^[a-zA-Z0-9&@.$%\-_,():;` ]+$/;
           return pattern.test(value) || "Contains illegal characters";
-        }
-      }
+        },
+      },
     };
   },
   computed: {
     form() {
       return {
         userName: this.userName,
-        userPassword: this.userPassword
+        userPassword: this.userPassword,
       };
-    }
+    },
   },
   methods: {
+    loginHandler() {
+      if (this.$refs.userName.validate() && this.$refs.userPassword.validate()) {
+        this.login();
+      }
+    },
     async login() {
       await this.$axios({
         method: "post",
         url: this.$store.state.host + "auth/login",
         data: {
           userName: this.userName,
-          userPassword: this.userPassword
-        }
+          userPassword: this.userPassword,
+        },
       })
-        .then(res => {
+        .then((res) => {
           // if (res.data.data == 2000) 登录成功返回的直接就是cookie
           if (res.data.data == 2001) alert("Wrong password");
           else if (res.data.data == 2002) alert("User not exist");
@@ -159,10 +165,10 @@ export default {
               method: "get",
               url: this.$store.state.host + "user/get/" + this.userName,
               headers: {
-                Authorization: "Bearer " + this.$store.getters.getToken
-              }
+                Authorization: "Bearer " + this.$store.getters.getToken,
+              },
             })
-              .then(response => {
+              .then((response) => {
                 this.$store.commit(
                   "set_userphoto",
                   response.data.data.userAvatar
@@ -171,16 +177,16 @@ export default {
                 this.$router.push("/project");
                 this.$router.go(0);
               })
-              .catch(error => {});
+              .catch((error) => {});
           }
         })
-        .catch(error => {
+        .catch((error) => {
           // console.log(error);
         });
     },
     resetForm() {
       this.errorMessages = [];
-      Object.keys(this.form).forEach(f => {
+      Object.keys(this.form).forEach((f) => {
         this.$refs[f].reset();
       });
     },
@@ -189,8 +195,8 @@ export default {
     },
     register() {
       this.showRegisterDialog = true;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>
