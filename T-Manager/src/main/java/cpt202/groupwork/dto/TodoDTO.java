@@ -12,7 +12,7 @@ public class TodoDTO {
   //添加一个新的todo需要用到的属性
 
   // todo的名字
-  @Size(min = 1, max = 20, message = "todo名称必须在1到20个字之间哦")
+  @Size(min = 1, max = 20, message = "The TODO name must be between 1 and 20 characters")
   private String todoName;
 
   // todo所属的todolist

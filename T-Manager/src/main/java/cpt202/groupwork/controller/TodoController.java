@@ -63,18 +63,29 @@ public class TodoController {
   @PostMapping("/add")
   @Operation(summary = "Add todo with todoListId and todoCreateDTO")
   public Response<?> createTodo(@Valid @RequestBody TodoDTO todoDTO) {
-    // Optional<String> username = SecurityUtils.getCurrentUsername();
-    // if (username.isEmpty()) {
-    // return Response.unAuth();
-    // }
+
+    // check if todo exist
     Integer todolistId = todoDTO.getTodolistId();
     Optional<Todolist> todolist = todolistRepository.findById(todolistId);
     if (todolist.equals(Optional.empty())) {
-      return Response.exceptionHandling(30, "todolist does not exist");
+      return Response.exceptionHandling(302, "todolist does not exist");
     }
+
+    // check the todoName meet requirements
+    int nameLength = todoDTO.getTodoName().length();
+    if (nameLength < 1 || nameLength > 20) {
+      return Response.exceptionHandling(341, "The TODO name should be between 1 and 20 characters");
+    }
+
+    // check the todoDetail meet requirements
+    int detailLength = todoDTO.getTodoDetail().length();
+    if (detailLength < 1 || detailLength > 100) {
+      return Response.exceptionHandling(343, "The detail should be less than 100 characters");
+    }
+    // check if user exist
     Optional<User> user = userRepository.findByUserName(todoDTO.getTodoMember());
     if (user.equals(Optional.empty())) {
-      return Response.exceptionHandling(30, "user does not exist");
+      return Response.exceptionHandling(305, "user does not exist");
     }
     Todo todo = new Todo();
     BeanUtils.copyProperties(todoDTO, todo);
@@ -93,7 +104,7 @@ public class TodoController {
 
     Optional<Todo> todo = todoRepository.findById(todoId);
     if (todo.equals(Optional.empty())) {
-      return Response.exceptionHandling(30, "todo does not exist");
+      return Response.exceptionHandling(301, "todo does not exist");
     }
     Todolist todolist = todolistRepository.findById(todo.get().getTodolistId()).get();
     todolist.setTodolistTotalNum(todolist.getTodolistTotalNum() - 1);
@@ -112,11 +123,23 @@ public class TodoController {
     Integer todoId = todoInfo.getTodoId();
     Optional<Todo> todo = todoRepository.findById(todoId);
     if (todo.equals(Optional.empty())) {
-      return Response.exceptionHandling(30, "todo does not exist");
+      return Response.exceptionHandling(301, "todo does not exist");
+    }
+
+    // check the todoName meet requirements
+    int nameLength = todoInfo.getTodoName().length();
+    if (nameLength < 1 || nameLength > 20) {
+      return Response.exceptionHandling(341, "The TODO name should be between 1 and 20 characters");
+    }
+
+    // check the todoDetail meet requirements
+    int detailLength = todoInfo.getTodoDetail().length();
+    if (detailLength < 1 || detailLength > 100) {
+      return Response.exceptionHandling(343, "The detail should be less than 100 characters");
     }
     Optional<User> user = userRepository.findByUserName(todoInfo.getTodoMember());
     if (user.equals(Optional.empty())) {
-      return Response.exceptionHandling(30, "user does not exist");
+      return Response.exceptionHandling(307, "user does not exist");
     }
     BeanUtils.copyProperties(todoInfo, todo.get());
     todo.get().setTodoMember(user.get().getUserId());
@@ -129,7 +152,7 @@ public class TodoController {
   public Response<?> checkTodo(@PathVariable Integer todoId) {
     Optional<Todo> todo = todoRepository.findById(todoId);
     if (todo.equals(Optional.empty())) {
-      return Response.exceptionHandling(30, "todo does not exist");
+      return Response.exceptionHandling(301, "todo does not exist");
     }
 
     Optional<Todolist> todolist = todolistRepository.findById(todo.get().getTodolistId());
@@ -143,7 +166,8 @@ public class TodoController {
       todolist.get().setTodolistCompleteNum(todolist.get().getTodolistCompleteNum() - 1);
     }
     todo.get().setTodoCheck(!todo.get().getTodoCheck());
-    return Response.ok(todoRepository.save(todo.get()));
+    todoRepository.save(todo.get());
+    return Response.ok();
   }
 
   @GetMapping("/get/{todoId}")
@@ -152,7 +176,7 @@ public class TodoController {
     Optional<Todo> todo = todoRepository.findById(todoId);
 
     if (todo.equals(Optional.empty())) {
-      return Response.exceptionHandling(30, "todo does not exist");
+      return Response.exceptionHandling(301, "todo does not exist");
     }
     // UserSelfVO userSelfVO = new UserSelfVO();
     // BeanUtils.copyProperties(user.get(), userSelfVO);
@@ -164,7 +188,7 @@ public class TodoController {
   public Response<?> getTodoByUsername(@PathVariable String todoMember) {
     Optional<User> user = userRepository.findByUserName(todoMember);
     if (user.equals(Optional.empty())) {
-      return Response.exceptionHandling(30, "executor does not exist");
+      return Response.exceptionHandling(301, "executor does not exist");
     }
     List<Todo> todos = todoRepository.findByTodoMemberOrderByTodoDdlAsc(user.get().getUserId());
     List<TodoCalendarDTO> todoCalendarDTOs = new ArrayList<>();

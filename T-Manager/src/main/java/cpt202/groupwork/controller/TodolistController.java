@@ -53,13 +53,20 @@ public class TodolistController {
   @Operation(summary = "通过 projectId 和 todolistCreateDTO 添加 todoList")
   public Response<?> createTodolist(@Valid @RequestBody TodolistDTO todolistDTO) {
     Optional<Project> project = projectRepository.findById(todolistDTO.getProjectId());
+    // check if project exist
     if (project.equals(Optional.empty())) {
-      return Response.exceptionHandling(30, "todolist does not exist");
+      return Response.exceptionHandling(302, "project does not exist");
+    }
+
+    // check the todolistName meet requirements
+    int nameLength = todolistDTO.getTodolistName().length();
+    if (nameLength < 1 || nameLength > 20) {
+      return Response.exceptionHandling(341, "The TODOLIST name should be between 1 and 20 characters");
     }
     Todolist todolist = new Todolist();
     BeanUtils.copyProperties(todolistDTO, todolist);
     todoListRepository.save(todolist);
-    return Response.ok(1000);
+    return Response.ok(0);
   }
 
   @DeleteMapping("/delete/{todolistId}")
@@ -68,11 +75,10 @@ public class TodolistController {
 
     Optional<Todolist> todolist = todoListRepository.findById(todolistId);
     if (todolist.equals(Optional.empty())) {
-      return Response.exceptionHandling(30, "todolist does not exist");
+      return Response.exceptionHandling(301, "todolist does not exist");
     }
-
     todoListRepository.deleteById(todolistId);
-    return Response.ok();
+    return Response.ok(0);
   }
 
   @PutMapping("/modify")
@@ -81,7 +87,13 @@ public class TodolistController {
     Optional<Todolist> todolistOld = todoListRepository.findById(todolist.getTodolistId());
 
     if (todolistOld.equals(Optional.empty())) {
-      return Response.exceptionHandling(30, "todolist does not exist");
+      return Response.exceptionHandling(301, "todolist does not exist");
+    }
+
+    // check the todolistName meet requirements
+    int nameLength = todolist.getTodolistName().length();
+    if (nameLength < 1 || nameLength > 20) {
+      return Response.exceptionHandling(341, "The TODOLIST name should be between 1 and 20 characters");
     }
     BeanUtils.copyProperties(todolist, todolistOld.get());
     todoListRepository.save(todolistOld.get());
