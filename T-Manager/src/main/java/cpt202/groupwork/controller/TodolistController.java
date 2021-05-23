@@ -55,24 +55,24 @@ public class TodolistController {
     Todolist todolist = new Todolist();
     BeanUtils.copyProperties(todolistDTO, todolist);
     todoListRepository.save(todolist);
-    return Response.ok(todolist);
+    return Response.ok(1000);
   }
 
   @DeleteMapping("/delete/{todolistId}")
   @Operation(summary = "删除todolist")
   public Response<?> deleteTodolist(@PathVariable Integer todolistId) {
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
-//    if (username.isEmpty()) {
-//      return Response.unAuth();
-//    }
+    // Optional<String> username = SecurityUtils.getCurrentUsername();
+    // if (username.isEmpty()) {
+    // return Response.unAuth();
+    // }
 
     Optional<Todolist> todolist = todoListRepository.findById(todolistId);
-//    if (todoList.isEmpty()) {
-//      return Response.notFound();
-//    }
-//    if (!username.get().equals(todolist.get().getUsername())) {
-//      return Response.permissionDenied("只有自己才能删除哦！");
-//    }
+    // if (todoList.isEmpty()) {
+    // return Response.notFound();
+    // }
+    // if (!username.get().equals(todolist.get().getUsername())) {
+    // return Response.permissionDenied("只有自己才能删除哦！");
+    // }
     todoListRepository.deleteById(todolistId);
     return Response.ok();
   }
@@ -90,9 +90,7 @@ public class TodolistController {
   @GetMapping("/get/{projectId}")
   @Operation(summary = "通过 projectid 查看所有的 todolist, 包括所属的todo")
   public Response<?> getTodolist(@PathVariable Integer projectId) {
-    List<TodolistViewDTO> todolistViewDTOs = new ArrayList<>();
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
-    todolistViewDTOs = todolistService.getTodolist(projectId);
-    return Response.ok(todolistViewDTOs);
+
+    return todolistService.getTodolist(projectId);
   }
 }
