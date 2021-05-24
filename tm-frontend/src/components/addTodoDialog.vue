@@ -13,7 +13,12 @@
           style="font-size:30px; margin-left:10px; width:100%; text-align:left; display:flex; align-items:center"
         >
           Create New Todo
-          <v-btn color="primary" style="margin-left:10px" icon>
+          <v-btn
+            color="primary"
+            style="margin-left:10px"
+            icon
+            @click="gotoHelp"
+          >
             <v-icon size="28">mdi-help-circle-outline</v-icon>
           </v-btn>
         </div>
@@ -200,6 +205,9 @@ export default {
   },
   props: ["projectId", "todolist"],
   methods: {
+    gotoHelp() {
+      window.open("https://ecb29d.baklib-free.com/f4bf/4851", "_blank");
+    },
     checkNameRules(v) {
       if (typeof v == "undefined") return false;
       return v.length <= 20 && v.length >= 1;

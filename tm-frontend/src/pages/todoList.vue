@@ -1,17 +1,29 @@
 <template>
   <div style="display:flex; padding: 0px 58px 5px 58px; flex-direction:column">
-    <v-text-field
-      solo
-      append-icon="mdi-magnify"
-      style="border-radius: 30px; height: 45px; width:400px; margin-left: 990px;"
-      maxlength="20"
-      @keyup.enter="search"
-      @click:append="search"
-      color="primary"
-      label="Search Todo"
-      v-model="searchText"
-    >
-    </v-text-field>
+    <div style="display:flex; align-items:center; margin-left:20px">
+      <v-btn
+        color="primary"
+        systle="font-size:24px"
+        elevation="0"
+        @click="gotoHelp"
+        text
+      >
+        HELP?
+      </v-btn>
+      <v-text-field
+        solo
+        append-icon="mdi-magnify"
+        style="border-radius: 30px; height: 45px; width:400px; margin-left: 950px;"
+        maxlength="20"
+        @keyup.enter="search"
+        @click:append="search"
+        color="primary"
+        label="Search Todo"
+        v-model="searchText"
+      >
+      </v-text-field>
+    </div>
+
     <div
       v-if="!showTodoLists"
       style="width:100%; display:flex; justify-content:center; margin-top:200px; align-items:center"
@@ -85,6 +97,9 @@ export default {
     };
   },
   methods: {
+    gotoHelp() {
+      window.open("https://ecb29d.baklib-free.com/f4bf", "_blank");
+    },
     /**Controls whether to display the dialog that added Todolist */
     showAddNewTodolist() {
       if (this.showAddTodolist == false) this.showAddTodolist = true;
