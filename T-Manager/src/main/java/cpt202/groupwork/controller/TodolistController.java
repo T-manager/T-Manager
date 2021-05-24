@@ -3,6 +3,7 @@ package cpt202.groupwork.controller;
 import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.TodolistDTO;
 import cpt202.groupwork.dto.TodolistViewDTO;
+import cpt202.groupwork.entity.Project;
 import cpt202.groupwork.entity.Todolist;
 import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.TodolistRepository;
@@ -51,28 +52,31 @@ public class TodolistController {
   @PostMapping("/add")
   @Operation(summary = "通过 projectId 和 todolistCreateDTO 添加 todoList")
   public Response<?> createTodolist(@Valid @RequestBody TodolistDTO todolistDTO) {
+    Optional<Project> project = projectRepository.findById(todolistDTO.getProjectId());
+    // check if project exist
+    if (project.equals(Optional.empty())) {
+      return Response.exceptionHandling(302, "project does not exist");
+    }
 
+    // check the todolistName meet requirements
+    int nameLength = todolistDTO.getTodolistName().length();
+    if (nameLength < 1 || nameLength > 20) {
+      return Response.exceptionHandling(341, "The TODOLIST name should be between 1 and 20 characters");
+    }
     Todolist todolist = new Todolist();
     BeanUtils.copyProperties(todolistDTO, todolist);
     todoListRepository.save(todolist);
-    return Response.ok(todolist);
+    return Response.ok();
   }
 
   @DeleteMapping("/delete/{todolistId}")
   @Operation(summary = "删除todolist")
   public Response<?> deleteTodolist(@PathVariable Integer todolistId) {
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
-//    if (username.isEmpty()) {
-//      return Response.unAuth();
-//    }
 
     Optional<Todolist> todolist = todoListRepository.findById(todolistId);
-//    if (todoList.isEmpty()) {
-//      return Response.notFound();
-//    }
-//    if (!username.get().equals(todolist.get().getUsername())) {
-//      return Response.permissionDenied("只有自己才能删除哦！");
-//    }
+    if (todolist.equals(Optional.empty())) {
+      return Response.exceptionHandling(301, "todolist does not exist");
+    }
     todoListRepository.deleteById(todolistId);
     return Response.ok();
   }
@@ -82,17 +86,24 @@ public class TodolistController {
   public Response<?> modifyTodolist(@Valid @RequestBody Todolist todolist) {
     Optional<Todolist> todolistOld = todoListRepository.findById(todolist.getTodolistId());
 
+    if (todolistOld.equals(Optional.empty())) {
+      return Response.exceptionHandling(301, "todolist does not exist");
+    }
+
+    // check the todolistName meet requirements
+    int nameLength = todolist.getTodolistName().length();
+    if (nameLength < 1 || nameLength > 20) {
+      return Response.exceptionHandling(341, "The TODOLIST name should be between 1 and 20 characters");
+    }
     BeanUtils.copyProperties(todolist, todolistOld.get());
     todoListRepository.save(todolistOld.get());
+
     return Response.ok("modify success");
   }
 
   @GetMapping("/get/{projectId}")
   @Operation(summary = "通过 projectid 查看所有的 todolist, 包括所属的todo")
   public Response<?> getTodolist(@PathVariable Integer projectId) {
-    List<TodolistViewDTO> todolistViewDTOs = new ArrayList<>();
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
-    todolistViewDTOs = todolistService.getTodolist(projectId);
-    return Response.ok(todolistViewDTOs);
+    return todolistService.getTodolist(projectId);
   }
 }

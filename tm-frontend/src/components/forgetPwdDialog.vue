@@ -7,13 +7,16 @@
       Forget password?
     </div>
     <!-- Dialog for checking whether the username exists -->
-    <v-dialog v-model="showBeginReset" persistent max-width="450px">
-      <v-form v-model="valid">
+    <v-dialog v-model="showBeginReset" persistent max-width="500px">
+      <v-form v-model="valid" v-on:submit.prevent>
         <v-card class="resetPwdCard" ref="form">
           <div style="display: flex; font-size: 30px; margin-left: 10px">
             Input your username
           </div>
-          <v-card-text style="margin-top: 30px; padding: 10px">
+          <v-card-text
+            style="margin-top: 30px; padding: 10px"
+            v-on:keyup.enter="checkNameHandler"
+          >
             <v-text-field
               outlined
               ref="userName"
@@ -51,13 +54,14 @@
     </v-dialog>
     <!-- Dialog for checking whether email matches username -->
     <v-dialog v-model="showVerifyInfo" persistent max-width="500px">
-      <v-form v-model="valid">
+      <v-form v-model="valid" v-on:submit.prevent>
         <v-card class="resetPwdCard" ref="form">
           <div style="display: flex; font-size: 30px; margin-left: 10px">
             Input your Email address
           </div>
           <v-card-text style="margin-top: 30px; padding: 10px">
             <v-text-field
+              v-on:keyup.enter="checkEmailHandler"
               outlined
               ref="userEmail"
               v-model="userEmail"
@@ -96,13 +100,14 @@
     </v-dialog>
     <!-- Dialog for verification code -->
     <v-dialog v-model="showVerifyCode" persistent max-width="500px">
-      <v-form v-model="valid">
+      <v-form v-model="valid" v-on:submit.prevent>
         <v-card ref="form" class="resetPwdCard">
           <div style="display: flex; font-size: 30px; margin-left: 10px">
             Input the verification code
           </div>
           <v-card-text style="margin-top: 30px; padding: 10px">
             <v-text-field
+              v-on:keyup.enter="checkCodeHandler"
               outlined
               ref="userVerifyCode"
               v-model="userVerifyCode"
@@ -158,7 +163,7 @@
       </v-form>
     </v-dialog>
     <!-- Dialog for modifying password -->
-    <v-dialog v-model="showModifyPwd" persistent max-width="500px">
+    <v-dialog v-model="showModifyPwd" persistent max-width="600px">
       <v-card style="padding: 30px 35px 50px 35px; border-radius: 10px">
         <div
           @click="showModifyPwd = false"
@@ -272,6 +277,11 @@ export default {
       this.showVerifyCode = false;
       this.showModifyPwd = true;
     },
+    checkNameHandler: function () {
+      if (this.$refs.userName.validate()) {
+        this.checkExistUser();
+      }
+    },
     checkExistUser: async function () {
       this.$axios({
         method: "get",
@@ -288,6 +298,11 @@ export default {
         .catch((error) => {
           // console.log(error);
         });
+    },
+    checkEmailHandler: function () {
+      if (this.$refs.userEmail.validate()) {
+        this.checkUserInfo();
+      }
     },
     checkUserInfo: async function () {
       (this.loading = true),
@@ -306,6 +321,7 @@ export default {
               alert("Email not match");
               this.userEmail = null;
             }
+            this.loading = false;
           })
           .catch((error) => {
             // console.log(error);
@@ -348,10 +364,16 @@ export default {
             alert("Email failed to send");
             this.userEmail = null;
           }
+
         })
         .catch((error) => {
           // console.log(error);
         });
+    },
+    checkCodeHandler() {
+      if (this.$refs.userVerifyCode.validate()) {
+        this.checkVerifyCode();
+      }
     },
     checkVerifyCode: async function () {
       this.$axios({
@@ -368,6 +390,7 @@ export default {
             this.next3();
           } else {
             alert(res.data.message);
+            this.loading = false;
           }
         })
         .catch((error) => {
@@ -387,6 +410,7 @@ export default {
 
       if (this.newPassword != this.confirmPassword) {
         alert("The two passwords are inconsistent");
+        this.loading = false;
       } else {
         this.userPassword = this.confirmPassword;
 

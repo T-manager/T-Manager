@@ -57,7 +57,7 @@ public class ResourceController {
   @PostMapping("/upload/{username}")
   @ResponseBody
   public String upload(@PathVariable String username, @RequestParam("file") MultipartFile file) {
-    if (file.isEmpty()) {
+    if (file == null) {
       return "Upload failed, please select file";
     }
     Optional<User> user = userRepository.findByUserName(username);

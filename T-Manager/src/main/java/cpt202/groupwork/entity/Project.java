@@ -6,10 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 @Entity
 @Data
@@ -31,6 +29,7 @@ public class Project implements Serializable {
   /**
    * name of the project
    */
+  @NonNull
   @Column(length = 20, name = "project_name")
   private String projectName;
 
@@ -43,12 +42,14 @@ public class Project implements Serializable {
   /**
    * name of the project owner
    */
+  @NonNull
   @Column(name = "project_owner_id")
   private Integer projectOwnerId;
 
   /**
    * name of the project owner
    */
+  @NonNull
   @Column(length = 100, name = "project_type")
   private String projectType;
 }

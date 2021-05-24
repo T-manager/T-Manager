@@ -21,9 +21,8 @@ public class ErrorAuthenticationEntryPoint implements AuthenticationEntryPoint, 
     private static final long serialVersionUID = 5200068540912465653L;
 
     @Override
-    public void commence(HttpServletRequest request,
-                         HttpServletResponse response,
-                         AuthenticationException authException) throws IOException {
+    public void commence(HttpServletRequest request, HttpServletResponse response,
+            AuthenticationException authException) throws IOException {
         // 设置 Json 格式返回
         response.setContentType("application/json;charset=UTF-8");
         // 设置 HTTP 状态码为 401
@@ -31,7 +30,8 @@ public class ErrorAuthenticationEntryPoint implements AuthenticationEntryPoint, 
         // PrintWriter 输出 Response 返回信息
         PrintWriter writer = response.getWriter();
         ObjectMapper mapper = new ObjectMapper();
-        Response<?> myResponse = Response.fail();
+        // Response<?> myResponse = Response.fail();
+        Response<?> myResponse = Response.exceptionHandling(10, "unauthorized");
         writer.write(mapper.writeValueAsString(myResponse));
     }
 }

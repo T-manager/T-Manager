@@ -1,6 +1,9 @@
 package cpt202.groupwork.service.impl;
 
+import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.ProjectDetailDTO;
+import cpt202.groupwork.entity.User;
+import cpt202.groupwork.repository.UserRepository;
 import cpt202.groupwork.service.ProjectService;
 import cpt202.groupwork.service.RelationService;
 import org.json.JSONException;
@@ -11,6 +14,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.regex.Pattern;
 
 /**
@@ -24,15 +28,24 @@ public class ProjectServiceImpl implements ProjectService {
     @Autowired
     RelationService relationService;
 
-    public List<ProjectDetailDTO> searchUserProject(String username, String namePattern) {
-        List<ProjectDetailDTO> pdDTO = relationService.getUserProject(username);
-        List<ProjectDetailDTO> pdDTOMatch = new ArrayList<>();
-        namePattern = namePattern.toLowerCase();
-        for (ProjectDetailDTO tmp : pdDTO){
-            if(tmp.getProjectName().toLowerCase().contains(namePattern)) {
-                pdDTOMatch.add(tmp);
+    @Autowired
+    UserRepository userRepository;
+
+    public Response<?> searchUserProject(String username, String namePattern) {
+        Optional<User> user = userRepository.findByUserName(username);
+        if(user.isPresent()){
+            Integer userId = user.get().getUserId();
+            List<ProjectDetailDTO> pdDTO = relationService.getUserProject(userId);
+            List<ProjectDetailDTO> pdDTOMatch = new ArrayList<>();
+            namePattern = namePattern.toLowerCase();
+            for (ProjectDetailDTO tmp : pdDTO){
+                if(tmp.getProjectName().toLowerCase().contains(namePattern)) {
+                    pdDTOMatch.add(tmp);
+                }
             }
+            return Response.ok(pdDTOMatch);
+        }else{
+            return Response.exceptionHandling(301,"User not found");
         }
-        return pdDTOMatch;
     }
 }
