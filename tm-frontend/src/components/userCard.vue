@@ -43,6 +43,9 @@
         <v-list-item link to="/calender" class="list_item_center">
           Calender
         </v-list-item>
+        <v-list-item @click="openHelp" class="list_item_center">
+          Help
+        </v-list-item>
         <v-list-item
           @click="logout"
           class="list_item_center"
@@ -68,6 +71,9 @@ export default {
   },
   props: ["size"],
   methods: {
+    openHelp() {
+      window.open("https://ecb29d.baklib-free.com", "_blank");
+    },
     /**get personal information for a specific user*/
     getDetail() {
       this.user.username = this.$store.getters.getUsername;
