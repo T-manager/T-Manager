@@ -45,13 +45,13 @@ public class RelationController {
   @PostMapping("/add")
   @Operation(summary = "add a relation")
   public Response<?> createRelation(@Valid @RequestBody RelationDTO relationDTO) {
-    if(relationDTO.getMemberName()==""){
-      Response.exceptionHandling(341,"member name don't meet requirement");
+    if(relationDTO.getMemberName().equals("")){
+      return Response.exceptionHandling(341,"member name don't meet requirement");
     }
     Optional<User> user = userRepository.findByUserName(relationDTO.getMemberName());
     if(user.isPresent()){
       List<ProjectMember> pms = relationRepository.findByProjectId(relationDTO.getProjectId());
-      if(!pms.equals(Optional.empty())){
+      if(pms.size()!=0){
         for (ProjectMember pm : pms) {
           if (pm.getMemberId() == user.get().getUserId()) {
             return Response.exceptionHandling(321,"user already exist in this project");
@@ -75,8 +75,13 @@ public class RelationController {
   @DeleteMapping("/delete/{projectMemberId}")
   @Operation(summary = "delete a relation")
   public Response<?> deleteRelation(@PathVariable Integer projectMemberId) {
-    relationRepository.deleteById(projectMemberId);
-    return Response.ok();
+    if(relationRepository.findById(projectMemberId).isPresent()){
+      relationRepository.deleteById(projectMemberId);
+      return Response.ok();
+    }else{
+      return Response.exceptionHandling(301,"relation not found");
+    }
+
   }
 
   @GetMapping("getproject/{username}")

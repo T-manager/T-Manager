@@ -62,7 +62,7 @@ public class RelationServiceImpl implements RelationService{
      */
     public Response<?> getProjectUser(Integer projectId){
         List<ProjectMember> projectMembers = relationRepository.findByProjectId(projectId);
-        if(projectMembers.size()==0){
+        if(projectMembers.size()!=0){
             List<MemberDTO> memberDTOs = new ArrayList<>();
             MemberDTO ownerDTO = new MemberDTO();
             for (ProjectMember projectMember : projectMembers){
