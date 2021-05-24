@@ -422,14 +422,14 @@ body {
 }
 
 .gantt_popup_button.gantt_ok_button {
-  background: #283593;
+  background: #283593 !important;
 }
 .gantt_grid_data .gantt_row.odd:hover,
 .gantt_grid_data .gantt_row:hover,
 .gantt_grid_data .gantt_row.gantt_selected,
 .gantt_grid_data .gantt_row.odd.gantt_selected,
 .gantt_task_row.gantt_selected {
-  background-color: #b3e5fc;
+  background-color: #b3e5fc !important;
 }
 
 .gantt_grid_head_cell.gantt_grid_head_duration.updColor {
