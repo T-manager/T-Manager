@@ -4,6 +4,7 @@ import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.TodolistDTO;
 import cpt202.groupwork.dto.TodolistViewDTO;
 import cpt202.groupwork.entity.Project;
+import cpt202.groupwork.entity.Todo;
 import cpt202.groupwork.entity.Todolist;
 import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.TodolistRepository;
@@ -72,13 +73,7 @@ public class TodolistController {
   @DeleteMapping("/delete/{todolistId}")
   @Operation(summary = "删除todolist")
   public Response<?> deleteTodolist(@PathVariable Integer todolistId) {
-
-    Optional<Todolist> todolist = todoListRepository.findById(todolistId);
-    if (todolist.equals(Optional.empty())) {
-      return Response.exceptionHandling(301, "todolist does not exist");
-    }
-    todoListRepository.deleteById(todolistId);
-    return Response.ok();
+    return todolistService.deleteTodolist(todolistId);
   }
 
   @PutMapping("/modify")
@@ -89,7 +84,6 @@ public class TodolistController {
     if (todolistOld.equals(Optional.empty())) {
       return Response.exceptionHandling(301, "todolist does not exist");
     }
-
     // check the todolistName meet requirements
     int nameLength = todolist.getTodolistName().length();
     if (nameLength < 1 || nameLength > 20) {
