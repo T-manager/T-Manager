@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
     if (user.isPresent()) {
       return Response.ok(user.get());
     } else {
-      return Response.ok("user not found");
+      return Response.exceptionHandling(301, "User not found");
     }
   }
 
@@ -66,7 +66,7 @@ public class UserServiceImpl implements UserService {
     if (user.isPresent()) {
       return Response.ok(user.get());
     } else {
-      return Response.ok("username not found");
+      return Response.exceptionHandling(301, "User not found");
     }
   }
 
@@ -87,9 +87,9 @@ public class UserServiceImpl implements UserService {
       user.setUserRole("USER");
       user.setUserAvatar("default.jpg");
       userRepository.save(user);
-      return Response.ok(1000); // User created successfully
+      return Response.ok(); // User created successfully
     } catch (Exception e) {
-      return Response.fail(1001); // User already exists
+      return Response.exceptionHandling(321, "User already exists");
     }
   }
 
@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
       userRepository.deleteById(userId);
       return Response.ok(user.get());
     } else {
-      return Response.ok("user not found");
+      return Response.exceptionHandling(301, "User not found");
     }
   }
 
@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
       userRepository.delete(user.get());
       return Response.ok(user.get());
     } else {
-      return Response.ok("user not found");
+      return Response.exceptionHandling(301, "User not found");
     }
   }
 
@@ -136,7 +136,7 @@ public class UserServiceImpl implements UserService {
       userRepository.save(user.get());
       return Response.ok(user.get());
     } else {
-      return Response.ok("user not found");
+      return Response.exceptionHandling(301, "User not found");
     }
   }
 
@@ -165,7 +165,7 @@ public class UserServiceImpl implements UserService {
       userRepository.save(user.get());
       return Response.ok(user.get());
     } else {
-      return Response.ok("user not found");
+      return Response.exceptionHandling(301, "User not found");
     }
   }
 
@@ -179,10 +179,10 @@ public class UserServiceImpl implements UserService {
         System.out.println(tokenUtils.createToken(user.get()));
         return Response.ok(tokenUtils.createToken(user.get()));
       } else {
-        return Response.fail(2001); // Wrong password
+        return Response.exceptionHandling(31, "Wrong password");
       }
     } else {
-      return Response.fail(2002); // User not found
+      return Response.exceptionHandling(301, "User not found");
     }
   }
 
@@ -191,10 +191,10 @@ public class UserServiceImpl implements UserService {
     Optional<User> user = userRepository.findByUserName(postUser.getUserName());
     if (user.isPresent()) {
       if (user.get().getUserEmail().equals(postUser.getUserEmail()))
-        return Response.ok(2000); // Match
-      else return Response.fail(2001); // Not match
+        return Response.ok(); // Match
+      else return Response.exceptionHandling(31, "Email not match");
     } else {
-      return Response.fail(2002); // Not found
+      return Response.exceptionHandling(301, "User not found");
     }
   }
 
@@ -217,10 +217,10 @@ public class UserServiceImpl implements UserService {
     verifyRepository.save(verificationEmail);
 
     if(generateCodeandSend(emailCode, user.getUserEmail())){
-      return Response.ok(3000); // ok
+      return Response.ok(); // ok
     }
     else {
-      return Response.fail(3001); // fail to send email
+      return Response.exceptionHandling(33, "Failed to send Email");
     }
   }
   public boolean generateCodeandSend(String emailCode, String emailAddr){
@@ -245,18 +245,18 @@ public class UserServiceImpl implements UserService {
     try{
       verification=verifyRepository.findByUserEmail(verificationCode.getUserEmail());
     }catch (Exception e) {
-      return Response.fail("No verification code");
+      return Response.exceptionHandling(301, "No verification code");
     }
     if(!verification.isPresent()){
-      return Response.fail("No verification code");
+      return Response.exceptionHandling(301, "No verification code");
     }
     Date current=new Date();
     if(current.after(verification.get().getExpireTime())){
       verifyRepository.delete(verification.get());
-      return Response.fail("Verification code expire");
+      return Response.exceptionHandling(31, "Verification code expire");
     }
     if(!verificationCode.getVerifyPassword().equals(verification.get().getVerifyPassword())){
-      return Response.fail("Wrong Verification code");
+      return Response.exceptionHandling(31, "Wrong Verification code");
     }
     return Response.ok("Verify successful");
   }
@@ -279,9 +279,19 @@ public class UserServiceImpl implements UserService {
   public Response<?> userNameExists(String username){
     Optional<User> user = userRepository.findByUserName(username);
     if (user.isPresent()) {
-      return Response.ok(2000); // Found
+      return Response.exceptionHandling(321, "User already exists");
     } else {
-      return Response.fail(2002); // Not found
+      return Response.ok();
+    }
+  }
+
+  @Override
+  public Response<?> userEmailExists(String email){
+    Optional<User> user = userRepository.findByUserEmail(email);
+    if (user.isPresent()) {
+      return Response.exceptionHandling(321, "User already exists");
+    } else {
+      return Response.ok();
     }
   }
 }

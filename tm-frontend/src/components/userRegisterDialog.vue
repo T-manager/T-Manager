@@ -13,6 +13,14 @@
         <v-card class="userRegistCard" ref="form">
           <div style="display: flex">
             <div style="font-size: 30px; margin-left: 10px">Sign Up</div>
+            <v-btn
+            color="primary"
+            style="margin-left:5px; margin-top:5px"
+            icon
+            @click="gotoHelp"
+          >
+            <v-icon size="28">mdi-help-circle-outline</v-icon>
+          </v-btn>
             <v-spacer></v-spacer>
             <v-tooltip v-if="this.valid" right>
               <template v-slot:activator="{ on, attrs }">
@@ -68,7 +76,7 @@
               :disabled="!this.valid"
               :loading="loading"
               color="primary"
-              @click="getVerifyCode"
+              @click="checkEmail"
               style="color: #fff; width: 100px"
               depressed
             >
@@ -193,14 +201,29 @@ export default {
     checkName: function (val) {
       this.$axios({
         method: "get",
-        url: this.$store.state.host + "auth/check?username=" + val,
+        url: this.$store.state.host + "auth/checkname?username=" + val,
       })
         .then((res) => {
           this.userNameErr =
-            res.data.data == 2000 ? ["Username already exists"] : [];
+            res.data.status == 321 ? ["Username already exists"] : [];
         })
         .catch((error) => {
-          // console.log(error);
+          this.$store.commit("response", error);
+        });
+    },
+    checkEmail: function() {
+      this.$axios({
+        method: "get",
+        url: this.$store.state.host + "auth/checkemail?email=" + this.userEmail,
+      })
+        .then((res) => {
+          if(res.data.status == 321)
+            alert("Email already used"); 
+          else
+            this.getVerifyCode();
+        })
+        .catch((error) => {
+          this.$store.commit("response", error);
         });
     },
     /**Create a new user*/
@@ -215,15 +238,11 @@ export default {
         },
       })
         .then((res) => {
-          if (res.data.data == 1000) {
-            alert("Registered successfully");
-            this.showRegisterDialog = false;
-          }
-          if (res.data.data == 1001)
-            alert("MySQL server error, User is null or User already exists");
+          alert("Registered successfully");
+          this.showRegisterDialog = false;
         })
         .catch((error) => {
-          // console.log(error);
+          this.$store.commit("response", error);
         });
     },
     /**Reset all input*/
@@ -264,17 +283,14 @@ export default {
         },
       })
         .then((res) => {
-          if (res.data.data == 3000) {
             this.loading = false;
             this.showRegisterDialog = false;
             this.showVerifyCode = true;
-          } else {
-            alert("Email failed to send");
-            this.userEmail = null;
           }
-        })
+        )
         .catch((error) => {
-          // console.log(error);
+          this.$store.commit("response", error);
+          this.userEmail = null;
         });
     },
     checkCodeHandler() {
@@ -300,7 +316,7 @@ export default {
           }
         })
         .catch((error) => {
-          // console.log(error);
+          this.$store.commit("response", error);
         });
     },
     submit() {
@@ -317,11 +333,14 @@ export default {
         (this.userEmail = ""),
         (this.userVerifyCode = "");
     },
+    gotoHelp() {
+      window.open("https://ecb29d.baklib-free.com/01c8/a8c0", "_blank");
+    },
   },
   watch: {
     userName: function (val) {
       return this.checkName(val);
-    },
+    }
   },
 };
 </script>

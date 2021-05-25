@@ -41,9 +41,14 @@ public class AuthController {
     return userService.userLogin(user);
   }
 
-  @GetMapping("/check")
+  @GetMapping("/checkname")
   public Response<?> checkUserExists(@RequestParam("username") String username) {
     return userService.userNameExists(username);
+  }
+
+  @GetMapping("/checkemail")
+  public Response<?> checkUserExists2(@RequestParam("email") String email) {
+    return userService.userEmailExists(email);
   }
 
   @PostMapping("/check")
