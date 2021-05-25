@@ -3,15 +3,17 @@ package cpt202.groupwork.controller;
 import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.ProjectDTO;
 import cpt202.groupwork.dto.ProjectDetailDTO;
+import cpt202.groupwork.entity.Gantt;
 import cpt202.groupwork.entity.Project;
+import cpt202.groupwork.entity.Todolist;
 import cpt202.groupwork.entity.User;
 import cpt202.groupwork.entity.relation.ProjectMember;
-import cpt202.groupwork.repository.ProjectRepository;
-import cpt202.groupwork.repository.RelationRepository;
-import cpt202.groupwork.repository.UserRepository;
+import cpt202.groupwork.repository.*;
+import cpt202.groupwork.service.GanttService;
 import cpt202.groupwork.service.ProjectService;
 import cpt202.groupwork.service.RelationService;
 //import cpt202.groupwork.security.SecurityUtils;
+import cpt202.groupwork.service.TodolistService;
 import cpt202.groupwork.service.impl.RelationServiceImpl;
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -44,16 +46,29 @@ public class ProjectController {
   @Autowired
   ProjectService projectService;
 
+  @Autowired
+  TodolistRepository todolistRepository;
+
+  @Autowired
+  TodolistService todolistService;
+
+  @Autowired
+  GanttRepository ganttRepository;
+
+  @Autowired
+  GanttService ganttService;
+
   @PostMapping("/add")
   @Operation(summary = "add a project")
   public Response<?> createProject(@Valid @RequestBody ProjectDTO projectDTO) {
-    if(projectDTO.getProjectName()==""){
+    if(projectDTO.getProjectName().length()>20||projectDTO.getProjectName().length()<1){
       return Response.exceptionHandling(341,"project name don't meet the requirement");
     }
     if(projectDTO.getProjectOwner()==""){
       return Response.exceptionHandling(343,"project owner don't meet the requirement");
     }
-    if(projectDTO.getProjectType()==""){
+    if(!(projectDTO.getProjectType().equals("team")||projectDTO.getProjectType().equals("personal"))){
+      System.out.println(projectDTO.getProjectType());
       return Response.exceptionHandling(344,"project type don't meet the requirement");
     }
     Project project = new Project();
@@ -73,6 +88,7 @@ public class ProjectController {
 
   }
 
+
   @DeleteMapping("/delete/{projectId}")
   @Operation(summary = "delete a project")
   public Response<?> deleteProject(@PathVariable Integer projectId) {
@@ -81,6 +97,15 @@ public class ProjectController {
       List<ProjectMember> pms = relationRepository.findByProjectId(projectId);
       for (ProjectMember pm : pms) {
         relationRepository.delete(pm);
+      }
+      List<Todolist> tls = todolistRepository.findByProjectId(projectId);
+      for(Todolist tl : tls){
+        todolistService.deleteTodolist(tl.getTodolistId());
+      }
+      List<Gantt> gts = ganttRepository.findByProjectId(projectId);
+      for(Gantt gt : gts){
+        //ganttRepository.delete(gt);
+        ganttService.deleteGantt(gt.getGanttId());
       }
       projectRepository.deleteById(projectId);
       return Response.ok();
@@ -95,15 +120,19 @@ public class ProjectController {
     if(projectInfo.getProjectId()==null){
       return Response.exceptionHandling(340,"");
     }
-    if(projectInfo.getProjectName()==""){
-      return Response.exceptionHandling(341,"project name is missing");
+    if(projectInfo.getProjectName().length()>20||projectInfo.getProjectName().length()<1){
+      return Response.exceptionHandling(341,"project name don't meet the requirement");
     }
-    if(projectInfo.getProjectType()==""){
-      return Response.exceptionHandling(344,"project type is missing");
+    if(!(projectInfo.getProjectType().equals("team")||projectInfo.getProjectType().equals("personal"))){
+      return Response.exceptionHandling(344,"project type don't meet the requirement");
     }
     Integer projectId = projectInfo.getProjectId();
     Optional<Project> project = projectRepository.findById(projectId);
+
     if (project.isPresent()){
+      if(!project.get().getProjectType().equals(projectInfo.getProjectType())){
+        return Response.exceptionHandling(314,"project type cannot be change");
+      }
       projectInfo.setProjectOwnerId(project.get().getProjectOwnerId());
       BeanUtils.copyProperties(projectInfo, project.get());
       return Response.ok(projectRepository.save(project.get()));

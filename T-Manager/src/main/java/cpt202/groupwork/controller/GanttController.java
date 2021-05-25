@@ -67,22 +67,8 @@ public class GanttController {
 
   @DeleteMapping("/delete/{ganttId}")
   @Operation(summary = "删除gantt")
-  public Response<?> deleteDiscussion(@PathVariable Integer ganttId) {
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
-//    if (username.isEmpty()) {
-//      return Response.unAuth();
-//    }
-
-    Optional<Gantt> gantt = ganttRepository.findById(ganttId);
-//    if (gantt.isEmpty()) {
-//      return Response.notFound();
-//    }
-
-//    if (!username.get().equals(gantt.get().getUsername())) {
-//      return Response.permissionDenied("只有自己才能删除哦！");
-//    }
-    ganttRepository.deleteById(ganttId);
-    return Response.ok();
+  public Response<?> deleteGantt(@PathVariable Integer ganttId) {
+    return ganttService.deleteGantt(ganttId);
   }
 
   @PutMapping("/modify")
@@ -110,7 +96,7 @@ public class GanttController {
       Gantt newGantt = new Gantt();
       BeanUtils.copyProperties(ganttViewDTO, newGantt);
       ganttRepository.save(newGantt);
-      ganttViewDTOs.add(ganttViewDTO) ;
+      ganttViewDTOs.add(ganttViewDTO);
     }
 
     return Response.ok(ganttViewDTOs);

@@ -1,6 +1,7 @@
 package cpt202.groupwork.repository;
 
 import cpt202.groupwork.entity.Gantt;
+import cpt202.groupwork.entity.Mission;
 import cpt202.groupwork.entity.Todolist;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;

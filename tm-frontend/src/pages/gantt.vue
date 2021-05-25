@@ -11,9 +11,9 @@
 </template>
 
 <script>
-import gantt from "dhtmlx-gantt"; // 引入模块
+import gantt from "dhtmlx-gantt"; // import module
 import "dhtmlx-gantt/codebase/dhtmlxgantt.css";
-// import 'dhtmlx-gantt/codebase/locale/locale_cn'  // 本地化
+
 export default {
   name: "ganttEchart",
   data() {
@@ -87,8 +87,7 @@ export default {
     gantt.config.grid_width = 500;
     gantt.config.xml_date = "%Y-%m-%d";
 
-    // 在时间线上增加一行年份显示
-    //gantt.config.subscales = [{ unit: "year", step: 1, date: "%Y" }];
+   
     gantt.templates.grid_header_class = function(columnName, column) {
       // console.log(columnName)
       // console.log(column)
@@ -263,15 +262,15 @@ export default {
   
 
 
-    // 初始化
+    // initialize
     gantt.init(this.$refs.gantt);
-    // 数据解析
+    // parse
     gantt.parse(this.tasks);
 
   
     // #E8EAF6
     this.projectId = this.$route.path.split("projectid=")[1];
-    //加载全部mission
+    //load all mission
     this.$axios({
       method: "get",
       url: this.$store.state.host + "gantt/get/" + this.projectId,
@@ -280,7 +279,6 @@ export default {
       }
     })
       .then(res => {
-        // console.log("get all", res);
         if (res.data.data.length == 0) this.gantt = {};
         else {
           this.gantt = res.data.data[0];
@@ -379,11 +377,11 @@ export default {
     this.deleteMission();
   },
   created() {
-    if (this.$store.getters.getToken == null) {
-      alert("You are not signned in yet!");
-      var path = "/login";
-      this.$router.push({ path: path });
-    }
+    // if (this.$store.getters.getToken == null) {
+    //   alert("You are not signned in yet!");
+    //   var path = "/login";
+    //   this.$router.push({ path: path });
+    // }
   }
 };
 </script>
@@ -422,14 +420,14 @@ body {
 }
 
 .gantt_popup_button.gantt_ok_button {
-  background: #283593;
+  background: #283593 !important;
 }
 .gantt_grid_data .gantt_row.odd:hover,
 .gantt_grid_data .gantt_row:hover,
 .gantt_grid_data .gantt_row.gantt_selected,
 .gantt_grid_data .gantt_row.odd.gantt_selected,
 .gantt_task_row.gantt_selected {
-  background-color: #b3e5fc;
+  background-color: #b3e5fc !important;
 }
 
 .gantt_grid_head_cell.gantt_grid_head_duration.updColor {
