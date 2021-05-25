@@ -9,4 +9,7 @@ public interface TodolistService {
   Response<?> getTodolist(Integer projectId);
 
   List<TodolistViewDTO> searchTodos(Integer projectId, String todoName);
+
+  Response<?> deleteTodolist(Integer todolistId);
+
 }

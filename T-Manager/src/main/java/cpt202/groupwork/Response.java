@@ -29,7 +29,7 @@ public class Response<T> {
 
     // 正常通过
     public static Response<?> ok() {
-        return Response.builder().status(HttpStatus.OK.value()).message("Success").data(new ArrayList<>()).build();
+        return Response.builder().status(0).message("Success").data(new ArrayList<>()).build();
     }
 
     // 正常通过 + 携带相关 data 数据

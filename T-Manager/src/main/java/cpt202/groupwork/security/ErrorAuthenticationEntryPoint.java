@@ -30,7 +30,8 @@ public class ErrorAuthenticationEntryPoint implements AuthenticationEntryPoint, 
         // PrintWriter 输出 Response 返回信息
         PrintWriter writer = response.getWriter();
         ObjectMapper mapper = new ObjectMapper();
-        Response<?> myResponse = Response.exceptionHandling(401, "unauthorized");
+        // Response<?> myResponse = Response.fail();
+        Response<?> myResponse = Response.exceptionHandling(10, "unauthorized");
         writer.write(mapper.writeValueAsString(myResponse));
     }
 }

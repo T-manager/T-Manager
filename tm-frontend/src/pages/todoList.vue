@@ -1,17 +1,29 @@
 <template>
   <div style="display:flex; padding: 0px 58px 5px 58px; flex-direction:column">
-    <v-text-field
-      solo
-      append-icon="mdi-magnify"
-      style="border-radius: 30px; height: 45px; width:400px; margin-left: 990px;"
-      maxlength="20"
-      @keyup.enter="search"
-      @click:append="search"
-      color="primary"
-      label="Search Todo"
-      v-model="searchText"
-    >
-    </v-text-field>
+    <div style="display:flex; align-items:center; margin-left:20px">
+      <v-btn
+        color="primary"
+        systle="font-size:24px"
+        elevation="0"
+        @click="gotoHelp"
+        text
+      >
+        HELP?
+      </v-btn>
+      <v-text-field
+        solo
+        append-icon="mdi-magnify"
+        style="border-radius: 30px; height: 45px; width:400px; margin-left: 950px;"
+        maxlength="20"
+        @keyup.enter="search"
+        @click:append="search"
+        color="primary"
+        label="Search Todo"
+        v-model="searchText"
+      >
+      </v-text-field>
+    </div>
+
     <div
       v-if="!showTodoLists"
       style="width:100%; display:flex; justify-content:center; margin-top:200px; align-items:center"
@@ -42,6 +54,7 @@
           label="Enter a name"
           color="primary"
           style="margin-top:10px; margin-left:13px"
+          :rules="rules.nameRules"
         ></v-text-field>
         <v-btn
           v-if="showAddTodolist == true"
@@ -81,10 +94,20 @@ export default {
       projectId: 0,
       todolists: "",
       todolist: {},
-      searchText: ""
+      searchText: "",
+      rules: {
+        nameRules: [
+          v =>
+            (typeof v != "undefined" && v.length <= 20 && v.length >= 1) ||
+            "the length of name should be 1-20"
+        ]
+      }
     };
   },
   methods: {
+    gotoHelp() {
+      window.open("https://ecb29d.baklib-free.com/f4bf", "_blank");
+    },
     /**Controls whether to display the dialog that added Todolist */
     showAddNewTodolist() {
       if (this.showAddTodolist == false) this.showAddTodolist = true;
@@ -93,9 +116,17 @@ export default {
     hideAddNewTodolist() {
       this.showAddTodolist = false;
     },
+    checkNameRules(v) {
+      if (typeof v == "undefined") return false;
+      return v.length <= 20 && v.length >= 1;
+    },
     /**create a todolist*/
     addTodolist() {
       this.loadAddTodoList = true;
+      if (!this.checkNameRules(this.newTodolistName)) {
+        this.loadAddTodoList = false;
+        return;
+      }
       this.$axios({
         method: "post",
         url: this.$store.state.host + "todolist/add",
@@ -167,11 +198,11 @@ export default {
   },
   created() {
     /**check if the user has logged in*/
-    if (this.$store.getters.getToken == null) {
-      alert("You are not signned in yet!");
-      var path = "/login";
-      this.$router.push({ path: path });
-    }
+    // if (this.$store.getters.getToken == null) {
+    //   alert("You are not signned in yet!");
+    //   var path = "/login";
+    //   this.$router.push({ path: path });
+    // }
     this.projectId = this.$route.path.split("projectid=")[1];
     this.getTodolists();
   },

@@ -38,8 +38,8 @@ public class TodolistServiceImpl implements TodolistService {
   public Response<?> getTodolist(Integer projectId) {
     List<TodolistViewDTO> todolistViewDTOs = new ArrayList<>();
     Optional<Project> project = projectRepository.findById(projectId);
-    if (project.isEmpty()) {
-      return Response.exceptionHandling(30, "project not exist");
+    if (project.equals(Optional.empty())) {
+      return Response.exceptionHandling(301, "project not exist");
     }
     List<Todolist> todolists = todoListRepository.findByProjectIdOrderByTodolistIdAsc(projectId);
     for (Todolist todoList : todolists) {
@@ -94,6 +94,20 @@ public class TodolistServiceImpl implements TodolistService {
     }
 
     return todolistViewDTOs;
-
   }
+
+  public Response<?> deleteTodolist(Integer todolistId) {
+
+    Optional<Todolist> todolist = todoListRepository.findById(todolistId);
+    if (todolist.equals(Optional.empty())) {
+      return Response.exceptionHandling(301, "todolist does not exist");
+    }
+    todoListRepository.deleteById(todolistId);
+    List<Todo> todos = todoRepository.findByTodolistIdOrderByTodoDdlAsc(todolistId);
+    for (Todo todo : todos) {
+      todoRepository.deleteById(todo.getTodoId());
+    }
+    return Response.ok();
+  }
+
 }

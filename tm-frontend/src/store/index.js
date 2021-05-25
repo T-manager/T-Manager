@@ -5,14 +5,15 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     token: null,
-    // host: "http://localhost:6767/api/",
-    host: "http://34.96.252.120/api/",
+    host: "http://localhost:6767/api/",
+    // host: "http://34.96.252.120/api/",
     show: {
       showModifyTodo: false
     }
   },
   getters: {
     getToken() {
+    
       return localStorage.getItem("token");
     },
     getUsername() {
@@ -46,13 +47,13 @@ export default new Vuex.Store({
       if (token.response) {
         alert(token.response.data.message);
         // console.log(typeof token.response.data.status);
-        if (token.response.data.status == 401) {
+        if (token.response.data.status == 10) {
           var path = "/login";
           router.push({ path: path });
         }
       } else if (token.request) {
         alert(token.request.data.message);
-        if (token.request.data.status == 401) {
+        if (token.request.data.status == 10) {
           var path = "/login";
           router.push({ path: path });
         }

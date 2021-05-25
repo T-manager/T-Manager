@@ -108,6 +108,15 @@
           style="font-size:30px; margin-left:10px; width:100%; text-align:left; display:flex; align-items:center"
         >
           Todo Detail
+          <!-- help -->
+          <v-btn
+            color="primary"
+            style="margin-left:10px"
+            icon
+            @click="gotoHelp"
+          >
+            <v-icon size="28">mdi-help-circle-outline</v-icon>
+          </v-btn>
           <!-- modify todo popup -->
           <v-btn
             v-if="
@@ -164,11 +173,22 @@
     <v-dialog v-model="showModifyTodo" persistent max-width="600px">
       <v-card style="padding: 30px 35px 50px 35px;" class="card-background">
         <div
-          style="font-size:30px; margin-left:10px; width:100%; text-align:left"
+          style="display:flex; margin-left:10px; width:100%; align-items:center"
         >
-          Modify Todo
+          <div style="font-size:30px; text-align:left">
+            Modify Todo
+          </div>
+          <!-- help -->
+          <v-btn
+            color="primary"
+            style="margin-left:10px"
+            icon
+            @click="gotoHelp"
+          >
+            <v-icon size="28">mdi-help-circle-outline</v-icon>
+          </v-btn>
         </div>
-        <v-card-text style="margin-top:30px; padding:10px">
+        <v-card-text style="margin-top:20px; padding:10px">
           <div
             style="display:flex;flex-direction:row;font-size:16px;color:#101010;margin-top:20px;margin-bottom:20px"
           >
@@ -362,6 +382,9 @@ export default {
   components: { popup },
   props: ["todolistName", "todo", "projectName", "projectId"],
   methods: {
+    gotoHelp() {
+      window.open("https://ecb29d.baklib-free.com/f4bf/b041", "_blank");
+    },
     /** show popup method */
     showPopupMethod() {
       this.showPopup = !this.showPopup;

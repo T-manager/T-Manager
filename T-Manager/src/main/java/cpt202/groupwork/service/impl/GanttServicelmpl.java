@@ -1,5 +1,6 @@
 package cpt202.groupwork.service.impl;
 //GanttServicelmpl
+import cpt202.groupwork.Response;
 import cpt202.groupwork.dto.GanttViewDTO;
 import cpt202.groupwork.dto.MissionViewDTO;
 import cpt202.groupwork.dto.TodoViewDTO;
@@ -17,6 +18,8 @@ import cpt202.groupwork.service.GanttService;
 import cpt202.groupwork.service.TodolistService;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -57,5 +60,18 @@ public class GanttServicelmpl  implements GanttService {
 
     return ganttViewDTOs;
 
+  }
+
+  public Response<?> deleteGantt(Integer ganttId) {
+    Optional<Gantt> gantt = ganttRepository.findById(ganttId);
+    if (!gantt.isPresent()) {
+      return Response.exceptionHandling(301, "gantt chart does not exist");
+    }
+    ganttRepository.deleteById(ganttId);
+    List<Mission> missions = missionRepository.findByGanttId(ganttId);
+    for (Mission mission : missions) {
+      missionRepository.delete(mission);
+    }
+    return Response.ok();
   }
 }
