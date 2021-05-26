@@ -94,6 +94,7 @@
             width: 100%;
             text-align: left;
           "
+          @click="gotoHelp"
         >
           Help
         </div>
@@ -139,7 +140,10 @@ export default {
   },
   methods: {
     loginHandler() {
-      if (this.$refs.userName.validate() && this.$refs.userPassword.validate()) {
+      if (
+        this.$refs.userName.validate() &&
+        this.$refs.userPassword.validate()
+      ) {
         this.login();
       }
     },
@@ -153,35 +157,35 @@ export default {
         },
       })
         .then((res) => {
-          // if (res.data.data == 2000) 登录成功返回的直接就是cookie
-          if (res.data.data == 2001) alert("Wrong password");
-          else if (res.data.data == 2002) alert("User not exist");
-          else {
+          if (res.data.message == "Success") {
             this.$store.commit("set_username", this.userName);
             this.$store.commit("set_token", res.data.data);
             alert("Login sucessfully");
-
-            this.$axios({
-              method: "get",
-              url: this.$store.state.host + "user/get/" + this.userName,
-              headers: {
-                Authorization: "Bearer " + this.$store.getters.getToken,
-              },
-            })
-              .then((response) => {
-                this.$store.commit(
-                  "set_userphoto",
-                  response.data.data.userAvatar
-                );
-
-                this.$router.push("/project");
-                this.$router.go(0);
-              })
-              .catch((error) => {});
+            this.getAvater();
+          } else {
+            this.$store.commit("response", res.data);
+            this.$store.commit("del_username");
           }
         })
+        .catch(error => {
+          this.$store.commit("response", error);
+        });
+    },
+    getAvater() {
+      this.$axios({
+        method: "get",
+        url: this.$store.state.host + "user/get/" + this.userName,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken,
+        },
+      })
+        .then((response) => {
+          this.$store.commit("set_userphoto", response.data.data.userAvatar);
+          this.$router.push("/project");
+          this.$router.go(0);
+        })
         .catch((error) => {
-          // console.log(error);
+          this.$store.commit("response", error);
         });
     },
     resetForm() {
@@ -195,6 +199,9 @@ export default {
     },
     register() {
       this.showRegisterDialog = true;
+    },
+    gotoHelp() {
+      window.open("https://ecb29d.baklib-free.com/01c8", "_blank");
     },
   },
 };

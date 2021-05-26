@@ -1,21 +1,7 @@
 package cpt202.groupwork.controller;
 
-import cpt202.groupwork.Response;
-import cpt202.groupwork.dto.TodolistDTO;
-import cpt202.groupwork.dto.TodolistViewDTO;
-import cpt202.groupwork.entity.Project;
-import cpt202.groupwork.entity.Todo;
-import cpt202.groupwork.entity.Todolist;
-import cpt202.groupwork.repository.ProjectRepository;
-import cpt202.groupwork.repository.TodolistRepository;
-import cpt202.groupwork.repository.TodoRepository;
-import cpt202.groupwork.repository.UserRepository;
-//import cpt202.groupwork.security.SecurityUtils;
-import cpt202.groupwork.service.TodolistService;
-import io.swagger.v3.oas.annotations.Operation;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.BeanUtils;
@@ -29,6 +15,18 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import cpt202.groupwork.Response;
+import cpt202.groupwork.dto.TodolistDTO;
+import cpt202.groupwork.entity.Project;
+import cpt202.groupwork.entity.Todolist;
+import cpt202.groupwork.repository.ProjectRepository;
+import cpt202.groupwork.repository.TodoRepository;
+import cpt202.groupwork.repository.TodolistRepository;
+import cpt202.groupwork.repository.UserRepository;
+//import cpt202.groupwork.security.SecurityUtils;
+import cpt202.groupwork.service.TodolistService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController

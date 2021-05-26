@@ -1,4 +1,19 @@
 <template>
+<div>
+<div style="display:flex; padding: 0px 58px 0px 58px; flex-direction:column">
+  <div style="display:flex; align-items:center; margin-left:20px" >
+    <v-btn
+          color="primary"
+          systle="font-size:24px"
+          elevation="0"
+          @click="gotoHelp"
+          text
+        >
+          HELP?
+    </v-btn>
+  </div>
+  </div>
+
   <div style="padding: 10px 70px 0px 70px">
     <div style="font-size: 20px; color: red" class="app-container">
       <label><input type="radio" name="scale" value="day" checked/>day scale</label>
@@ -8,6 +23,8 @@
       <div ref="gantt" class="left-container" />
     </div>
   </div>
+  </div>
+
 </template>
 
 <script>
@@ -26,6 +43,9 @@ export default {
     };
   },
   methods: {
+     gotoHelp() {
+      window.open("https://ecb29d.baklib-free.com/6dec/84cb", "_blank");
+    },
     updateMission() {
       //update mission
       var that = this;

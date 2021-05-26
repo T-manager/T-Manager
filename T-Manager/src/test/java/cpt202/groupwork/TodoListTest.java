@@ -81,7 +81,7 @@ public class TodoListTest {
     public void testDeleteTodolistNormal() throws Exception {
 
         mockMvc.perform(
-                MockMvcRequestBuilders.delete("/todolist/delete/{todolistId}", 100).accept(MediaType.APPLICATION_JSON))
+                MockMvcRequestBuilders.delete("/todolist/delete/{todolistId}", 10).accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(content().string(equalTo("{\"status\":0,\"message\":\"Success\",\"data\":[]}"))).andReturn()
                 .getResponse().getContentAsString();
@@ -101,7 +101,7 @@ public class TodoListTest {
     // PUT: /todolist/modify
     @Test
     public void testModifyTodolistNormal() throws Exception {
-        String requestBody = "{\"todolistId\":\"73\", \"projectId\":\"30\", \"todolistName\":\"string\", \"todolistTotalNum\":\"0\", \"todolistCompleteNum\":\"0\"}";
+        String requestBody = "{\"todolistId\":\"10\", \"projectId\":\"3\", \"todolistName\":\"string\", \"todolistTotalNum\":\"0\", \"todolistCompleteNum\":\"0\"}";
         mockMvc.perform(MockMvcRequestBuilders
                 .put("/todolist/modify").content(requestBody).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -112,7 +112,7 @@ public class TodoListTest {
 
     @Test
     public void testModifyTodolistNotExist() throws Exception {
-        String requestBody = "{\"todolistId\":\"84\", \"projectId\":\"30\", \"todolistName\":\"string\", \"todolistTotalNum\":\"0\", \"todolistCompleteNum\":\"0\"}";
+        String requestBody = "{\"todolistId\":\"84\", \"projectId\":\"3\", \"todolistName\":\"string\", \"todolistTotalNum\":\"0\", \"todolistCompleteNum\":\"0\"}";
         mockMvc.perform(MockMvcRequestBuilders
                 .put("/todolist/modify").content(requestBody).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -123,7 +123,7 @@ public class TodoListTest {
 
     @Test
     public void testModiftTodolistLongName() throws Exception {
-        String requestBody = "{\"todolistId\":\"73\", \"projectId\":\"30\", \"todolistName\":\"This is a very long name for todolist\", \"todolistTotalNum\":\"0\", \"todolistCompleteNum\":\"0\"}";
+        String requestBody = "{\"todolistId\":\"10\", \"projectId\":\"3\", \"todolistName\":\"This is a very long name for todolist\", \"todolistTotalNum\":\"0\", \"todolistCompleteNum\":\"0\"}";
         mockMvc.perform(MockMvcRequestBuilders
                 .put("/todolist/modify").content(requestBody).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -134,7 +134,7 @@ public class TodoListTest {
 
     @Test
     public void testModiftTodolistShortName() throws Exception {
-        String requestBody = "{\"todolistId\":\"73\", \"projectId\":\"30\", \"todolistName\":\"\", \"todolistTotalNum\":\"0\", \"todolistCompleteNum\":\"0\"}";
+        String requestBody = "{\"todolistId\":\"10\", \"projectId\":\"3\", \"todolistName\":\"\", \"todolistTotalNum\":\"0\", \"todolistCompleteNum\":\"0\"}";
         mockMvc.perform(MockMvcRequestBuilders
                 .put("/todolist/modify").content(requestBody).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -147,9 +147,9 @@ public class TodoListTest {
     @Test
     public void testGetTodolistNormal() throws Exception {
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/todolist/get/{projectId}", 31).accept(MediaType.APPLICATION_JSON))
+        mockMvc.perform(MockMvcRequestBuilders.get("/todolist/get/{projectId}", 3).accept(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(content().string(equalTo("{\"status\":0,\"message\":\"Success\",\"data\":[{\"todolistId\":39,\"projectId\":31,\"projectName\":\"project 1\",\"todolistName\":\"totolist 1\",\"todolistTotalNum\":2,\"todolistCompleteNum\":1,\"todoViewDTO\":[{\"todoId\":20,\"todolistId\":39,\"todoName\":\"123\",\"todoDetail\":\"\",\"todoDdl\":\"2021-05-07 15:55:00\",\"todoCheck\":true,\"todoMember\":\"all\",\"todoMemberAvatar\":\"20210506080440.jpg\"},{\"todoId\":21,\"todolistId\":39,\"todoName\":\"lunar\",\"todoDetail\":\"123\",\"todoDdl\":\"2021-05-21 14:51:00\",\"todoCheck\":false,\"todoMember\":\"all\",\"todoMemberAvatar\":\"20210506080440.jpg\"}]},{\"todolistId\":40,\"projectId\":31,\"projectName\":\"project 1\",\"todolistName\":\"\",\"todolistTotalNum\":0,\"todolistCompleteNum\":0,\"todoViewDTO\":[]},{\"todolistId\":48,\"projectId\":31,\"projectName\":\"project 1\",\"todolistName\":\"\",\"todolistTotalNum\":0,\"todolistCompleteNum\":0,\"todoViewDTO\":[]}]}"))).andReturn()
+                .andExpect(content().string(equalTo("{\"status\":0,\"message\":\"Success\",\"data\":[{\"todolistId\":8,\"projectId\":3,\"projectName\":\"11\",\"todolistName\":\"123\",\"todolistTotalNum\":-5,\"todolistCompleteNum\":0,\"todoViewDTO\":[{\"todoId\":10,\"todolistId\":8,\"todoName\":\"1\",\"todoDetail\":\"1\",\"todoDdl\":\"2021-05-07 16:01:00\",\"todoCheck\":false,\"todoMember\":\"Sunnary\",\"todoMemberAvatar\":\"20210523122557.jpg\"}]}]}"))).andReturn()
                 .getResponse().getContentAsString();
     }
 
