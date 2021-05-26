@@ -41,13 +41,13 @@ public class AuthController {
     return userService.userLogin(user);
   }
 
-  @GetMapping("/checkname")
-  public Response<?> checkUserExists(@RequestParam("username") String username) {
+  @GetMapping("/checkname/{username}")
+  public Response<?> checkUserExists(@PathVariable String username) {
     return userService.userNameExists(username);
   }
 
-  @GetMapping("/checkemail")
-  public Response<?> checkUserExists2(@RequestParam("email") String email) {
+  @GetMapping("/checkemail/{email}")
+  public Response<?> checkUserExists2(@PathVariable String email) {
     return userService.userEmailExists(email);
   }
 

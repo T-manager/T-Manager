@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
   private String emailUserName;
 
   //定义发送的标题
-  public static String title="[T-Manager]获取验证码";
+  public static String title="[T-Manager]Verification Code";
 
   @Override
   public Response<?> userIdExists(Integer userId) {
