@@ -7,10 +7,12 @@ import cpt202.groupwork.dto.TodoViewDTO;
 import cpt202.groupwork.dto.TodolistViewDTO;
 import cpt202.groupwork.entity.Gantt;
 import cpt202.groupwork.entity.Mission;
+import cpt202.groupwork.entity.Project;
 import cpt202.groupwork.entity.Todo;
 import cpt202.groupwork.entity.Todolist;
 import cpt202.groupwork.repository.GanttRepository;
 import cpt202.groupwork.repository.MissionRepository;
+import cpt202.groupwork.repository.ProjectRepository;
 import cpt202.groupwork.repository.TodolistRepository;
 import cpt202.groupwork.repository.TodoRepository;
 import cpt202.groupwork.repository.UserRepository;
@@ -35,15 +37,20 @@ public class GanttServicelmpl  implements GanttService {
   @Autowired
   UserRepository userRepository;
 
-  @Override
-  public List<GanttViewDTO> getGantt(Integer projectId) {
-    List<GanttViewDTO> ganttViewDTOs= new ArrayList<>();
-    List<Gantt> gantts = ganttRepository.findByProjectId(projectId);
+  @Autowired
+  ProjectRepository projectRepository;
 
+  @Override
+  public Response<?> getGantt(Integer projectId) {
+    List<GanttViewDTO> ganttViewDTOs= new ArrayList<>();
+    Optional<Project> project = projectRepository.findById(projectId);
+    if (project.equals(Optional.empty())) {
+      return Response.exceptionHandling(301, "project not exist");
+    }
+    List<Gantt> gantts = ganttRepository.findByProjectId(projectId);
     for (Gantt gantt : gantts) {
       GanttViewDTO ganttViewDTO = new GanttViewDTO();
       BeanUtils.copyProperties(gantt, ganttViewDTO);
-//      ganttViewDTO.setAvatar(userRepository.findAvatarByUsername(ganttViewDTO.getUsername()));
       ganttViewDTOs.add(ganttViewDTO);
 
       List<MissionViewDTO> missionViewDTOS = new ArrayList<>();
@@ -54,17 +61,25 @@ public class GanttServicelmpl  implements GanttService {
         BeanUtils.copyProperties(mission, missionViewDTO);
         missionViewDTOS.add(missionViewDTO);
       }
-
       ganttViewDTO.setMissionViewDTO(missionViewDTOS);
     }
-
-    return ganttViewDTOs;
+    if(ganttViewDTOs.size() == 0) {
+      GanttViewDTO ganttViewDTO = new GanttViewDTO();
+      ganttViewDTO.setProjectId(projectId);
+      ganttViewDTO.setGanttName("new Gantt");
+      ganttViewDTO.setGanttTotalNum(0);
+      Gantt newGantt = new Gantt();
+      BeanUtils.copyProperties(ganttViewDTO, newGantt);
+      ganttRepository.save(newGantt);
+      ganttViewDTOs.add(ganttViewDTO);
+    }
+  return   Response.ok(ganttViewDTOs);
 
   }
 
   public Response<?> deleteGantt(Integer ganttId) {
     Optional<Gantt> gantt = ganttRepository.findById(ganttId);
-    if (!gantt.isPresent()) {
+    if (gantt.equals(Optional.empty())) {
       return Response.exceptionHandling(301, "gantt chart does not exist");
     }
     ganttRepository.deleteById(ganttId);
