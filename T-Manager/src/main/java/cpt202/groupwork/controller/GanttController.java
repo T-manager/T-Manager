@@ -6,6 +6,7 @@ import cpt202.groupwork.dto.GanttDTO;
 //import cpt202.groupwork.dto.TodolistViewDTO;
 import cpt202.groupwork.dto.GanttViewDTO;
 import cpt202.groupwork.entity.Gantt;
+import cpt202.groupwork.entity.Project;
 import cpt202.groupwork.entity.Todolist;
 import cpt202.groupwork.repository.GanttRepository;
 import cpt202.groupwork.repository.MissionRepository;
@@ -57,12 +58,16 @@ public class GanttController {
   @PostMapping("/add")
   @Operation(summary = "通过 projectId 和 ganttDTO 添加 gantt")
   public Response<?> createGantt(@Valid @RequestBody GanttDTO ganttDTO) {
+    Optional<Project> project = projectRepository.findById(ganttDTO.getProjectId());
+    // check if project exist
+    if (project.equals(Optional.empty())) {
+      return Response.exceptionHandling(302, "project does not exist");
+    }
     //ganttId会自动按顺序生成
-
     Gantt gantt = new Gantt();
     BeanUtils.copyProperties(ganttDTO, gantt);
     ganttRepository.save(gantt);
-    return Response.ok(gantt);
+    return Response.ok();
   }
 
   @DeleteMapping("/delete/{ganttId}")
@@ -75,7 +80,9 @@ public class GanttController {
   @Operation(summary = "修改gantt信息")
   public Response<?> modifyProject(@Valid @RequestBody Gantt gantt) {
     Optional<Gantt> ganttOld = ganttRepository.findById(gantt.getGanttId());
-
+    if (ganttOld.equals(Optional.empty())) {
+      return Response.exceptionHandling(301, "gantt does not exist");
+    }
     BeanUtils.copyProperties(gantt, ganttOld.get());
     ganttRepository.save(ganttOld.get());
     return Response.ok("modify success");
@@ -85,20 +92,6 @@ public class GanttController {
   @GetMapping("/get/{projectId}")
   @Operation(summary = "通过 projectid 查看所有的 gantt, 包括所属的mission")
   public Response<?> getDiscussion(@PathVariable Integer projectId) {
-    List<GanttViewDTO> ganttViewDTOs = new ArrayList<>();
-//    Optional<String> username = SecurityUtils.getCurrentUsername();
-    ganttViewDTOs = ganttService.getGantt(projectId);
-    if(ganttViewDTOs.size() == 0) {
-      GanttViewDTO ganttViewDTO = new GanttViewDTO();
-      ganttViewDTO.setProjectId(projectId);
-      ganttViewDTO.setGanttName("new Gantt");
-      ganttViewDTO.setGanttTotalNum(0);
-      Gantt newGantt = new Gantt();
-      BeanUtils.copyProperties(ganttViewDTO, newGantt);
-      ganttRepository.save(newGantt);
-      ganttViewDTOs.add(ganttViewDTO);
-    }
-
-    return Response.ok(ganttViewDTOs);
+    return ganttService.getGantt(projectId);
   }
 }

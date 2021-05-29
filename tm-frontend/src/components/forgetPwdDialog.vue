@@ -285,10 +285,10 @@ export default {
     checkExistUser: async function () {
       this.$axios({
         method: "get",
-        url: this.$store.state.host + "auth/check?username=" + this.userName,
+        url: this.$store.state.host + "auth/checkname?username=" + this.userName,
       })
         .then((res) => {
-          if (res.data.data == 2000) {
+          if (res.data.status = 321) {
             this.next1();
           } else {
             alert("User not exist");
@@ -296,7 +296,7 @@ export default {
           }
         })
         .catch((error) => {
-          // console.log(error);
+          this.$store.commit("response", error);
         });
     },
     checkEmailHandler: function () {
@@ -315,16 +315,16 @@ export default {
           },
         })
           .then((res) => {
-            if (res.data.data == 2000) {
+            if (res.data.status == 0) {
               this.getVerifyCode();
             } else {
               alert("Email not match");
               this.userEmail = null;
+              this.loading = false;
             }
-            this.loading = false;
           })
           .catch((error) => {
-            // console.log(error);
+            this.$store.commit("response", error);
           });
     },
     /**Wait before resend the verification code*/
@@ -357,17 +357,13 @@ export default {
         },
       })
         .then((res) => {
-          if (res.data.data == 3000) {
             this.loading = false;
             this.next2();
-          } else {
-            alert("Email failed to send");
-            this.userEmail = null;
           }
-
-        })
+        )
         .catch((error) => {
-          // console.log(error);
+            this.$store.commit("response", error);
+            this.userEmail = null;
         });
     },
     checkCodeHandler() {
@@ -394,7 +390,7 @@ export default {
           }
         })
         .catch((error) => {
-          // console.log(error);
+          this.$store.commit("response", error);
         });
     },
     checkPwdRules(v) {
@@ -432,8 +428,7 @@ export default {
             this.$router.go(0);
           })
           .catch((error) => {
-            // console.log(error);
-            //   this.$store.commit("response", error);
+            this.$store.commit("response", error);
             this.loading = false;
           });
       }
