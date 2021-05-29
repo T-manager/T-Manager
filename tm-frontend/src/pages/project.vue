@@ -105,6 +105,14 @@
             >
               <v-img></v-img>
               Create Project
+              <v-btn
+                color="primary"
+                style="margin-left: 10px"
+                icon
+                @click="gotoHelp"
+              >
+                <v-icon size="28">mdi-help-circle-outline</v-icon>
+              </v-btn>
             </div>
             <v-card-text style="margin-top: 30px; padding: 10px">
               <v-text-field
@@ -213,6 +221,9 @@ export default {
     text: "inputHandle",
   },
   methods: {
+    gotoHelp() {
+      window.open("https://ecb29d.baklib-free.com/34d8", "_blank");
+    },
     inputHandle(text) {
       if (text.trim() !== "") {
         this.getProjects();
@@ -236,27 +247,25 @@ export default {
       }
     },
     getProjects() {
-     
-        this.$axios({
-          method: "get",
-          url:
-            this.$store.state.host +
-            "project/search/" +
-            this.$store.getters.getUsername +
-            "/" +
-            this.text,
-          headers: {
-            Authorization: "Bearer " + this.$store.getters.getToken,
-          },
+      this.$axios({
+        method: "get",
+        url:
+          this.$store.state.host +
+          "project/search/" +
+          this.$store.getters.getUsername +
+          "/" +
+          this.text,
+        headers: {
+          Authorization: "Bearer " + this.$store.getters.getToken,
+        },
+      })
+        .then((res) => {
+          console.log(res.data.data);
+          this.projects = res.data.data;
         })
-          .then((res) => {
-            console.log(res.data.data);
-            this.projects = res.data.data;
-          })
-          .catch((error) => {
-            this.$store.commit("response", error);
-          });
-      
+        .catch((error) => {
+          this.$store.commit("response", error);
+        });
     },
     checkNameRules(v) {
       if (typeof v == "undefined") return false;
