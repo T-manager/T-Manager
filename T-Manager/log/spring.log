@@ -1,0 +1,76 @@
+2021-04-27 23:44:10.377  INFO 21116 --- [main] cpt202.groupwork.TManagerApplication     : Starting TManagerApplication using Java 1.8.0_221 on DESKTOP-FS2UR9G with PID 21116 (D:\CSSE\CPT202\SOftwareE\New_TManager\T-Manager\T-Manager\target\classes started by X P1 in D:\CSSE\CPT202\SOftwareE\New_TManager\T-Manager\T-Manager)
+2021-04-27 23:44:10.384  INFO 21116 --- [main] cpt202.groupwork.TManagerApplication     : No active profile set, falling back to default profiles: default
+2021-04-27 23:44:11.055  INFO 21116 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-04-27 23:44:11.119  INFO 21116 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 56 ms. Found 8 JPA repository interfaces.
+2021-04-27 23:44:11.343  INFO 21116 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@7a24eb3' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-27 23:44:11.347  INFO 21116 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-27 23:44:11.558  INFO 21116 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 6767 (http)
+2021-04-27 23:44:11.566  INFO 21116 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-04-27 23:44:11.566  INFO 21116 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-04-27 23:44:11.567  INFO 21116 --- [main] o.a.catalina.core.AprLifecycleListener   : Loaded Apache Tomcat Native library [1.2.23] using APR version [1.7.0].
+2021-04-27 23:44:11.567  INFO 21116 --- [main] o.a.catalina.core.AprLifecycleListener   : APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+2021-04-27 23:44:11.567  INFO 21116 --- [main] o.a.catalina.core.AprLifecycleListener   : APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2021-04-27 23:44:11.586  INFO 21116 --- [main] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 1.1.1c  28 May 2019]
+2021-04-27 23:44:11.690  INFO 21116 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2021-04-27 23:44:11.690  INFO 21116 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1267 ms
+2021-04-27 23:44:11.841  INFO 21116 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-04-27 23:44:11.884  INFO 21116 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-04-27 23:44:12.005  INFO 21116 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-04-27 23:44:12.148  INFO 21116 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-04-27 23:44:13.244  INFO 21116 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-04-27 23:44:13.257  INFO 21116 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2021-04-27 23:44:14.722  INFO 21116 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-04-27 23:44:14.731  INFO 21116 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-04-27 23:44:15.098  WARN 21116 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-04-27 23:44:15.334  INFO 21116 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/'] with []
+2021-04-27 23:44:15.334  INFO 21116 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/css/**'] with []
+2021-04-27 23:44:15.334  INFO 21116 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/js/**'] with []
+2021-04-27 23:44:15.334  INFO 21116 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/images/**'] with []
+2021-04-27 23:44:15.760  INFO 21116 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@1da53f4f, org.springframework.security.web.context.SecurityContextPersistenceFilter@2d801d8, org.springframework.security.web.header.HeaderWriterFilter@29f95272, org.springframework.web.filter.CorsFilter@4e7eba9f, org.springframework.security.web.authentication.logout.LogoutFilter@52657d5f, cpt202.groupwork.security.TokenFilter@2b917fb0, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@2807cf3, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@536da29c, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@2df71be0, org.springframework.security.web.session.SessionManagementFilter@f10d055, org.springframework.security.web.access.ExceptionTranslationFilter@503556cb, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@73da7f08]
+2021-04-27 23:44:15.801  INFO 21116 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-04-27 23:44:15.859  WARN 21116 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2021-04-27 23:44:15.984  INFO 21116 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 6767 (http) with context path '/api'
+2021-04-27 23:44:15.991  INFO 21116 --- [main] cpt202.groupwork.TManagerApplication     : Started TManagerApplication in 5.97 seconds (JVM running for 6.898)
+2021-04-27 23:52:07.302  INFO 21116 --- [http-nio-6767-exec-2] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-04-27 23:52:07.302  INFO 21116 --- [http-nio-6767-exec-2] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-04-27 23:52:07.303  INFO 21116 --- [http-nio-6767-exec-2] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2021-04-27 23:56:23.348  INFO 2360 --- [main] cpt202.groupwork.TManagerApplication     : Starting TManagerApplication using Java 1.8.0_221 on DESKTOP-FS2UR9G with PID 2360 (D:\CSSE\CPT202\SOftwareE\New_TManager\T-Manager\T-Manager\target\classes started by X P1 in D:\CSSE\CPT202\SOftwareE\New_TManager\T-Manager\T-Manager)
+2021-04-27 23:56:23.350  INFO 2360 --- [main] cpt202.groupwork.TManagerApplication     : No active profile set, falling back to default profiles: default
+2021-04-27 23:56:23.945  INFO 2360 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2021-04-27 23:56:24.005  INFO 2360 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 54 ms. Found 8 JPA repository interfaces.
+2021-04-27 23:56:24.208  INFO 2360 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler@5cf87cfd' of type [org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-27 23:56:24.212  INFO 2360 --- [main] trationDelegate$BeanPostProcessorChecker : Bean 'methodSecurityMetadataSource' of type [org.springframework.security.access.method.DelegatingMethodSecurityMetadataSource] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2021-04-27 23:56:24.388  INFO 2360 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 6767 (http)
+2021-04-27 23:56:24.394  INFO 2360 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2021-04-27 23:56:24.394  INFO 2360 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.43]
+2021-04-27 23:56:24.394  INFO 2360 --- [main] o.a.catalina.core.AprLifecycleListener   : Loaded Apache Tomcat Native library [1.2.23] using APR version [1.7.0].
+2021-04-27 23:56:24.396  INFO 2360 --- [main] o.a.catalina.core.AprLifecycleListener   : APR capabilities: IPv6 [true], sendfile [true], accept filters [false], random [true].
+2021-04-27 23:56:24.396  INFO 2360 --- [main] o.a.catalina.core.AprLifecycleListener   : APR/OpenSSL configuration: useAprConnector [false], useOpenSSL [true]
+2021-04-27 23:56:24.399  INFO 2360 --- [main] o.a.catalina.core.AprLifecycleListener   : OpenSSL successfully initialized [OpenSSL 1.1.1c  28 May 2019]
+2021-04-27 23:56:24.498  INFO 2360 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring embedded WebApplicationContext
+2021-04-27 23:56:24.498  INFO 2360 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1116 ms
+2021-04-27 23:56:24.631  INFO 2360 --- [main] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2021-04-27 23:56:24.661  INFO 2360 --- [main] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 5.4.28.Final
+2021-04-27 23:56:24.743  INFO 2360 --- [main] o.hibernate.annotations.common.Version   : HCANN000001: Hibernate Commons Annotations {5.1.2.Final}
+2021-04-27 23:56:24.863  INFO 2360 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2021-04-27 23:56:25.883  INFO 2360 --- [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2021-04-27 23:56:25.891  INFO 2360 --- [main] org.hibernate.dialect.Dialect            : HHH000400: Using dialect: org.hibernate.dialect.MySQL5Dialect
+2021-04-27 23:56:26.696  INFO 2360 --- [main] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000490: Using JtaPlatform implementation: [org.hibernate.engine.transaction.jta.platform.internal.NoJtaPlatform]
+2021-04-27 23:56:26.703  INFO 2360 --- [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2021-04-27 23:56:27.049  WARN 2360 --- [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2021-04-27 23:56:27.298  INFO 2360 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/'] with []
+2021-04-27 23:56:27.298  INFO 2360 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/css/**'] with []
+2021-04-27 23:56:27.298  INFO 2360 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/js/**'] with []
+2021-04-27 23:56:27.298  INFO 2360 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure Ant [pattern='/images/**'] with []
+2021-04-27 23:56:27.687  INFO 2360 --- [main] o.s.s.web.DefaultSecurityFilterChain     : Will secure any request with [org.springframework.security.web.context.request.async.WebAsyncManagerIntegrationFilter@29aa4bc9, org.springframework.security.web.context.SecurityContextPersistenceFilter@3c9e19de, org.springframework.security.web.header.HeaderWriterFilter@4468fda8, org.springframework.web.filter.CorsFilter@6fd7aba8, org.springframework.security.web.authentication.logout.LogoutFilter@41be8db9, cpt202.groupwork.security.TokenFilter@99407c2, org.springframework.security.web.savedrequest.RequestCacheAwareFilter@6115846e, org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter@f10d055, org.springframework.security.web.authentication.AnonymousAuthenticationFilter@6c519e47, org.springframework.security.web.session.SessionManagementFilter@15e5246, org.springframework.security.web.access.ExceptionTranslationFilter@a03529c, org.springframework.security.web.access.intercept.FilterSecurityInterceptor@66b31d46]
+2021-04-27 23:56:27.723  INFO 2360 --- [main] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-04-27 23:56:27.772  WARN 2360 --- [main] ion$DefaultTemplateResolverConfiguration : Cannot find template location: classpath:/templates/ (please add some templates or check your Thymeleaf configuration)
+2021-04-27 23:56:27.886  INFO 2360 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 6767 (http) with context path '/api'
+2021-04-27 23:56:27.893  INFO 2360 --- [main] cpt202.groupwork.TManagerApplication     : Started TManagerApplication in 4.848 seconds (JVM running for 5.699)
+2021-04-27 23:56:39.212  INFO 2360 --- [http-nio-6767-exec-1] o.a.c.c.C.[Tomcat].[localhost].[/api]    : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2021-04-27 23:56:39.212  INFO 2360 --- [http-nio-6767-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2021-04-27 23:56:39.213  INFO 2360 --- [http-nio-6767-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 1 ms
+2021-04-27 23:56:39.639  WARN 2360 --- [http-nio-6767-exec-1] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1062, SQLState: 23000
+2021-04-27 23:56:39.639 ERROR 2360 --- [http-nio-6767-exec-1] o.h.engine.jdbc.spi.SqlExceptionHelper   : Duplicate entry 'email' for key 'UK_lqjrcobrh9jc8wpcar64q1bfh'
+2021-04-27 23:56:50.002  WARN 2360 --- [http-nio-6767-exec-4] o.h.engine.jdbc.spi.SqlExceptionHelper   : SQL Error: 1062, SQLState: 23000
+2021-04-27 23:56:50.002 ERROR 2360 --- [http-nio-6767-exec-4] o.h.engine.jdbc.spi.SqlExceptionHelper   : Duplicate entry 'email' for key 'UK_lqjrcobrh9jc8wpcar64q1bfh'
